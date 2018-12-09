@@ -51,4 +51,15 @@ public class DropBox {
 
         return toPath;
     }
+
+    public String getCurrentUserName(){
+        try{
+            return this.client.users().getCurrentAccount().getName().getDisplayName();
+        }
+        catch (DbxException e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

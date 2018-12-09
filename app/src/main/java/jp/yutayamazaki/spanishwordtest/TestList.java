@@ -1,16 +1,24 @@
 package jp.yutayamazaki.spanishwordtest;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
+
 public class TestList extends AppCompatActivity {
+    private DropBox dropBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +26,17 @@ public class TestList extends AppCompatActivity {
         setContentView(R.layout.activity_test_list);
 
         setTestList();
+
+        String token = getResources().getString(R.string.dropbox_token);
+        String userAgent = getResources().getString(R.string.dropbox_useragant);
+        this.dropBox = new DropBox(token, userAgent);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                accessDropBox();
+            }
+        }).start();
     }
 
     private void setTestList(){
@@ -55,6 +74,23 @@ public class TestList extends AppCompatActivity {
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = contents.getHeight() - 16;
         listView.setLayoutParams(params);
+    }
+
+    private void accessDropBox(){
+        String path = dropBox.downloadFile("testlist.csv", getFilesDir().getPath());
+
+        File file = new File(path);
+
+        try(BufferedReader br = new BufferedReader(new FileReader(file))){
+            String line;
+
+            while((line = br.readLine()) != null){
+                Log.d("textfile", line);
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override
