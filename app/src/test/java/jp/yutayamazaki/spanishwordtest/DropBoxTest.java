@@ -73,7 +73,6 @@ public class DropBoxTest {
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         String savePath =
                 dropBox.downloadFile("test.txt", System.getProperty("user.dir") + tempPath);
-        System.out.println(savePath);
         String downloadText = readResourceFile(new File(savePath));
         String baseText = readResourceFile("testbase.txt");
 
