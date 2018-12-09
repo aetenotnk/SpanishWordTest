@@ -14,7 +14,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
+import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 
 public class TestList extends AppCompatActivity {
@@ -38,29 +41,20 @@ public class TestList extends AppCompatActivity {
     }
 
     private void setTestList(){
-        String filepath = dropBox.downloadFile("testlist.csv", getFilesDir().getPath());
-        ArrayList<HashMap<String, String>> listData = new ArrayList<>();
+        TestTitleCollection testTitleCollection = TestTitleCollection.getInstance();
+        testTitleCollection.loadBeansByDropBox(dropBox,
+                "testlist.csv",
+                getFilesDir().getAbsolutePath());
+        List<HashMap<String, String>>listData = new ArrayList<>();
 
-        try(BufferedReader br = new BufferedReader(new FileReader(new File(filepath)))){
-            // ヘッダを飛ばす
-            br.readLine();
+        for(TestTitle testTitle : testTitleCollection.getAll()){
+            HashMap<String, String>row = new HashMap<>();
 
-            while(br.ready()){
-                String line = br.readLine();
+            row.put("title", testTitle.getTitle());
+            row.put("caption", testTitle.getCaption());
 
-                String[] row = line.split(",");
-                HashMap<String, String>data = new HashMap<>();
-
-                data.put("title", row[1]);
-                data.put("caption", row.length < 3 ? "" : row[2]);
-
-                listData.add(data);
-            }
+            listData.add(row);
         }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-
 
         final SimpleAdapter adapter = new SimpleAdapter(
                 this,
