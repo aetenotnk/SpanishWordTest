@@ -43,6 +43,8 @@ public class DropBox {
                 osr.write(c);
             }
             osr.flush();
+            osr.close();
+            isr.close();
         }
         catch(DbxException | IOException e){
             Log.e("DropBoxError", "Cannot downloadTextFile");
