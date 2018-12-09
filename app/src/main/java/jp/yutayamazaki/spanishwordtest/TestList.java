@@ -25,8 +25,6 @@ public class TestList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_list);
 
-        setTestList();
-
         String token = getResources().getString(R.string.dropbox_token);
         String userAgent = getResources().getString(R.string.dropbox_useragant);
         this.dropBox = new DropBox(token, userAgent);
@@ -34,24 +32,37 @@ public class TestList extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                accessDropBox();
+                setTestList();
             }
         }).start();
     }
 
     private void setTestList(){
+        String filepath = dropBox.downloadFile("testlist.csv", getFilesDir().getPath());
         ArrayList<HashMap<String, String>> listData = new ArrayList<>();
 
-        for(int i = 0;i < 10;i++){
-            HashMap<String, String> data = new HashMap<>();
+        try(BufferedReader br = new BufferedReader(new FileReader(new File(filepath)))){
+            // ヘッダを飛ばす
+            br.readLine();
 
-            data.put("title", "テスト" + i);
-            data.put("caption", "テスト" + i + "です。");
+            while(br.ready()){
+                String line = br.readLine();
 
-            listData.add(data);
+                String[] row = line.split(",");
+                HashMap<String, String>data = new HashMap<>();
+
+                data.put("title", row[1]);
+                data.put("caption", row.length < 3 ? "" : row[2]);
+
+                listData.add(data);
+            }
+        }
+        catch (IOException e){
+            e.printStackTrace();
         }
 
-        SimpleAdapter adapter = new SimpleAdapter(
+
+        final SimpleAdapter adapter = new SimpleAdapter(
                 this,
                 listData,
                 R.layout.test_list_row,
@@ -59,8 +70,13 @@ public class TestList extends AppCompatActivity {
                 new int[]{R.id.test_row_title, R.id.test_row_caption}
         );
 
-        ListView listView = ListView.class.cast(findViewById(R.id.test_list));
-        listView.setAdapter(adapter);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ListView listView = ListView.class.cast(findViewById(R.id.test_list));
+                listView.setAdapter(adapter);
+            }
+        });
     }
 
     /**
