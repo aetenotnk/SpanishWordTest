@@ -25,18 +25,7 @@ public class DropBoxTest {
     @Before
     public void setUp() throws Exception {
         // jsonファイルからDropBoxのトークンを取得
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream("testconfig.json");
-        MatcherAssert.assertThat(inputStream, CoreMatchers.is(CoreMatchers.notNullValue()));
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder stringBuilder = new StringBuilder();
-        String inputStr;
-        while((inputStr = br.readLine()) != null){
-            stringBuilder.append(inputStr);
-        }
-        br.close();
-
-        JSONObject json = new JSONObject(stringBuilder.toString());
+        JSONObject json = new JSONObject(readTextFromFile("testconfig.json"));
         String token = json.getJSONObject("dropbox").getString("token");
         String useragent = json.getJSONObject("dropbox").getString("useragent");
 
@@ -52,5 +41,25 @@ public class DropBoxTest {
         // ユーザ名が取得できなければトークンが誤っている
         Assert.assertThat(dropBox.getCurrentUserName(),
                 CoreMatchers.is(CoreMatchers.notNullValue()));
+    }
+
+    /**
+     * ファイルの文字列を読み込む
+     * @param filepath resources以下のファイル名、パス
+     * @return ファイルの中身
+     */
+    private String readTextFromFile(String filepath) throws  Exception{
+        InputStream inputStream = ClassLoader.getSystemResourceAsStream(filepath);
+        MatcherAssert.assertThat(inputStream, CoreMatchers.is(CoreMatchers.notNullValue()));
+
+        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        String inputStr;
+        while((inputStr = br.readLine()) != null){
+            stringBuilder.append(inputStr);
+        }
+        br.close();
+
+        return stringBuilder.toString();
     }
 }
