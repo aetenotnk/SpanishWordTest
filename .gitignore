@@ -10,4 +10,4 @@
 /captures
 .externalNativeBuild
 /app/src/main/res/values/private.xml
-/app/src/test/resources
+/app/src/test/resources/testconfig.json

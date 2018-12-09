@@ -1,0 +1,9 @@
+{
+  "dropbox" : {
+    "token" : "",
+    "useragent" : ""
+  },
+  "test" : {
+    "tempdirectory" : "/src/test/resources/tmp"
+  }
+}
