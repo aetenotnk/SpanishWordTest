@@ -4,6 +4,7 @@
     "useragent" : ""
   },
   "test" : {
-    "tempdirectory" : "/src/test/resources/tmp"
+    "tempdirectory" : "/src/test/resources/tmp",
+    "resourcesdirectory" : "/src/test/resources"
   }
 }

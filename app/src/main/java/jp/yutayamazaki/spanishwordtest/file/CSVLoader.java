@@ -14,6 +14,8 @@ import java.util.List;
  * CSVファイル読み込みクラス
  */
 public class CSVLoader {
+    private static char ESCAPE_CHAR = '"';
+
     /**
      * CSVを読み込む
      * @param file 読み込むファイル
@@ -24,6 +26,11 @@ public class CSVLoader {
         List data = new LinkedList();
 
         try(BufferedReader br = new BufferedReader(new FileReader(file))){
+            // ファイルの中身が空なら空のリストを返す
+            if(!br.ready()){
+                return Collections.emptyList();
+            }
+
             // ヘッダー
             String[] header = parseHeader(br.readLine());
             data.add(header);
@@ -46,8 +53,7 @@ public class CSVLoader {
      * @return 分割した文字列配列
      */
     private static String[] parseHeader(String line){
-        // TODO: 2018/12/10 もともとの文字列にカンマが含まれることも想定する
-        return line.split(",");
+        return split(line);
     }
 
     /**
@@ -57,8 +63,7 @@ public class CSVLoader {
      * @return 分割した文字列配列
      */
     private static String[] parseLine(String line, int column){
-        // TODO: 2018/12/10 もともとの文字列にカンマが含まれることも想定する
-        List<String>row = new ArrayList<>(Arrays.asList(line.split(",")));
+        List<String>row = new ArrayList<>(Arrays.asList(split(line)));
 
         // もし足りなければ必要な分まで空の文字列を加える
         while(row.size() < column){
@@ -66,5 +71,36 @@ public class CSVLoader {
         }
 
         return row.toArray(new String[0]);
+    }
+
+    private static String[] split(String line){
+        List<String>list = new ArrayList<>();
+        StringBuilder stringBuilder = new StringBuilder();
+        String[] temp;
+
+        // 連続したダブルクォートを1つに置き換え
+        line = line.replaceAll("\"\"", "\"");
+        temp = line.split(",");
+
+        for(String part : temp){
+            if(stringBuilder.length() == 0){
+                if(part.charAt(0) == ESCAPE_CHAR) {
+                    stringBuilder.append(part);
+                }
+                else{
+                    list.add(part);
+                }
+            }
+            else{
+                stringBuilder.append(part);
+
+                if(part.charAt(part.length() - 1) == ESCAPE_CHAR){
+                    list.add(stringBuilder.toString());
+                    stringBuilder = new StringBuilder();
+                }
+            }
+        }
+
+        return list.toArray(new String[0]);
     }
 }
