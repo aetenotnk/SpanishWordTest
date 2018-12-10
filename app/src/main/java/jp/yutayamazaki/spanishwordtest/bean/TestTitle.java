@@ -1,7 +1,5 @@
 package jp.yutayamazaki.spanishwordtest.bean;
 
-import junit.framework.Test;
-
 public class TestTitle implements Bean {
     private int id;
     private String title;

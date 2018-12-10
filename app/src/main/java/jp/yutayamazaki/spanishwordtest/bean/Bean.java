@@ -1,7 +1,8 @@
 package jp.yutayamazaki.spanishwordtest.bean;
 
-import java.lang.reflect.Field;
-
+/**
+ * データ用のクラス
+ */
 public interface Bean {
     Bean copy();
 }
