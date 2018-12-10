@@ -30,7 +30,7 @@ public class DropBoxTest {
     @Before
     public void setUp() throws Exception {
         // jsonファイルからDropBoxのトークンを取得
-        jsonConfig = new JSONObject(readResourceFile("testconfig.json"));
+        jsonConfig = new JSONObject(TestUtil.readResourceFile("testconfig.json"));
         String token = jsonConfig.getJSONObject("dropbox").getString("token");
         String useragent = jsonConfig.getJSONObject("dropbox").getString("useragent");
 
@@ -50,7 +50,7 @@ public class DropBoxTest {
     public void tearDown() throws Exception{
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
 
-        deleteFiles(new File(System.getProperty("user.dir") + tempPath));
+        TestUtil.deleteFiles(new File(System.getProperty("user.dir") + tempPath));
     }
 
 
@@ -73,73 +73,9 @@ public class DropBoxTest {
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         String savePath =
                 dropBox.downloadFile("test.txt", System.getProperty("user.dir") + tempPath);
-        String downloadText = readResourceFile(new File(savePath));
-        String baseText = readResourceFile("testbase.txt");
+        String downloadText = TestUtil.readResourceFile(new File(savePath));
+        String baseText = TestUtil.readResourceFile("testbase.txt");
 
         Assert.assertEquals(downloadText, baseText);
-    }
-
-    /**
-     * リソースファイルの文字列を読み込む
-     * @param filepath resources以下のファイル名、パス
-     * @return ファイルの中身
-     */
-    private String readResourceFile(String filepath) throws  Exception{
-        InputStream inputStream = ClassLoader.getSystemResourceAsStream(filepath);
-        MatcherAssert.assertThat(inputStream, CoreMatchers.is(CoreMatchers.notNullValue()));
-
-        BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder stringBuilder = new StringBuilder();
-        String inputStr;
-        while((inputStr = br.readLine()) != null){
-            stringBuilder.append(inputStr);
-        }
-        br.close();
-
-        return stringBuilder.toString();
-    }
-
-    /**
-     * ファイルからテキストを読み込む
-     * @param file 読み込むファイル
-     * @return 読み込んだテキスト
-     * @throws Exception ファイルが開けないと例外を投げる
-     */
-    private String readResourceFile(File file) throws Exception{
-        StringBuilder stringBuilder = new StringBuilder();
-
-        try(BufferedReader br = new BufferedReader(new FileReader(file))){
-            String line;
-
-            while((line = br.readLine()) != null){
-                stringBuilder.append(line);
-            }
-        }
-
-        return stringBuilder.toString();
-    }
-
-    /**
-     * ファイルまたはディレクトリを削除する
-     * ディレクトリの場合は再帰的に削除
-     * @param file ファイルまたはディレクトリ
-     */
-    private void deleteFiles(File file){
-        if(!file.exists()){
-            return;
-        }
-
-        if(file.isFile()){
-            System.out.println("delete: " + file.getAbsolutePath());
-            file.delete();
-            return;
-        }
-
-        for(File innerFile : file.listFiles()){
-            deleteFiles(innerFile);
-        }
-
-        file.delete();
-        System.out.println("delete: " + file.getAbsolutePath());
     }
 }
