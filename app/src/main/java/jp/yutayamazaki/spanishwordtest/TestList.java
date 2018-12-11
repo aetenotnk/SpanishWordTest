@@ -86,23 +86,6 @@ public class TestList extends AppCompatActivity {
         listView.setLayoutParams(params);
     }
 
-    private void accessDropBox(){
-        String path = dropBox.downloadFile("testlist.csv", getFilesDir().getPath());
-
-        File file = new File(path);
-
-        try(BufferedReader br = new BufferedReader(new FileReader(file))){
-            String line;
-
-            while((line = br.readLine()) != null){
-                Log.d("textfile", line);
-            }
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
