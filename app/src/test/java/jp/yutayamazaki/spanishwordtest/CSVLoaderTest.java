@@ -78,6 +78,23 @@ public class CSVLoaderTest {
     }
 
     /**
+     * 最後の列が空のデータを含むファイルを読み込めるかテスト
+     * @throws Exception 設定ファイルが読み込めなければ例外を投げる
+     */
+    @Test
+    public void lackCSV() throws Exception{
+        List<String[]> result = loadCSV("lack.csv");
+
+        Assert.assertEquals(2, result.size());
+        Assert.assertArrayEquals(
+                new String[]{"col11","col12","col13"},
+                result.get(0));
+        Assert.assertArrayEquals(
+                new String[]{"This line is lacking.","col22",""},
+                result.get(1));
+    }
+
+    /**
      * テストファイルからCSVファイルを読み込む
      * @param filename テストcsvファイルのファイル名
      * @return csvのデータ
