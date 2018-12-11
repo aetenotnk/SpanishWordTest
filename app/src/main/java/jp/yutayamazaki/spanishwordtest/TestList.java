@@ -35,16 +35,24 @@ public class TestList extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                loadDataFromDropBox();
                 setTestList();
             }
         }).start();
     }
 
-    private void setTestList(){
+    /**
+     * DropBoxからデータを読み込む
+     */
+    private void loadDataFromDropBox(){
         TestTitleCollection testTitleCollection = TestTitleCollection.getInstance();
         testTitleCollection.loadBeansByDropBox(dropBox,
                 "testlist.csv",
                 getFilesDir().getAbsolutePath());
+    }
+
+    private void setTestList(){
+        TestTitleCollection testTitleCollection = TestTitleCollection.getInstance();
         List<HashMap<String, String>>listData = new ArrayList<>();
 
         for(TestTitle testTitle : testTitleCollection.getAll()){
@@ -63,6 +71,7 @@ public class TestList extends AppCompatActivity {
                 new String[]{"title", "caption"},
                 new int[]{R.id.test_row_title, R.id.test_row_caption}
         );
+
 
         runOnUiThread(new Runnable() {
             @Override
