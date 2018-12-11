@@ -84,7 +84,7 @@ public class CSVLoader {
 
         for(String part : temp){
             if(stringBuilder.length() == 0){
-                if(part.charAt(0) == ESCAPE_CHAR) {
+                if(part.length() > 0 && part.charAt(0) == ESCAPE_CHAR) {
                     part = part.substring(1, part.length());
                     stringBuilder.append(part);
                 }

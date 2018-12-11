@@ -94,6 +94,21 @@ public class CSVLoaderTest {
                 result.get(1));
     }
 
+
+    /**
+     * 行の途中に空のデータを含むファイルが読み込めるかテスト
+     * @throws Exception 設定ファイルが読み込めなければ例外を投げる
+     */
+    @Test
+    public void emptyColumnCSV() throws Exception{
+        List<String[]> result = loadCSV("emptyColumn.csv");
+
+        Assert.assertEquals(1, result.size());
+        Assert.assertArrayEquals(
+                new String[]{"abc","","efg"},
+                result.get(0));
+    }
+
     /**
      * テストファイルからCSVファイルを読み込む
      * @param filename テストcsvファイルのファイル名
