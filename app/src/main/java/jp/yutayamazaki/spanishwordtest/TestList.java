@@ -1,9 +1,13 @@
 package jp.yutayamazaki.spanishwordtest;
 
+import android.app.ActivityOptions;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
@@ -53,7 +57,7 @@ public class TestList extends AppCompatActivity {
 
     private void setTestList(){
         TestTitleCollection testTitleCollection = TestTitleCollection.getInstance();
-        List<HashMap<String, String>>listData = new ArrayList<>();
+        final List<HashMap<String, String>>listData = new ArrayList<>();
 
         for(TestTitle testTitle : testTitleCollection.getAll()){
             HashMap<String, String>row = new HashMap<>();
@@ -78,6 +82,17 @@ public class TestList extends AppCompatActivity {
             public void run() {
                 ListView listView = ListView.class.cast(findViewById(R.id.test_list));
                 listView.setAdapter(adapter);
+
+                // リスト内の項目をタップした時の処理
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        Intent modeSelectIntent = new Intent(getApplication(), ModeSelect.class);
+
+                        startActivity(modeSelectIntent);
+                        overridePendingTransition(R.anim.in_right, R.anim.out_left);
+                    }
+                });
             }
         });
     }
