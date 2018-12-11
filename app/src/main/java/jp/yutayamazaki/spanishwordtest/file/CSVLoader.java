@@ -85,6 +85,7 @@ public class CSVLoader {
         for(String part : temp){
             if(stringBuilder.length() == 0){
                 if(part.charAt(0) == ESCAPE_CHAR) {
+                    part = part.substring(1, part.length());
                     stringBuilder.append(part);
                 }
                 else{
@@ -92,10 +93,11 @@ public class CSVLoader {
                 }
             }
             else{
+                stringBuilder.append(",");
                 stringBuilder.append(part);
 
                 if(part.charAt(part.length() - 1) == ESCAPE_CHAR){
-                    list.add(stringBuilder.toString());
+                    list.add(stringBuilder.substring(0, stringBuilder.length() - 1));
                     stringBuilder = new StringBuilder();
                 }
             }

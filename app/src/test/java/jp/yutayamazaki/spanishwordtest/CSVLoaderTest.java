@@ -52,7 +52,27 @@ public class CSVLoaderTest {
         Assert.assertArrayEquals(new String[]{"2", "日本語"}, result.get(1));
     }
 
-    // TODO: 2018/12/10 元のデータにカンマを含むCSVのテスト
+    /**
+     * カンマを含むデータを読み込めるかテスト
+     * @throws Exception ファイルが読み込めなければ例外を投げる
+     */
+    @Test
+    public void commaCSV() throws Exception{
+        String resourcePath =
+                jsonConfig.getJSONObject("test").getString("resourcesdirectory");
+        String userDir = System.getProperty("user.dir");
+        List<String[]> result = CSVLoader.load(
+                new File(userDir + resourcePath + "/csv/comma.csv"));
+
+        Assert.assertEquals(2, result.size());
+        Assert.assertEquals(2, result.get(0).length);
+        Assert.assertArrayEquals(
+                new String[]{"Does this file include comma?", "Yes, it does."},
+                result.get(0));
+        Assert.assertArrayEquals(
+                new String[]{"This data have 2 commas.", "a,b,c"},
+                result.get(1));
+    }
 
     // TODO: 2018/12/10 空のファイルのテスト
 }
