@@ -39,11 +39,7 @@ public class CSVLoaderTest {
      */
     @Test
     public void simpleCSV() throws Exception{
-        String resourcePath =
-                jsonConfig.getJSONObject("test").getString("resourcesdirectory");
-        String userDir = System.getProperty("user.dir");
-        List<String[]> result = CSVLoader.load(
-                new File(userDir + resourcePath + "/csv/simple.csv"));
+        List<String[]> result = loadCSV("simple.csv");
 
         Assert.assertEquals(2, result.size());
         Assert.assertEquals(2, result.get(0).length);
@@ -58,11 +54,7 @@ public class CSVLoaderTest {
      */
     @Test
     public void commaCSV() throws Exception{
-        String resourcePath =
-                jsonConfig.getJSONObject("test").getString("resourcesdirectory");
-        String userDir = System.getProperty("user.dir");
-        List<String[]> result = CSVLoader.load(
-                new File(userDir + resourcePath + "/csv/comma.csv"));
+        List<String[]> result = loadCSV("comma.csv");
 
         Assert.assertEquals(2, result.size());
         Assert.assertEquals(2, result.get(0).length);
@@ -80,12 +72,22 @@ public class CSVLoaderTest {
      */
     @Test
     public void emptyCSV() throws Exception{
+        List<String[]> result = loadCSV("empty.csv");
+
+        Assert.assertEquals(0, result.size());
+    }
+
+    /**
+     * テストファイルからCSVファイルを読み込む
+     * @param filename テストcsvファイルのファイル名
+     * @return csvのデータ
+     * @throws Exception 設定ファイルが読み込めなければ例外を投げる
+     */
+    private List<String[]> loadCSV(String filename) throws Exception{
         String resourcePath =
                 jsonConfig.getJSONObject("test").getString("resourcesdirectory");
         String userDir = System.getProperty("user.dir");
-        List<String[]> result = CSVLoader.load(
-                new File(userDir + resourcePath + "/csv/empty.csv"));
 
-        Assert.assertEquals(0, result.size());
+        return CSVLoader.load(new File(userDir + resourcePath + "/csv/" + filename));
     }
 }
