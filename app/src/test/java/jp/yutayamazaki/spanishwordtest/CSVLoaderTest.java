@@ -74,5 +74,18 @@ public class CSVLoaderTest {
                 result.get(1));
     }
 
-    // TODO: 2018/12/10 空のファイルのテスト
+    /**
+     * 空のファイルを読み込めるかテスト
+     * @throws Exception ファイルが読み込めなければ例外を投げる
+     */
+    @Test
+    public void emptyCSV() throws Exception{
+        String resourcePath =
+                jsonConfig.getJSONObject("test").getString("resourcesdirectory");
+        String userDir = System.getProperty("user.dir");
+        List<String[]> result = CSVLoader.load(
+                new File(userDir + resourcePath + "/csv/empty.csv"));
+
+        Assert.assertEquals(0, result.size());
+    }
 }
