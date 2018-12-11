@@ -35,6 +35,7 @@ class BeanCollection<T extends Bean> {
         header = Arrays.asList(rows.get(0));
         rows.remove(0);
 
+        list.clear();
         for(String[] row : rows){
             list.add(createBean(row));
         }
