@@ -23,6 +23,10 @@ public class TestTitleCollectionTest {
     private DropBox dropBox;
     private JSONObject jsonConfig;
 
+    /**
+     * 前処理
+     * @throws Exception 設定ファイルが読み込めなければ例外を投げる
+     */
     @Before
     public void setUp() throws Exception{
         // jsonファイルからDropBoxのトークンを取得
@@ -37,6 +41,9 @@ public class TestTitleCollectionTest {
         new File(System.getProperty("user.dir") + tempPath).mkdir();
     }
 
+    /**
+     * DBが作成できるかテスト
+     */
     @Test
     public void createTable(){
         TestTitleCollection testTitleCollection =
@@ -46,6 +53,10 @@ public class TestTitleCollectionTest {
         Assert.assertNotEquals(null, db);
     }
 
+    /**
+     * DBを更新した時のテスト
+     * @throws Exception TestTitleCollection.DB_FIELDにアクセスできないと例外を投げる
+     */
     @Test
     public void upgradeTable() throws Exception {
         TestTitleCollection testTitleCollection =
