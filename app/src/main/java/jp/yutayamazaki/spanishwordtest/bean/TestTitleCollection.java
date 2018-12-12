@@ -31,7 +31,7 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
     }
 
     @Override
-    protected TestTitle createBean(String[] row) {
+    public TestTitle createBean(String[] row) {
         return new TestTitle(Integer.parseInt(row[0]), row[1], row[2], row[3]);
     }
 }

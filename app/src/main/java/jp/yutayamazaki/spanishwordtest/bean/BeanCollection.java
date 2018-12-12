@@ -98,7 +98,5 @@ abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
      * @param row 文字列配列
      * @return 作成したデータ
      */
-    protected T createBean(String[] row){
-        return null;
-    }
+    public abstract T createBean(String[] row);
 }
