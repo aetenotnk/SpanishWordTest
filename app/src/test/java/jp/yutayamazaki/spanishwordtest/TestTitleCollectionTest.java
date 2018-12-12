@@ -15,7 +15,9 @@ import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.List;
 
+import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 
@@ -51,7 +53,7 @@ public class TestTitleCollectionTest {
     public void tearDown() throws Exception{
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
 
-        TestUtil.deleteFiles(new File(System.getProperty("user.dir") + tempPath));
+//        TestUtil.deleteFiles(new File(System.getProperty("user.dir") + tempPath));
     }
 
     /**
@@ -89,5 +91,26 @@ public class TestTitleCollectionTest {
                 new TestTitleCollection(RuntimeEnvironment.application).getWritableDatabase();
 
         Assert.assertNotEquals(null, db);
+    }
+
+    @Test
+    public void loadDataFromDropBox() throws Exception{
+        TestTitleCollection testTitleCollection =
+                new TestTitleCollection(RuntimeEnvironment.application);
+        String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
+        tempPath = System.getProperty("user.dir") + tempPath;
+
+        testTitleCollection.loadBeansByDropBox(dropBox, "test/testlist.csv", tempPath);
+
+        List<TestTitle> data = testTitleCollection.getAll();
+
+        Assert.assertEquals(1, data.size());
+
+        TestTitle testTitle = data.get(0);
+
+        Assert.assertEquals(1, testTitle.getId());
+        Assert.assertEquals("スペイン語単語テスト2018/09/23", testTitle.getTitle());
+        Assert.assertEquals("P8 - 11", testTitle.getCaption());
+        Assert.assertEquals("quiz/quiz20180923.csv", testTitle.getFilepath());
     }
 }

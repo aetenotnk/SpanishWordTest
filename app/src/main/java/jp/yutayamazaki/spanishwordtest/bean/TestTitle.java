@@ -29,6 +29,10 @@ public class TestTitle implements Bean {
         return caption;
     }
 
+    public String getFilepath() {
+        return filepath;
+    }
+
     @Override
     public Bean copy() {
         return new TestTitle(this);
