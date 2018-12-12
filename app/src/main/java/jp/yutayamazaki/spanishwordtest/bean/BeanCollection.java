@@ -19,7 +19,7 @@ import jp.yutayamazaki.spanishwordtest.file.CSVLoader;
  * @param <T> Beanを継承したクラス
  */
 abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
-    private static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ?";
+    private static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ";
 
     private List<T> list;
     private List<String> header;

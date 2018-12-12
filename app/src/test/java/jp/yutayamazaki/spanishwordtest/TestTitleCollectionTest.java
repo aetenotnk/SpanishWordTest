@@ -13,6 +13,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
+import java.lang.reflect.Field;
 
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
@@ -41,6 +42,27 @@ public class TestTitleCollectionTest {
         TestTitleCollection testTitleCollection =
                 new TestTitleCollection(RuntimeEnvironment.application);
         SQLiteDatabase db = testTitleCollection.getReadableDatabase();
+
+        Assert.assertNotEquals(null, db);
+    }
+
+    @Test
+    public void upgradeTable() throws Exception {
+        TestTitleCollection testTitleCollection =
+                new TestTitleCollection(RuntimeEnvironment.application);
+        Class c = testTitleCollection.getClass();
+        // プライベートなstaticフィールドに無理やりアクセス
+        Field versionField = c.getDeclaredField("DB_VERSION");
+        versionField.setAccessible(true);
+        // バージョンを1に設定
+        versionField.setInt(testTitleCollection, 1);
+        // getWritableDatabaseを呼んで,
+        // バージョンを更新してnewをした時にonUpgradeが呼ばれるようにする
+        testTitleCollection.getWritableDatabase().close();
+        // バージョンを更新
+        versionField.setInt(testTitleCollection, 2);
+        SQLiteDatabase db =
+                new TestTitleCollection(RuntimeEnvironment.application).getWritableDatabase();
 
         Assert.assertNotEquals(null, db);
     }
