@@ -1,5 +1,10 @@
 package jp.yutayamazaki.spanishwordtest.bean;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,13 +18,29 @@ import jp.yutayamazaki.spanishwordtest.file.CSVLoader;
  * Beanのコレクションクラス
  * @param <T> Beanを継承したクラス
  */
-class BeanCollection<T extends Bean> {
+abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
+    private static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ?";
+
     private List<T> list;
     private List<String> header;
+    private String dbName;
+    private int version;
 
-    public BeanCollection(){
-        list = new LinkedList<>();
-        header = Collections.emptyList();
+    public BeanCollection(Context context, String dbName, int version){
+        super(context, dbName, null, version);
+        this.list = new LinkedList<>();
+        this.header = Collections.emptyList();
+        this.dbName = dbName;
+        this.version = version;
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+        SQLiteStatement statement = sqLiteDatabase.compileStatement(SQL_DROP_TABLE + dbName);
+
+        statement.execute();
+
+        onCreate(sqLiteDatabase);
     }
 
     /**

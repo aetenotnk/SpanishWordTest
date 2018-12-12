@@ -1,29 +1,33 @@
 package jp.yutayamazaki.spanishwordtest.bean;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
+
 /**
  * TestTitleのコレクションクラス
  * ※ スングルトン
  */
 public class TestTitleCollection extends BeanCollection<TestTitle> {
-    private static TestTitleCollection instance = null;
+    private static String DB_NAME = "TestTitle";
+    private static int DB_VERSION = 1;
 
-    /**
-     * インスタンスを取得する
-     * @return インスタンス
-     */
-    public static synchronized TestTitleCollection getInstance(){
-        if(instance == null){
-            instance = new TestTitleCollection();
-        }
+    private static String SQL_CREATE_TABLE =
+            "CREATE TABLE " + DB_NAME + "(" +
+                    "id integer," +
+                    "title text," +
+                    "caption text," +
+                    "filepath text)";
 
-        return instance;
+    public TestTitleCollection(Context context){
+        super(context, DB_NAME, DB_VERSION);
     }
 
-    /**
-     * インスタンスを破棄する
-     */
-    public void destroy(){
-        instance = null;
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        SQLiteStatement statement = sqLiteDatabase.compileStatement(SQL_CREATE_TABLE);
+
+        statement.execute();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -20,6 +21,8 @@ import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 
 public class TestList extends AppCompatActivity {
     private DropBox dropBox;
+    private TestTitleCollection testTitleCollection;
+    private SQLiteDatabase testTitleDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +46,14 @@ public class TestList extends AppCompatActivity {
      * DropBoxからデータを読み込む
      */
     private void loadDataFromDropBox(){
-        TestTitleCollection testTitleCollection = TestTitleCollection.getInstance();
+        testTitleCollection = new TestTitleCollection(this);
         testTitleCollection.loadBeansByDropBox(dropBox,
                 "testlist.csv",
                 getFilesDir().getAbsolutePath());
+        testTitleDB = testTitleCollection.getReadableDatabase();
     }
 
     private void setTestList(){
-        TestTitleCollection testTitleCollection = TestTitleCollection.getInstance();
         final List<HashMap<String, String>>listData = new ArrayList<>();
 
         for(TestTitle testTitle : testTitleCollection.getAll()){
