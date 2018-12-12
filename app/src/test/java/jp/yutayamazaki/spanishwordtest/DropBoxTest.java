@@ -72,7 +72,7 @@ public class DropBoxTest {
     public void downloadTextFile() throws Exception {
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         String savePath =
-                dropBox.downloadFile("test.txt", System.getProperty("user.dir") + tempPath);
+                dropBox.downloadFile("test/test.txt", System.getProperty("user.dir") + tempPath);
         String downloadText = TestUtil.readResourceFile(new File(savePath));
         String baseText = TestUtil.readResourceFile("testbase.txt");
 

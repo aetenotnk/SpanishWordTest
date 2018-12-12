@@ -31,6 +31,9 @@ public class DropBox {
         String fromPath = "/" + filename;
         String toPath = saveDir + "/" + filename;
 
+        // ファイルまでのディレクトリを作成する
+        new File(toPath).getParentFile().mkdirs();
+
         try{
             DbxDownloader downloader  = client.files().download(fromPath);
             File outFile = new File(toPath);
