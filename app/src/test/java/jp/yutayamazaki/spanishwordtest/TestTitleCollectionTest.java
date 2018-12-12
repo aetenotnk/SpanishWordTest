@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.json.JSONObject;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,6 +40,18 @@ public class TestTitleCollectionTest {
 
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         new File(System.getProperty("user.dir") + tempPath).mkdir();
+    }
+
+    /**
+     * 各テストの後処理
+     * tempフォルダの削除
+     * @throws Exception 設定ファイルが読み込めなければ例外を投げる
+     */
+    @After
+    public void tearDown() throws Exception{
+        String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
+
+        TestUtil.deleteFiles(new File(System.getProperty("user.dir") + tempPath));
     }
 
     /**
