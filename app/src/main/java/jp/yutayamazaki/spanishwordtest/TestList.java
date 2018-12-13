@@ -56,7 +56,7 @@ public class TestList extends AppCompatActivity {
     private void setTestList(){
         final List<HashMap<String, String>>listData = new ArrayList<>();
 
-        for(TestTitle testTitle : testTitleCollection.getAll()){
+        for(TestTitle testTitle : testTitleCollection.selectAll()){
             HashMap<String, String>row = new HashMap<>();
 
             row.put("title", testTitle.getTitle());

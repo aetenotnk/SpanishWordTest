@@ -58,26 +58,12 @@ abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
 
         list.clear();
         for(String[] row : rows){
-            list.add(createBean(row));
+            // DBにデータを保存する
+            insertOrUpdate(createBean(row));
         }
 
         // ダウンロードしたファイルは削除する
         new File(path).delete();
-    }
-
-    /**
-     * 保持しているデータリストをコピーして取得する
-     * @return データリスト
-     */
-    @SuppressWarnings("unchecked")
-    public List<T> getAll(){
-        List<T> res = new LinkedList<>();
-
-        for(Bean bean : this.list){
-            res.add((T)bean.copy());
-        }
-
-        return res;
     }
 
     /**
@@ -99,4 +85,17 @@ abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
      * @return 作成したデータ
      */
     public abstract T createBean(String[] row);
+
+    /**
+     * データを挿入する
+     * 主キーが同じものがあれば更新する
+     * @param bean 挿入、更新するデータ
+     */
+    public abstract void insertOrUpdate(T bean);
+
+    /**
+     * データをすべて取得する
+     * @return DBから取得した全レコード
+     */
+    public abstract List<T> selectAll();
 }

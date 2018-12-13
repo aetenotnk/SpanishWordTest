@@ -102,7 +102,7 @@ public class TestTitleCollectionTest {
 
         testTitleCollection.loadBeansByDropBox(dropBox, "test/testlist.csv", tempPath);
 
-        List<TestTitle> data = testTitleCollection.getAll();
+        List<TestTitle> data = testTitleCollection.selectAll();
 
         Assert.assertEquals(1, data.size());
 
