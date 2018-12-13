@@ -113,4 +113,46 @@ public class TestTitleCollectionTest {
         Assert.assertEquals("P8 - 11", testTitle.getCaption());
         Assert.assertEquals("quiz/quiz20180923.csv", testTitle.getFilepath());
     }
+
+    /**
+     * データ追加のテスト
+     */
+    @Test
+    public void insert(){
+        TestTitleCollection testTitleCollection =
+                new TestTitleCollection(RuntimeEnvironment.application);
+        TestTitle data = new TestTitle(1, "Test1", "caption1", "/dummy");
+
+        testTitleCollection.insertOrUpdate(data);
+
+        List<TestTitle> all = testTitleCollection.selectAll();
+
+        Assert.assertEquals(1, all.size());
+        Assert.assertEquals(1, all.get(0).getId());
+        Assert.assertEquals("Test1", all.get(0).getTitle());
+        Assert.assertEquals("caption1", all.get(0).getCaption());
+        Assert.assertEquals("/dummy", all.get(0).getFilepath());
+    }
+
+    /**
+     * データ更新した時のテスト
+     */
+    @Test
+    public void update(){
+        TestTitleCollection testTitleCollection =
+                new TestTitleCollection(RuntimeEnvironment.application);
+        TestTitle data1 = new TestTitle(1, "Test1", "caption1", "/dummy");
+        TestTitle data2 = new TestTitle(1, "Test1_1", "caption1_1", "/dummy_1");
+
+        testTitleCollection.insertOrUpdate(data1);
+        testTitleCollection.insertOrUpdate(data2);
+
+        List<TestTitle> all = testTitleCollection.selectAll();
+
+        Assert.assertEquals(1, all.size());
+        Assert.assertEquals(1, all.get(0).getId());
+        Assert.assertEquals("Test1_1", all.get(0).getTitle());
+        Assert.assertEquals("caption1_1", all.get(0).getCaption());
+        Assert.assertEquals("/dummy_1", all.get(0).getFilepath());
+    }
 }
