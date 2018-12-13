@@ -6,9 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
@@ -21,15 +18,11 @@ import jp.yutayamazaki.spanishwordtest.file.CSVLoader;
 abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
     private static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ";
 
-    private List<T> list;
-    private List<String> header;
-    private String dbName;
-    private int version;
+    protected String dbName;
+    protected int version;
 
     public BeanCollection(Context context, String dbName, int version){
         super(context, dbName, null, version);
-        this.list = new LinkedList<>();
-        this.header = Collections.emptyList();
         this.dbName = dbName;
         this.version = version;
     }
@@ -53,10 +46,8 @@ abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
         String path = dropBox.downloadFile(filename, tempDir);
         List<String[]> rows = CSVLoader.load(new File(tempDir + "/" + filename));
 
-        header = Arrays.asList(rows.get(0));
         rows.remove(0);
 
-        list.clear();
         for(String[] row : rows){
             // DBにデータを保存する
             insertOrUpdate(createBean(row));
@@ -64,18 +55,6 @@ abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
 
         // ダウンロードしたファイルは削除する
         new File(path).delete();
-    }
-
-    /**
-     * カラム名を取得する
-     * @return カラム名のリスト
-     */
-    public List<String> getHeader(){
-        List<String> res = new LinkedList<>();
-
-        res.addAll(this.header);
-
-        return res;
     }
 
     /**
