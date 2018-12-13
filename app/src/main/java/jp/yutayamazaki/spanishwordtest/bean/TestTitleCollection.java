@@ -10,11 +10,15 @@ import java.util.List;
 
 /**
  * TestTitleのコレクションクラス
- * ※ スングルトン
  */
 public class TestTitleCollection extends BeanCollection<TestTitle> {
     private static String DB_NAME = "TestTitle";
     private static int DB_VERSION = 1;
+
+    private static String DB_COL_ID = "id";
+    private static String DB_COL_TITLE = "title";
+    private static String DB_COL_CAPTION = "caption";
+    private static String DB_COL_FILEPATH = "filepath";
 
     private static String SQL_CREATE_TABLE =
             "CREATE TABLE " + DB_NAME + "(" +
@@ -23,7 +27,11 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
                     "caption text," +
                     "filepath text)";
     private static String SQL_INSERT_OR_UPDATE =
-            "REPLACE INTO " + DB_NAME + "(id, title, caption, filepath) " +
+            "REPLACE INTO " + DB_NAME + "(" +
+                    DB_COL_ID + "," +
+                    DB_COL_TITLE + "," +
+                    DB_COL_CAPTION + "," +
+                    DB_COL_FILEPATH + ")" +
                     "VALUES(?, ?, ?, ?)";
     private static String SQL_SELECT_ALL =
             "SELECT * FROM " + DB_NAME;
@@ -65,10 +73,10 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
         List<TestTitle> result = new LinkedList<>();
 
         while(cursor.moveToNext()){
-            int id = cursor.getInt(cursor.getColumnIndex("id"));
-            String title = cursor.getString(cursor.getColumnIndex("title"));
-            String caption = cursor.getString(cursor.getColumnIndex("caption"));
-            String filepath = cursor.getString(cursor.getColumnIndex("filepath"));
+            int id = cursor.getInt(cursor.getColumnIndex(DB_COL_ID));
+            String title = cursor.getString(cursor.getColumnIndex(DB_COL_TITLE));
+            String caption = cursor.getString(cursor.getColumnIndex(DB_COL_CAPTION));
+            String filepath = cursor.getString(cursor.getColumnIndex(DB_COL_FILEPATH));
 
             result.add(new TestTitle(id, title, caption, filepath));
         }
