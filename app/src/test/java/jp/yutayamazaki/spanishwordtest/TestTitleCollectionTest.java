@@ -53,7 +53,7 @@ public class TestTitleCollectionTest {
     public void tearDown() throws Exception{
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
 
-//        TestUtil.deleteFiles(new File(System.getProperty("user.dir") + tempPath));
+        TestUtil.deleteFiles(new File(System.getProperty("user.dir") + tempPath));
     }
 
     /**
