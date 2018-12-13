@@ -22,10 +22,10 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
 
     private static String SQL_CREATE_TABLE =
             "CREATE TABLE " + DB_NAME + "(" +
-                    "id integer primary key," +
-                    "title text," +
-                    "caption text," +
-                    "filepath text)";
+                    DB_COL_ID + " integer primary key," +
+                    DB_COL_TITLE + " text," +
+                    DB_COL_CAPTION + " text," +
+                    DB_COL_FILEPATH + " text)";
     private static String SQL_INSERT_OR_UPDATE =
             "REPLACE INTO " + DB_NAME + "(" +
                     DB_COL_ID + "," +
