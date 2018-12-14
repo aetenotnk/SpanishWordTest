@@ -23,7 +23,6 @@ import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 
 public class TestList extends AppCompatActivity {
     private static String TEST_TITLE_FILE = "testlist.csv";
-    private static String TEST_NAME_PREFIX = "WordTest";
 
     private DropBox dropBox;
     private TestTitleCollection testTitleCollection;
@@ -70,9 +69,8 @@ public class TestList extends AppCompatActivity {
                 getFilesDir().getAbsolutePath());
         // 単語データを取得
         for(TestTitle title : testTitleCollection.selectAll()){
-            String testName = TEST_NAME_PREFIX + title.getId();
             String filePath = title.getFilepath();
-            WordCollection wordCollection = new WordCollection(this, testName);
+            WordCollection wordCollection = new WordCollection(this, title.getId());
 
             wordCollection.loadBeansByDropBox(dropBox,
                     filePath,

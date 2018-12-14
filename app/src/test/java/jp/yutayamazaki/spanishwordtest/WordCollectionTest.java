@@ -61,7 +61,7 @@ public class WordCollectionTest {
     @Test
     public void createTable(){
         WordCollection WordCollection =
-                new WordCollection(RuntimeEnvironment.application, "test");
+                new WordCollection(RuntimeEnvironment.application, 1);
         SQLiteDatabase db = WordCollection.getReadableDatabase();
 
         Assert.assertNotEquals(null, db);
@@ -74,7 +74,7 @@ public class WordCollectionTest {
     @Test
     public void loadDataFromDropBox() throws Exception{
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, "test");
+                new WordCollection(RuntimeEnvironment.application, 1);
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         tempPath = System.getProperty("user.dir") + tempPath;
 
@@ -101,7 +101,7 @@ public class WordCollectionTest {
     @Test
     public void insert(){
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, "test");
+                new WordCollection(RuntimeEnvironment.application, 1);
         Word word = new Word("deporte",
                 "スポーツ",
                 "¿Haces algún (deporte)",
@@ -126,7 +126,7 @@ public class WordCollectionTest {
     @Test
     public void insertTwiceSameData(){
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, "test");
+                new WordCollection(RuntimeEnvironment.application, 1);
         Word word = new Word("deporte",
                 "スポーツ",
                 "¿Haces algún (deporte)",
@@ -148,7 +148,7 @@ public class WordCollectionTest {
     @Test
     public void deleteAll(){
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, "test");
+                new WordCollection(RuntimeEnvironment.application, 1);
         Word word = new Word("deporte",
                 "スポーツ",
                 "¿Haces algún (deporte)",

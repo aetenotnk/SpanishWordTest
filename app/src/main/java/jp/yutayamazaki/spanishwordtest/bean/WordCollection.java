@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WordCollection extends BeanCollection<Word> {
-    private static String DB_NAME_PREFIX = "";
+    private static String DB_NAME_PREFIX = "WordTest";
     private static String DB_NAME_SUFFIX = "_WORD";
     private static int DB_VERSION = 1;
 
@@ -43,10 +43,14 @@ public class WordCollection extends BeanCollection<Word> {
     private static String SQL_SELECT_ALL = "SELECT * FROM ";
     private static String SQL_DELETE_ALL = "DELETE FROM ";
 
-    public WordCollection(Context context, String testName){
+    private int testId;
+
+    public WordCollection(Context context, int testId){
         super(context,
-                DB_NAME_PREFIX + testName + DB_NAME_SUFFIX,
+                DB_NAME_PREFIX + testId + DB_NAME_SUFFIX,
                 DB_VERSION);
+
+        this.testId = testId;
     }
 
     /**
