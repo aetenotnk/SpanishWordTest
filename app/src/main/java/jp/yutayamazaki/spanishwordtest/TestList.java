@@ -14,6 +14,8 @@ import android.widget.SimpleAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
@@ -32,14 +34,27 @@ public class TestList extends AppCompatActivity {
         String token = getResources().getString(R.string.dropbox_token);
         String userAgent = getResources().getString(R.string.dropbox_useragant);
         this.dropBox = new DropBox(token, userAgent);
+    }
 
-        new Thread(new Runnable() {
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        ScheduledExecutorService schedule = Executors.newSingleThreadScheduledExecutor();
+
+        schedule.submit(new Runnable() {
             @Override
             public void run() {
                 loadDataFromDropBox();
+            }
+        });
+
+        schedule.submit(new Runnable() {
+            @Override
+            public void run() {
                 setTestList();
             }
-        }).start();
+        });
     }
 
     /**
