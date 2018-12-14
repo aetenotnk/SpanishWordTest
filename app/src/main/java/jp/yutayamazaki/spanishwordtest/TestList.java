@@ -1,7 +1,6 @@
 package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,10 +18,12 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
+import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 
 public class TestList extends AppCompatActivity {
     private static String TEST_TITLE_FILE = "testlist.csv";
+    private static String TEST_NAME_PREFIX = "WordTest";
 
     private DropBox dropBox;
     private TestTitleCollection testTitleCollection;
@@ -67,6 +68,16 @@ public class TestList extends AppCompatActivity {
         testTitleCollection.loadBeansByDropBox(dropBox,
                 TEST_TITLE_FILE,
                 getFilesDir().getAbsolutePath());
+        // 単語データを取得
+        for(TestTitle title : testTitleCollection.selectAll()){
+            String testName = TEST_NAME_PREFIX + title.getId();
+            String filePath = title.getFilepath();
+            WordCollection wordCollection = new WordCollection(this, testName);
+
+            wordCollection.loadBeansByDropBox(dropBox,
+                    filePath,
+                    getFilesDir().getAbsolutePath());
+        }
     }
 
     private void setTestList(){
