@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
@@ -26,6 +27,8 @@ public class TestList extends AppCompatActivity {
 
     private DropBox dropBox;
     private TestTitleCollection testTitleCollection;
+    private ProgressBar progressBar;
+    private ScheduledExecutorService loadDataSchedule;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,25 +38,29 @@ public class TestList extends AppCompatActivity {
         String token = getResources().getString(R.string.dropbox_token);
         String userAgent = getResources().getString(R.string.dropbox_useragant);
         this.dropBox = new DropBox(token, userAgent);
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        ScheduledExecutorService schedule = Executors.newSingleThreadScheduledExecutor();
-
-        schedule.submit(new Runnable() {
+        // 起動時にDropBoxからデータを取得
+        this.loadDataSchedule = Executors.newSingleThreadScheduledExecutor();
+        loadDataSchedule.submit(new Runnable() {
             @Override
             public void run() {
                 loadDataFromDropBox();
             }
         });
 
-        schedule.submit(new Runnable() {
+        progressBar = findViewById(R.id.progress_bar);
+        progressBar.setVisibility(ProgressBar.VISIBLE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        loadDataSchedule.submit(new Runnable() {
             @Override
             public void run() {
                 setTestList();
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
             }
         });
     }
