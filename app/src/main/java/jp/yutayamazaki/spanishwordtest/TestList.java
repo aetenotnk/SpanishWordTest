@@ -22,9 +22,10 @@ import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 
 public class TestList extends AppCompatActivity {
+    private static String TEST_TITLE_FILE = "testlist.csv";
+
     private DropBox dropBox;
     private TestTitleCollection testTitleCollection;
-    private SQLiteDatabase testTitleDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +63,10 @@ public class TestList extends AppCompatActivity {
      */
     private void loadDataFromDropBox(){
         testTitleCollection = new TestTitleCollection(this);
+        // テスト一覧のデータを取得
         testTitleCollection.loadBeansByDropBox(dropBox,
-                "testlist.csv",
+                TEST_TITLE_FILE,
                 getFilesDir().getAbsolutePath());
-        testTitleDB = testTitleCollection.getReadableDatabase();
     }
 
     private void setTestList(){
