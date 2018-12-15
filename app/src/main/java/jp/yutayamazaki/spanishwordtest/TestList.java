@@ -21,14 +21,17 @@ import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
+import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
 
 public class TestList extends AppCompatActivity {
+    public static String EXTRA_WORD_TEST_MANAGER = "WordTestManager";
+
     private static String TEST_TITLE_FILE = "testlist.csv";
 
     private DropBox dropBox;
-    private TestTitleCollection testTitleCollection;
     private ProgressBar progressBar;
     private ScheduledExecutorService loadDataSchedule;
+    private List<TestTitle> testTitles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,13 +72,14 @@ public class TestList extends AppCompatActivity {
      * DropBoxからデータを読み込む
      */
     private void loadDataFromDropBox(){
-        testTitleCollection = new TestTitleCollection(this);
+        TestTitleCollection testTitleCollection = new TestTitleCollection(this);
         // テスト一覧のデータを取得
         testTitleCollection.loadBeansByDropBox(dropBox,
                 TEST_TITLE_FILE,
                 getFilesDir().getAbsolutePath());
+        testTitles = testTitleCollection.selectAll();
         // 単語データを取得
-        for(TestTitle title : testTitleCollection.selectAll()){
+        for(TestTitle title : testTitles){
             String filePath = title.getFilepath();
             WordCollection wordCollection = new WordCollection(this, title.getId());
 
@@ -88,7 +92,7 @@ public class TestList extends AppCompatActivity {
     private void setTestList(){
         final List<HashMap<String, String>>listData = new ArrayList<>();
 
-        for(TestTitle testTitle : testTitleCollection.selectAll()){
+        for(TestTitle testTitle : testTitles){
             HashMap<String, String>row = new HashMap<>();
 
             row.put("title", testTitle.getTitle());
@@ -117,6 +121,13 @@ public class TestList extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Intent modeSelectIntent = new Intent(getApplication(), ModeSelect.class);
+                        TestTitle testTitle = testTitles.get(i);
+                        WordCollection wordCollection =
+                                new WordCollection(TestList.this, testTitle.getId());
+
+                        // モード選択画面に渡すWordTestManagerを渡す
+                        modeSelectIntent.putExtra(EXTRA_WORD_TEST_MANAGER,
+                                new WordTestManager(testTitle, wordCollection));
 
                         startActivity(modeSelectIntent);
                         overridePendingTransition(R.anim.in_right, R.anim.out_left);
