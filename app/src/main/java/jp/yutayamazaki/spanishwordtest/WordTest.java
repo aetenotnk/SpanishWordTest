@@ -28,6 +28,7 @@ public class WordTest extends AppCompatActivity {
 
         testManager = WordTestManager.class.cast(
                 getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
+        testManager.init(TEST_COUNT);
         setTitle(testManager.getTitle());
 
         questionTextView = findViewById(R.id.question_text);
@@ -62,7 +63,6 @@ public class WordTest extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        testManager.init(TEST_COUNT);
         setContents();
     }
 
