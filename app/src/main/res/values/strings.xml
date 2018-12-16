@@ -4,7 +4,8 @@
     <string name="start_test">テストを開始する</string>
     <string name="check_test">テストを確認する</string>
 
-    <string name="test_question">Q1.かっこ内を埋めなさい。</string>
+    <string name="test_question_prefix">Q</string>
+    <string name="test_question">.かっこ内を埋めなさい。</string>
     <string name="example_spanish">(    ) lavarse las manos antes de comer.</string>
     <string name="example_japanese">食事の前には手を洗わなければならない。</string>
     <string name="test_previous_button">前へ</string>
