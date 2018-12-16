@@ -99,4 +99,61 @@ public class WordTestManagerTest {
         // 有効な単語すべてが問題になっていること
         Assert.assertEquals(2, words.size());
     }
+
+    /**
+     * WordTestManager#getBlindSpanishExampleに
+     * 単語とインデックスを指定してかっこ内を空欄にした文字列が取得できるかテスト
+     */
+    @Test
+    public void blindSpanishExample(){
+        Word word1 = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "(Hay que) lavarse las manos antes de comer.",
+                "食事の前に手を洗わないといけません。",
+                "v");
+
+        Assert.assertEquals("(    ) lavarse las manos antes de comer.",
+                WordTestManager.getBlindSpanishExample(word1, 0));
+
+        Word word2 = new Word(
+                "rojo / roja",
+                "赤い",
+                "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
+                "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
+                "adjective");
+
+        Assert.assertEquals("El samáforo está (    ).",
+                WordTestManager.getBlindSpanishExample(word2, 1));
+    }
+
+    @Test
+    public void getSpanishExample(){
+        Word word = new Word(
+                "rojo / roja",
+                "赤い",
+                "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
+                "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
+                "adjective");
+
+        Assert.assertEquals("Con un poco de whisky se puso (rojo).",
+                WordTestManager.getSpanishExample(word, 0));
+        Assert.assertEquals("El samáforo está (rojo).",
+                WordTestManager.getSpanishExample(word, 1));
+    }
+
+    @Test
+    public void getJapaneseExample(){
+        Word word = new Word(
+                "rojo / roja",
+                "赤い",
+                "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
+                "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
+                "adjective");
+
+        Assert.assertEquals("彼は少しのウイスキーで赤くなった。",
+                WordTestManager.getJapaneseExample(word, 0));
+        Assert.assertEquals("信号は赤です。",
+                WordTestManager.getJapaneseExample(word, 1));
+    }
 }
