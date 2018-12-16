@@ -8,6 +8,7 @@
     <string name="test_question">.かっこ内を埋めなさい。</string>
     <string name="example_spanish">(    ) lavarse las manos antes de comer.</string>
     <string name="example_japanese">食事の前には手を洗わなければならない。</string>
+    <string name="input_answer">答えを入力</string>
     <string name="test_previous_button">前へ</string>
     <string name="test_next_button">次へ</string>
     <string name="test_finish_button">終わる</string>
