@@ -30,10 +30,12 @@ public class WordTestManager implements Serializable {
         this.answers = new LinkedList<>();
     }
 
+    /**
+     * 初期化
+     * @param testCount 要求されたテスト数
+     */
     public void init(int testCount){
-        this.testCount = testCount;
-        this.currentTestCount = 0;
-
+        initTestCount(testCount);
         setWords();
         initAnswers();
     }
@@ -103,12 +105,23 @@ public class WordTestManager implements Serializable {
     }
 
     /**
+     * テスト数の初期化
+     * @param testCount 要求されたテスト数
+     */
+    private void initTestCount(int testCount){
+        int validWordCount = getValidWordCount();
+
+        // テスト数が有効な単語数を超えないよう設定
+        this.testCount = testCount < validWordCount ? testCount : validWordCount;
+        this.currentTestCount = 0;
+    }
+
+    /**
      * 出題する単語を設定する
      */
     private void setWords(){
         // 例文を含む単語だけ抽出
-        List<Word> filteredWords = words.stream().filter(
-                w -> !w.getExampleSpanish().equals("")).collect(Collectors.toList());
+        List<Word> filteredWords = getValidWords();
 
         questionWords.clear();
 
@@ -129,5 +142,23 @@ public class WordTestManager implements Serializable {
         for(int i = 0;i < testCount;i++){
             answers.add("");
         }
+    }
+
+    /**
+     * 問題として有効な単語の数を取得する
+     * @return 問題として有効な単語の数
+     */
+    private int getValidWordCount(){
+        return getValidWords().size();
+    }
+
+    /**
+     * 問題として有効な単語を抽出する
+     * @return 問題として有効な単語リスト
+     */
+    private List<Word> getValidWords(){
+        return words.stream()
+                .filter(w -> !w.getExampleSpanish().equals(""))
+                .collect(Collectors.toList());
     }
 }
