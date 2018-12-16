@@ -44,12 +44,7 @@ public class TestList extends AppCompatActivity {
 
         // 起動時にDropBoxからデータを取得
         this.loadDataSchedule = Executors.newSingleThreadScheduledExecutor();
-        loadDataSchedule.submit(new Runnable() {
-            @Override
-            public void run() {
-                loadDataFromDropBox();
-            }
-        });
+        loadDataSchedule.submit(this::loadDataFromDropBox);
 
         progressBar = findViewById(R.id.progress_bar);
         progressBar.setVisibility(ProgressBar.VISIBLE);
@@ -59,12 +54,9 @@ public class TestList extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        loadDataSchedule.submit(new Runnable() {
-            @Override
-            public void run() {
-                setTestList();
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
-            }
+        loadDataSchedule.submit(() -> {
+            setTestList();
+            progressBar.setVisibility(ProgressBar.INVISIBLE);
         });
     }
 
@@ -110,30 +102,24 @@ public class TestList extends AppCompatActivity {
         );
 
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ListView listView = ListView.class.cast(findViewById(R.id.test_list));
-                listView.setAdapter(adapter);
+        runOnUiThread(() -> {
+            ListView listView = ListView.class.cast(findViewById(R.id.test_list));
+            listView.setAdapter(adapter);
 
-                // リスト内の項目をタップした時の処理
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Intent modeSelectIntent = new Intent(getApplication(), ModeSelect.class);
-                        TestTitle testTitle = testTitles.get(i);
-                        WordCollection wordCollection =
-                                new WordCollection(TestList.this, testTitle.getId());
+            // リスト内の項目をタップした時の処理
+            listView.setOnItemClickListener((adapterView, view, i, l) -> {
+                Intent modeSelectIntent = new Intent(getApplication(), ModeSelect.class);
+                TestTitle testTitle = testTitles.get(i);
+                WordCollection wordCollection =
+                        new WordCollection(TestList.this, testTitle.getId());
 
-                        // モード選択画面に渡すWordTestManagerを渡す
-                        modeSelectIntent.putExtra(EXTRA_WORD_TEST_MANAGER,
-                                new WordTestManager(testTitle, wordCollection));
+                // モード選択画面に渡すWordTestManagerを渡す
+                modeSelectIntent.putExtra(EXTRA_WORD_TEST_MANAGER,
+                        new WordTestManager(testTitle, wordCollection));
 
-                        startActivity(modeSelectIntent);
-                        overridePendingTransition(R.anim.in_right, R.anim.out_left);
-                    }
-                });
-            }
+                startActivity(modeSelectIntent);
+                overridePendingTransition(R.anim.in_right, R.anim.out_left);
+            });
         });
     }
 

@@ -22,12 +22,10 @@ public class WordTestManager implements Serializable {
     private List<Word> questionWords;
     private int testCount;
     private int currentTestCount;
-    private Random random;
 
     public WordTestManager(TestTitle testTitle, WordCollection wordCollection){
         this.testTitle = testTitle;
         this.words = wordCollection.selectAll();
-        this.random = new Random();
         this.questionWords = new LinkedList<>();
     }
 
