@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import jp.yutayamazaki.spanishwordtest.bean.Word;
@@ -20,6 +21,7 @@ public class WordTest extends AppCompatActivity {
     private TextView japaneseTextView;
     private Button previousButton;
     private Button nextButton;
+    private EditText answerText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +38,18 @@ public class WordTest extends AppCompatActivity {
         japaneseTextView = findViewById(R.id.japanese_text);
         previousButton = findViewById(R.id.previous_button);
         nextButton = findViewById(R.id.next_button);
+        answerText = findViewById(R.id.answer);
 
         // 各ボタンのクリック時のイベントを実装
         previousButton.setOnClickListener(view ->{
+            // 解答を取得
+            testManager.setAnswer(answerText.getText().toString());
             testManager.previous();
             setContents();
         });
         nextButton.setOnClickListener(view ->{
+            // 解答を取得
+            testManager.setAnswer(answerText.getText().toString());
             if(testManager.isLast()){
                 // TODO: 2018/12/16 試験結果画面の実装
                 Intent modeSelectIntent = new Intent(getApplication(), ModeSelect.class);
@@ -77,6 +84,9 @@ public class WordTest extends AppCompatActivity {
         questionTextView.setText(questionText);
         spanishTextView.setText(WordTestManager.getBlindSpanishExample(currentWord, 0));
         japaneseTextView.setText(WordTestManager.getJapaneseExample(currentWord, 0));
+
+        // 解答欄を設定
+        answerText.setText(testManager.getAnswer());
 
         // 前へボタンの制御
         if(testManager.isFirst()){

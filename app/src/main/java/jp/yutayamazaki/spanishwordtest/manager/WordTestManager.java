@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -22,11 +21,13 @@ public class WordTestManager implements Serializable {
     private List<Word> questionWords;
     private int testCount;
     private int currentTestCount;
+    private List<String> answers;
 
     public WordTestManager(TestTitle testTitle, WordCollection wordCollection){
         this.testTitle = testTitle;
         this.words = wordCollection.selectAll();
         this.questionWords = new LinkedList<>();
+        this.answers = new LinkedList<>();
     }
 
     public void init(int testCount){
@@ -34,6 +35,23 @@ public class WordTestManager implements Serializable {
         this.currentTestCount = 0;
 
         setWords();
+        initAnswers();
+    }
+
+    /**
+     * 現在の問題の解答を設定する
+     * @param input ユーザーの解答
+     */
+    public void setAnswer(String input){
+        answers.set(currentTestCount, input);
+    }
+
+    /**
+     * 現在の問題のユーザーの解答を取得する
+     * @return 現在の問題のユーザーの解答
+     */
+    public String getAnswer(){
+        return answers.get(currentTestCount);
     }
 
     public String getTitle(){
@@ -98,6 +116,18 @@ public class WordTestManager implements Serializable {
         Collections.shuffle(filteredWords);
         for(int i = 0;i < testCount;i++){
             questionWords.add(filteredWords.get(i));
+        }
+    }
+
+    /**
+     * 解答リストを初期化する
+     */
+    private void initAnswers(){
+        answers.clear();
+
+        // 解答リストを問題数分確保し空の文字列で埋める
+        for(int i = 0;i < testCount;i++){
+            answers.add("");
         }
     }
 }
