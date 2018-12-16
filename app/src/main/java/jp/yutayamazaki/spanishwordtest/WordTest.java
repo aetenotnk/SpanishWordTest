@@ -1,5 +1,6 @@
 package jp.yutayamazaki.spanishwordtest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -34,6 +35,27 @@ public class WordTest extends AppCompatActivity {
         japaneseTextView = findViewById(R.id.japanese_text);
         previousButton = findViewById(R.id.previous_button);
         nextButton = findViewById(R.id.next_button);
+
+        // 各ボタンのクリック時のイベントを実装
+        previousButton.setOnClickListener(view ->{
+            testManager.previous();
+            setContents();
+        });
+        nextButton.setOnClickListener(view ->{
+            if(testManager.isLast()){
+                // TODO: 2018/12/16 試験結果画面の実装
+                Intent modeSelectIntent = new Intent(getApplication(), ModeSelect.class);
+
+                modeSelectIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
+
+                startActivity(modeSelectIntent);
+                overridePendingTransition(R.anim.in_right, R.anim.out_left);
+            }
+            else{
+                testManager.next();
+                setContents();
+            }
+        });
     }
 
     @Override
