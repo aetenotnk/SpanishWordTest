@@ -18,4 +18,8 @@
     <string name="result_base">20</string>
     <string name="try_again">もう一度テストする</string>
     <string name="return_test_list">テスト一覧に戻る</string>
+    <string name="result_word_spanish">Hay que</string>
+    <string name="result_word_japanese">しなければならない</string>
+    <string name="result_example_spanish">(Hay que) lavarse las manos antes de comer.</string>
+    <string name="result_example_japanese">食事の前には手を洗わなければならない。</string>
 </resources>

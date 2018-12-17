@@ -43,4 +43,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     compile 'com.dropbox.core:dropbox-core-sdk:3.0.10'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
 }
