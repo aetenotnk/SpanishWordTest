@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="result_filter">
+        <item>すべて</item>
+        <item>間違えた問題のみ</item>
+        <item>正解した問題のみ</item>
+    </string-array>
+</resources>

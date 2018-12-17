@@ -51,12 +51,11 @@ public class WordTest extends AppCompatActivity {
             // 解答を取得
             testManager.setAnswer(answerText.getText().toString());
             if(testManager.isLast()){
-                // TODO: 2018/12/16 試験結果画面の実装
-                Intent modeSelectIntent = new Intent(getApplication(), ModeSelect.class);
+                Intent resultIntent = new Intent(getApplication(), TestResult.class);
 
-                modeSelectIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
+                resultIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
 
-                startActivity(modeSelectIntent);
+                startActivity(resultIntent);
                 overridePendingTransition(R.anim.in_right, R.anim.out_left);
             }
             else{

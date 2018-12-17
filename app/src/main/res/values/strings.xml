@@ -12,4 +12,10 @@
     <string name="test_previous_button">前へ</string>
     <string name="test_next_button">次へ</string>
     <string name="test_finish_button">終わる</string>
+
+    <string name="result_separator">/</string>
+    <string name="result_actual">20</string>
+    <string name="result_base">20</string>
+    <string name="try_again">もう一度テストする</string>
+    <string name="return_test_list">テスト一覧に戻る</string>
 </resources>
