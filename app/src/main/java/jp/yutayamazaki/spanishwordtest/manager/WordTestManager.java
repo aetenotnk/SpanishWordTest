@@ -23,6 +23,14 @@ public class WordTestManager implements Serializable {
     private int currentTestCount;
     private List<String> answers;
 
+    /**
+     * 各問題のの評価
+     */
+    public enum Grade{
+        OK,
+        NOT_OK
+    }
+
     public WordTestManager(TestTitle testTitle, WordCollection wordCollection){
         this.testTitle = testTitle;
         this.words = wordCollection.selectAll();
@@ -102,6 +110,26 @@ public class WordTestManager implements Serializable {
 
     public static String getJapaneseExample(Word word, int index){
         return word.getExampleJapanese().split(EXAMPLE_SPLIT)[index];
+    }
+
+    /**
+     * 解答を評価する
+     * @param word 単語
+     * @param index 例文のインデックス
+     * @param answer ユーザーの解答
+     * @return
+     */
+    public static Grade evaluate(Word word, int index, String answer){
+        String spanishExample = word.getExampleSpanish().split(EXAMPLE_SPLIT)[index];
+        Pattern pattern = Pattern.compile("\\((.*)\\)");
+        Matcher matcher = pattern.matcher(spanishExample);
+
+        matcher.find();
+        if(answer.toLowerCase().equals(matcher.group(1).toLowerCase())){
+            return Grade.OK;
+        }
+
+        return Grade.NOT_OK;
     }
 
     /**

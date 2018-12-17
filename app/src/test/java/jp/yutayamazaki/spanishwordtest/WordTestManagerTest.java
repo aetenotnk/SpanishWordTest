@@ -156,4 +156,40 @@ public class WordTestManagerTest {
         Assert.assertEquals("信号は赤です。",
                 WordTestManager.getJapaneseExample(word, 1));
     }
+
+    /**
+     * 評価メソッドが正しい解答でOKを返すかテスト
+     */
+    @Test
+    public void evaluateOK(){
+        Word word = new Word(
+                "rojo / roja",
+                "赤い",
+                "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
+                "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
+                "adjective");
+
+        Assert.assertEquals(WordTestManager.Grade.OK,
+                WordTestManager.evaluate(word, 0, "rojo"));
+        Assert.assertEquals(WordTestManager.Grade.OK,
+                WordTestManager.evaluate(word, 1, "rojo"));
+    }
+
+    /**
+     * 評価メソッドが誤った解答でNOT_OKを返すかテスト
+     */
+    @Test
+    public void evaluateNotOK(){
+        Word word = new Word(
+                "rojo / roja",
+                "赤い",
+                "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
+                "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
+                "adjective");
+
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                WordTestManager.evaluate(word, 0, "roja"));
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                WordTestManager.evaluate(word, 1, "roja"));
+    }
 }
