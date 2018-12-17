@@ -36,7 +36,7 @@ public class WordTestManager implements Serializable {
      */
     public void init(int testCount){
         initTestCount(testCount);
-        setWords();
+        initQuestionWords();
         initAnswers();
     }
 
@@ -119,7 +119,7 @@ public class WordTestManager implements Serializable {
     /**
      * 出題する単語を設定する
      */
-    private void setWords(){
+    private void initQuestionWords(){
         // 例文を含む単語だけ抽出
         List<Word> filteredWords = getValidWords();
 
