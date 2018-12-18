@@ -2,6 +2,7 @@ package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,6 +33,11 @@ public class WordTest extends AppCompatActivity {
                 getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
         testManager.init(TEST_COUNT);
         setTitle(testManager.getTitle());
+
+        // アクションバーのバックボタンを有効にする
+        ActionBar actionbar = getSupportActionBar();
+        actionbar.setDisplayHomeAsUpEnabled(true);
+
 
         questionTextView = findViewById(R.id.question_text);
         spanishTextView = findViewById(R.id.spanish_text);
