@@ -41,5 +41,9 @@ public class TestResult extends AppCompatActivity {
         // 結果一覧の設定
         this.resultList.setAdapter(new ResultListAdapter(testManager));
         this.resultList.setLayoutManager(new LinearLayoutManager(this));
+
+        // スコアの設定
+        this.scoreText.setText(String.valueOf(Math.round(testManager.getScore())));
+        this.baseScoreText.setText(String.valueOf(Math.round(testManager.getMaxScore())));
     }
 }

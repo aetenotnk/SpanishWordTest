@@ -27,8 +27,18 @@ public class WordTestManager implements Serializable {
      * 各問題のの評価
      */
     public enum Grade{
-        OK,
-        NOT_OK;
+        OK(1),
+        NOT_OK(0);
+
+        private float score;
+
+        Grade(float score){
+            this.score = score;
+        }
+
+        public float getScore() {
+            return score;
+        }
 
         @Override
         public String toString() {
@@ -127,6 +137,29 @@ public class WordTestManager implements Serializable {
 
     public int getTestCount(){
         return testCount;
+    }
+
+    /**
+     * テストのスコアを取得する
+     * @return テストのスコア
+     */
+    public float getScore(){
+        float score = 0;
+
+        for(int i = 0;i < questionWords.size();i++){
+            score += evaluate(questionWords.get(i), 0, answers.get(i)).getScore();
+        }
+
+        return score;
+    }
+
+    /**
+     * テストの満点のときのスコアを取得する
+     * @return テストの満点の時のスコア
+     */
+    public float getMaxScore(){
+        // すべてOKの時のスコアを返す
+        return questionWords.size() * Grade.OK.getScore();
     }
 
     /**
