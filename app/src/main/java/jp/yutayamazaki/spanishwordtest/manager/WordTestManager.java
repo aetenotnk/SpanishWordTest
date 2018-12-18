@@ -28,7 +28,19 @@ public class WordTestManager implements Serializable {
      */
     public enum Grade{
         OK,
-        NOT_OK
+        NOT_OK;
+
+        @Override
+        public String toString() {
+            switch (this){
+                case OK:
+                    return "⭕";
+                case NOT_OK:
+                    return "❌";
+            }
+
+            return super.toString();
+        }
     }
 
     public WordTestManager(TestTitle testTitle, WordCollection wordCollection){
@@ -52,7 +64,7 @@ public class WordTestManager implements Serializable {
      * 現在の問題の解答を設定する
      * @param input ユーザーの解答
      */
-    public void setAnswer(String input){
+    public void setCurrentAnswer(String input){
         answers.set(currentTestCount, input);
     }
 
@@ -60,8 +72,17 @@ public class WordTestManager implements Serializable {
      * 現在の問題のユーザーの解答を取得する
      * @return 現在の問題のユーザーの解答
      */
-    public String getAnswer(){
+    public String getCurrentAnswer(){
         return answers.get(currentTestCount);
+    }
+
+    /**
+     * ユーザーの解答を取得する
+     * @param index 何番目の解答か
+     * @return index番目の解答
+     */
+    public String getAnswer(int index){
+        return answers.get(index);
     }
 
     public String getTitle(){
@@ -70,6 +91,18 @@ public class WordTestManager implements Serializable {
 
     public Word getCurrentWord(){
         return questionWords.get(currentTestCount);
+    }
+
+    /**
+     * 問題の単語を取得する
+     * @param questionIndex 取得する単語が問題の何番目か
+     * @return questionIndex番目の単語を返す。
+     * questionIndexが0未満なら最初の、問題数以上なら最後の問題を返す。
+     */
+    public Word getQuestionWord(int questionIndex){
+        int index = Math.max(0, Math.min(questionIndex, questionWords.size() - 1));
+
+        return questionWords.get(index);
     }
 
     public void next(){
@@ -90,6 +123,10 @@ public class WordTestManager implements Serializable {
 
     public int getCurrentTestCount(){
         return currentTestCount;
+    }
+
+    public int getTestCount(){
+        return testCount;
     }
 
     /**
@@ -117,7 +154,7 @@ public class WordTestManager implements Serializable {
      * @param word 単語
      * @param index 例文のインデックス
      * @param answer ユーザーの解答
-     * @return
+     * @return ユーザーの解答の評価
      */
     public static Grade evaluate(Word word, int index, String answer){
         String spanishExample = word.getExampleSpanish().split(EXAMPLE_SPLIT)[index];
