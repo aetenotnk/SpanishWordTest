@@ -161,8 +161,9 @@ public class WordTestManager implements Serializable {
         Pattern pattern = Pattern.compile("\\((.*)\\)");
         Matcher matcher = pattern.matcher(spanishExample);
 
-        matcher.find();
-        if(answer.toLowerCase().equals(matcher.group(1).toLowerCase())){
+        // データが不正で()がないかもしれないので
+        // Matcher#findでパターンが見つかったかチェックする
+        if(matcher.find() && answer.toLowerCase().equals(matcher.group(1).toLowerCase())){
             return Grade.OK;
         }
 

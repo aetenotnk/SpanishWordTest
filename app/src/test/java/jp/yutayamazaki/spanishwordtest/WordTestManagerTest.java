@@ -176,6 +176,54 @@ public class WordTestManagerTest {
     }
 
     /**
+     * 例文が1つの単語でOKの評価ができるかテスト
+     */
+    @Test
+    public void evaluateOneExampleOK(){
+        Word word = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "(Hay que) lavarse las manos antes de comer.",
+                "食事の前に手を洗わないといけません。",
+                "v");
+
+        Assert.assertEquals(WordTestManager.Grade.OK,
+                WordTestManager.evaluate(word, 0, "Hay que"));
+    }
+
+    /**
+     * 例文が1つの単語でNOT_OKの評価ができるかテスト
+     */
+    @Test
+    public void evaluateOneExampleNotOK(){
+        Word word = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "(Hay que) lavarse las manos antes de comer.",
+                "食事の前に手を洗わないといけません。",
+                "v");
+
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                WordTestManager.evaluate(word, 0, ""));
+    }
+
+    /**
+     * 例文に(...)のパターンがない場合のテスト
+     */
+    @Test
+    public void evaluateMissingExample(){
+        Word word = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "Hay que lavarse las manos antes de comer.",
+                "食事の前に手を洗わないといけません。",
+                "v");
+
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                WordTestManager.evaluate(word, 0, "Hay que"));
+    }
+
+    /**
      * 評価メソッドが誤った解答でNOT_OKを返すかテスト
      */
     @Test
