@@ -2,7 +2,10 @@ package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -33,6 +36,12 @@ public class WordTest extends AppCompatActivity {
         testManager.init(TEST_COUNT);
         setTitle(testManager.getTitle());
 
+        // アクションバーのバックボタンを有効にする
+        ActionBar actionbar = getSupportActionBar();
+        if(actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+        }
+
         questionTextView = findViewById(R.id.question_text);
         spanishTextView = findViewById(R.id.spanish_text);
         japaneseTextView = findViewById(R.id.japanese_text);
@@ -56,6 +65,7 @@ public class WordTest extends AppCompatActivity {
                 resultIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
 
                 startActivity(resultIntent);
+                finish();
                 overridePendingTransition(R.anim.in_right, R.anim.out_left);
             }
             else{
@@ -70,6 +80,26 @@ public class WordTest extends AppCompatActivity {
         super.onStart();
 
         setContents();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // アクションバーのバックボタンが押されたときの挙動
+        if(id == android.R.id.home){
+            backModeSelect();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * 端末の戻るボタンを押したときの挙動
+     */
+    @Override
+    public void onBackPressed() {
+        backModeSelect();
     }
 
     private void setContents(){
@@ -102,5 +132,27 @@ public class WordTest extends AppCompatActivity {
         else{
             nextButton.setText(R.string.test_next_button);
         }
+    }
+
+    /**
+     * モード選択に戻る
+     */
+    private void backModeSelect(){
+        // ダイアログで戻るか確認する
+        new AlertDialog.Builder(this)
+                .setTitle("Caution")
+                .setMessage("モード選択に戻りますか？")
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    Intent intent = new Intent(getApplication(), ModeSelect.class);
+
+                    intent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
+
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.in_left, R.anim.out_right);
+                })
+                .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                    // 何もしない
+                })
+                .show();
     }
 }
