@@ -3,7 +3,9 @@ package jp.yutayamazaki.spanishwordtest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -78,6 +80,18 @@ public class WordTest extends AppCompatActivity {
         setContents();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // アクションバーのバックボタンが押されたときの挙動
+        if(id == android.R.id.home){
+            backModeSelect();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void setContents(){
         Word currentWord = testManager.getCurrentWord();
         String questionText =
@@ -108,5 +122,26 @@ public class WordTest extends AppCompatActivity {
         else{
             nextButton.setText(R.string.test_next_button);
         }
+    }
+
+    /**
+     * モード選択に戻る
+     */
+    private void backModeSelect(){
+        // ダイアログで戻るか確認する
+        new AlertDialog.Builder(this)
+                .setTitle("Caution")
+                .setMessage("モード選択に戻りますか？")
+                .setPositiveButton("OK", (dialogInterface, i) -> {
+                    Intent intent = new Intent(getApplication(), ModeSelect.class);
+
+                    intent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
+
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.in_left, R.anim.out_right);
+                })
+                .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                })
+                .show();
     }
 }
