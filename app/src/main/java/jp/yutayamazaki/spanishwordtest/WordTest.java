@@ -38,8 +38,9 @@ public class WordTest extends AppCompatActivity {
 
         // アクションバーのバックボタンを有効にする
         ActionBar actionbar = getSupportActionBar();
-        actionbar.setDisplayHomeAsUpEnabled(true);
-
+        if(actionbar != null) {
+            actionbar.setDisplayHomeAsUpEnabled(true);
+        }
 
         questionTextView = findViewById(R.id.question_text);
         spanishTextView = findViewById(R.id.spanish_text);
@@ -141,6 +142,7 @@ public class WordTest extends AppCompatActivity {
                     overridePendingTransition(R.anim.in_left, R.anim.out_right);
                 })
                 .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                    // 何もしない
                 })
                 .show();
     }
