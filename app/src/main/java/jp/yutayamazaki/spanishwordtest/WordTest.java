@@ -93,6 +93,14 @@ public class WordTest extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 端末の戻るボタンを押したときの挙動
+     */
+    @Override
+    public void onBackPressed() {
+        backModeSelect();
+    }
+
     private void setContents(){
         Word currentWord = testManager.getCurrentWord();
         String questionText =
