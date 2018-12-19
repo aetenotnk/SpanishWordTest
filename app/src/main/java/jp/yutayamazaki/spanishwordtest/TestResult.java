@@ -1,9 +1,11 @@
 package jp.yutayamazaki.spanishwordtest;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -21,6 +23,8 @@ public class TestResult extends AppCompatActivity {
     private Button tryAgainButton;
     private Button checkQuestionButton;
     private Button returnTestListButton;
+
+    private ResultListAdapter resultListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +45,15 @@ public class TestResult extends AppCompatActivity {
 
         setResultList();
         setScore();
+        setButtonListener();
     }
 
     /**
      * 結果一覧の設定
      */
     private void setResultList(){
-        this.resultList.setAdapter(new ResultListAdapter(testManager));
+        resultListAdapter = new ResultListAdapter(testManager);
+        this.resultList.setAdapter(resultListAdapter);
         this.resultList.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -57,5 +63,34 @@ public class TestResult extends AppCompatActivity {
     private void setScore(){
         this.scoreText.setText(String.valueOf(Math.round(testManager.getScore())));
         this.baseScoreText.setText(String.valueOf(Math.round(testManager.getMaxScore())));
+    }
+
+    private void setButtonListener(){
+        // フィルターの設定
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                ResultListAdapter.Filter filter = ResultListAdapter.Filter.ALL;
+
+                switch (i){
+                    case 0:
+                        filter = ResultListAdapter.Filter.ALL;
+                        break;
+                    case 1:
+                        filter = ResultListAdapter.Filter.CORRECT;
+                        break;
+                    case 2:
+                        filter = ResultListAdapter.Filter.MISTAKE;
+                        break;
+                }
+
+                resultListAdapter.filterWords(filter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                resultListAdapter.filterWords(ResultListAdapter.Filter.ALL);
+            }
+        });
     }
 }

@@ -2,9 +2,13 @@ package jp.yutayamazaki.spanishwordtest.widget;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.Collections;
+import java.util.List;
 
 import jp.yutayamazaki.spanishwordtest.R;
 import jp.yutayamazaki.spanishwordtest.bean.Word;
@@ -16,8 +20,17 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
 
     private WordTestManager testManager;
 
+    private List<Pair<Word, Integer>> filteredWords;
+
+    public enum Filter{
+        ALL,
+        CORRECT,
+        MISTAKE
+    }
+
     public ResultListAdapter(WordTestManager testManager){
         this.testManager = testManager;
+        this.filteredWords = testManager.getQuestionWordPairs();
     }
 
     @NonNull
@@ -32,11 +45,12 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ResultListHolder holder, int position) {
-        Word word = testManager.getQuestionWord(position);
+        Word word = filteredWords.get(position).first;
         // スペイン語の単語の前に問題番号と評価の記号を付ける
         WordTestManager.Grade grade =
                 WordTestManager.evaluate(word, 0, testManager.getAnswer(position));
-        String numberText = NUMBER_PREFIX + (position + 1) + NUMBER_SUFFIX;
+        int questionNumber = filteredWords.get(position).second + 1;
+        String numberText = NUMBER_PREFIX + questionNumber + NUMBER_SUFFIX;
         String spanishWordText = grade + numberText + word.getWordSpanish();
 
         holder.spanishWordText.setText(spanishWordText);
@@ -47,6 +61,27 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
 
     @Override
     public int getItemCount() {
-        return testManager.getTestCount();
+        return filteredWords.size();
+    }
+
+    /**
+     * 表示する単語を絞りこむ
+     * @param filterCondition 絞り込む条件
+     */
+    public void filterWords(Filter filterCondition){
+        switch (filterCondition){
+            case ALL:
+                filteredWords = testManager.getQuestionWordPairs();
+                break;
+            case CORRECT:
+                filteredWords = testManager.getCorrectWordPairs();
+                break;
+            case MISTAKE:
+                filteredWords = testManager.getMistakeWordPairs();
+                break;
+            default:
+                filteredWords = Collections.emptyList();
+        }
+        notifyDataSetChanged();
     }
 }

@@ -1,5 +1,7 @@
 package jp.yutayamazaki.spanishwordtest.manager;
 
+import android.util.Pair;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -104,15 +106,55 @@ public class WordTestManager implements Serializable {
     }
 
     /**
-     * 問題の単語を取得する
-     * @param questionIndex 取得する単語が問題の何番目か
-     * @return questionIndex番目の単語を返す。
-     * questionIndexが0未満なら最初の、問題数以上なら最後の問題を返す。
+     * 問題に出した単語をすべて取得する
+     * @return 問題のすべての単語とその問題のインデックスのペアリスト
      */
-    public Word getQuestionWord(int questionIndex){
-        int index = Math.max(0, Math.min(questionIndex, questionWords.size() - 1));
+    public List<Pair<Word, Integer>> getQuestionWordPairs(){
+        List<Pair<Word, Integer>> res = new LinkedList<>();
 
-        return questionWords.get(index);
+        for(int i = 0;i < questionWords.size();i++){
+            res.add(new Pair<>(questionWords.get(i), i));
+        }
+
+        return res;
+    }
+
+    /**
+     * 正解した単語をすべて取得する
+     * @return 正解した単語とその問題のインデックスのペアリスト
+     */
+    public List<Pair<Word, Integer>> getCorrectWordPairs(){
+        List<Pair<Word, Integer>> res = new LinkedList<>();
+
+        for(int i = 0;i < questionWords.size();i++){
+            Word word = questionWords.get(i);
+            String answer = answers.get(i);
+
+            if(evaluate(word, 0, answer) == Grade.OK){
+                res.add(new Pair<>(word, i));
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * 間違えた単語をすべて取得する
+     * @return 間違えた単語とその問題のインデックスのペアリスト
+     */
+    public List<Pair<Word, Integer>> getMistakeWordPairs(){
+        List<Pair<Word, Integer>> res = new LinkedList<>();
+
+        for(int i = 0;i < questionWords.size();i++){
+            Word word = questionWords.get(i);
+            String answer = answers.get(i);
+
+            if(evaluate(word, 0, answer) == Grade.NOT_OK){
+                res.add(new Pair<>(word, i));
+            }
+        }
+
+        return res;
     }
 
     public void next(){
