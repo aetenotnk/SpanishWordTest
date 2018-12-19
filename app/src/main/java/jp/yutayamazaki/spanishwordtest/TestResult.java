@@ -77,10 +77,10 @@ public class TestResult extends AppCompatActivity {
                         filter = ResultListAdapter.Filter.ALL;
                         break;
                     case 1:
-                        filter = ResultListAdapter.Filter.CORRECT;
+                        filter = ResultListAdapter.Filter.MISTAKE;
                         break;
                     case 2:
-                        filter = ResultListAdapter.Filter.MISTAKE;
+                        filter = ResultListAdapter.Filter.CORRECT;
                         break;
                 }
 
