@@ -224,6 +224,10 @@ public class WordTestManager implements Serializable {
         return word.getExampleJapanese().split(EXAMPLE_SPLIT)[index];
     }
 
+    public Grade getEvaluate(int questionIndex, int exampleIndex){
+        return evaluate(questionWords.get(questionIndex), exampleIndex, answers.get(questionIndex));
+    }
+
     /**
      * 解答を評価する
      * @param word 単語

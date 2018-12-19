@@ -46,10 +46,10 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
     @Override
     public void onBindViewHolder(@NonNull ResultListHolder holder, int position) {
         Word word = filteredWords.get(position).first;
+        Integer questionIndex = filteredWords.get(position).second;
         // スペイン語の単語の前に問題番号と評価の記号を付ける
-        WordTestManager.Grade grade =
-                WordTestManager.evaluate(word, 0, testManager.getAnswer(position));
-        int questionNumber = filteredWords.get(position).second + 1;
+        WordTestManager.Grade grade = testManager.getEvaluate(questionIndex, 0);
+        int questionNumber = questionIndex + 1;
         String numberText = NUMBER_PREFIX + questionNumber + NUMBER_SUFFIX;
         String spanishWordText = grade + numberText + word.getWordSpanish();
 
