@@ -101,5 +101,11 @@ public class TestResult extends AppCompatActivity {
             startActivity(wordTestIntent);
             overridePendingTransition(R.anim.in_left, R.anim.out_right);
         });
+        returnTestListButton.setOnClickListener(view -> {
+            Intent testListIntent = new Intent(getApplication(), TestList.class);
+
+            startActivity(testListIntent);
+            overridePendingTransition(R.anim.in_left, R.anim.out_right);
+        });
     }
 }
