@@ -1,5 +1,6 @@
 package jp.yutayamazaki.spanishwordtest;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -91,6 +92,14 @@ public class TestResult extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> adapterView) {
                 resultListAdapter.filterWords(ResultListAdapter.Filter.ALL);
             }
+        });
+        tryAgainButton.setOnClickListener(view -> {
+            Intent wordTestIntent = new Intent(getApplication(), WordTest.class);
+
+            wordTestIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
+
+            startActivity(wordTestIntent);
+            overridePendingTransition(R.anim.in_left, R.anim.out_right);
         });
     }
 }
