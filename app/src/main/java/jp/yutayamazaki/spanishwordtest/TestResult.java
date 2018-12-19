@@ -29,6 +29,7 @@ public class TestResult extends AppCompatActivity {
 
         this.testManager = WordTestManager.class.cast(
                 getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
+        setTitle(testManager.getTitle());
 
         this.scoreText = findViewById(R.id.score_actual);
         this.baseScoreText = findViewById(R.id.score_base);
