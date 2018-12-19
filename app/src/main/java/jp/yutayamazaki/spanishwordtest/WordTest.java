@@ -65,6 +65,7 @@ public class WordTest extends AppCompatActivity {
                 resultIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
 
                 startActivity(resultIntent);
+                finish();
                 overridePendingTransition(R.anim.in_right, R.anim.out_left);
             }
             else{
