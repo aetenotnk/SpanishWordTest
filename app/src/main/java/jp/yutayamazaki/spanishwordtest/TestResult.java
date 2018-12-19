@@ -38,11 +38,22 @@ public class TestResult extends AppCompatActivity {
         this.checkQuestionButton = findViewById(R.id.check_button);
         this.returnTestListButton = findViewById(R.id.return_test_list_button);
 
-        // 結果一覧の設定
+        setResultList();
+        setScore();
+    }
+
+    /**
+     * 結果一覧の設定
+     */
+    private void setResultList(){
         this.resultList.setAdapter(new ResultListAdapter(testManager));
         this.resultList.setLayoutManager(new LinearLayoutManager(this));
+    }
 
-        // スコアの設定
+    /**
+     * スコアの表示の設定
+     */
+    private void setScore(){
         this.scoreText.setText(String.valueOf(Math.round(testManager.getScore())));
         this.baseScoreText.setText(String.valueOf(Math.round(testManager.getMaxScore())));
     }
