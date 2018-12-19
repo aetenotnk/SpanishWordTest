@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,6 +18,12 @@ import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
 public class WordTest extends AppCompatActivity {
     // TODO: 2018/12/16 問題数は設定から変更できるようにする
     private static int TEST_COUNT = 20;
+    // スワイプ判定する最低のX軸の移動距離
+    private static float SWIPE_MIN_DISTANCE = 50;
+    // スワイプ判定する最低のX軸の速度
+    private static float SWIPE_MIN_SPEED = 200;
+    // Y軸の移動距離がこれ以上ならX軸の移動と判定しない
+    private static float SWIPE_MAX_OFF_PATH = 200;
 
     private WordTestManager testManager;
 
@@ -25,6 +33,8 @@ public class WordTest extends AppCompatActivity {
     private Button previousButton;
     private Button nextButton;
     private EditText answerText;
+
+    private GestureDetector gestureDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +60,7 @@ public class WordTest extends AppCompatActivity {
         answerText = findViewById(R.id.answer);
 
         setButtonEvent();
+        setSwipeEvent();
     }
 
     @Override
@@ -79,6 +90,11 @@ public class WordTest extends AppCompatActivity {
         backModeSelect();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
+    }
+
     /**
      * 各ボタンのイベントを設定
      */
@@ -106,6 +122,51 @@ public class WordTest extends AppCompatActivity {
                 setContents();
             }
         });
+    }
+
+    /**
+     * スワイプのイベントを設定
+     */
+    private void setSwipeEvent(){
+        GestureDetector.SimpleOnGestureListener listener =
+                new GestureDetector.SimpleOnGestureListener(){
+                    @Override
+                    public boolean onFling(MotionEvent e1,
+                                           MotionEvent e2,
+                                           float velocityX,
+                                           float velocityY) {
+                        float distance_x = Math.abs(e1.getX() - e2.getX());
+                        float velocity_x = Math.abs(velocityY);
+                        float distance_y = Math.abs(e1.getY() - e2.getY());
+
+                        if(distance_y > SWIPE_MAX_OFF_PATH){
+                            return false;
+                        }
+
+                        if(velocity_x < SWIPE_MIN_SPEED){
+                            return false;
+                        }
+
+                        if(distance_x < SWIPE_MIN_DISTANCE){
+                            return false;
+                        }
+
+                        // 左にスワイプ
+                        if(e1.getX() - e2.getX() > 0){
+                            nextButton.callOnClick();
+                        }
+                        // 右にフリック
+                        else{
+                            if(!testManager.isFirst()){
+                                previousButton.callOnClick();
+                            }
+                        }
+
+                        return false;
+                    }
+                };
+
+        gestureDetector = new GestureDetector(this, listener);
     }
 
     private void setContents(){
