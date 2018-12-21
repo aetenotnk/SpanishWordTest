@@ -75,6 +75,8 @@ public class TestList extends AppCompatActivity {
             String filePath = title.getFilepath();
             WordCollection wordCollection = new WordCollection(this, title.getId());
 
+            // 単語データを入れ替える
+            wordCollection.deleteAll();
             wordCollection.loadBeansByDropBox(dropBox,
                     filePath,
                     getFilesDir().getAbsolutePath());

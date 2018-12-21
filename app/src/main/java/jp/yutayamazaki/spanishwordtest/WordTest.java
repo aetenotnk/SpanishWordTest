@@ -101,13 +101,14 @@ public class WordTest extends AppCompatActivity {
     private void setButtonEvent(){
         previousButton.setOnClickListener(view ->{
             // 解答を取得
-            testManager.setAnswer(answerText.getText().toString());
+            testManager.setCurrentAnswer(answerText.getText().toString());
             testManager.previous();
             setContents();
         });
         nextButton.setOnClickListener(view ->{
             // 解答を取得
-            testManager.setAnswer(answerText.getText().toString());
+            testManager.setCurrentAnswer(answerText.getText().toString());
+            testManager.setCurrentAnswer(answerText.getText().toString());
             if(testManager.isLast()){
                 Intent resultIntent = new Intent(getApplication(), TestResult.class);
 
@@ -182,7 +183,7 @@ public class WordTest extends AppCompatActivity {
         japaneseTextView.setText(WordTestManager.getJapaneseExample(currentWord, 0));
 
         // 解答欄を設定
-        answerText.setText(testManager.getAnswer());
+        answerText.setText(testManager.getCurrentAnswer());
 
         // 前へボタンの制御
         if(testManager.isFirst()){
