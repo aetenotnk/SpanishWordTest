@@ -156,7 +156,7 @@ public class WordTest extends AppCompatActivity {
                         if(e1.getX() - e2.getX() > 0){
                             nextButton.callOnClick();
                         }
-                        // 右にフリック
+                        // 右にスワイプ
                         else{
                             if(!testManager.isFirst()){
                                 previousButton.callOnClick();
