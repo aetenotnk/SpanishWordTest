@@ -71,6 +71,13 @@ public class WordTest extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        testManager.setCurrentAnswer(answerText.getText().toString());
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
