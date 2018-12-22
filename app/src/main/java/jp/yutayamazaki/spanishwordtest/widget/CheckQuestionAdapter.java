@@ -32,8 +32,10 @@ public class CheckQuestionAdapter extends RecyclerView.Adapter<CheckQuestionHold
     @Override
     public void onBindViewHolder(@NonNull CheckQuestionHolder holder, int position) {
         Word word = words.get(position);
+        String numberText = (position + 1) + ".";
+        String spanishWord = numberText + word.getWordSpanish();
 
-        holder.spanishWordText.setText(word.getWordSpanish());
+        holder.spanishWordText.setText(spanishWord);
         holder.japaneseWordText.setText(word.getWordJapanese());
         holder.spanishExampleText.setText(word.getExampleSpanish());
         holder.japaneseExampleText.setText(word.getExampleJapanese());
