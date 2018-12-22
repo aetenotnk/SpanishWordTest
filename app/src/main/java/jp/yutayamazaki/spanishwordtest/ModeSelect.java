@@ -21,12 +21,21 @@ public class ModeSelect extends AppCompatActivity {
         setTitle(testManager.getTitle());
 
         Button startButton = findViewById(R.id.start_button);
+        Button checkButton = findViewById(R.id.check_button);
         startButton.setOnClickListener(view -> {
             Intent wordTestIntent = new Intent(getApplication(), WordTest.class);
 
             wordTestIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
 
             startActivity(wordTestIntent);
+            overridePendingTransition(R.anim.in_right, R.anim.out_left);
+        });
+        checkButton.setOnClickListener(view ->{
+            Intent checkQuestionIntent = new Intent(getApplication(), CheckQuestion.class);
+
+            checkQuestionIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
+
+            startActivity(checkQuestionIntent);
             overridePendingTransition(R.anim.in_right, R.anim.out_left);
         });
     }

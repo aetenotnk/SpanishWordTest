@@ -28,6 +28,9 @@
             android:launchMode="singleTask" />
         <activity android:name=".TestResult"
             android:launchMode="singleTask" />
+        <activity
+            android:name=".CheckQuestion"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>
