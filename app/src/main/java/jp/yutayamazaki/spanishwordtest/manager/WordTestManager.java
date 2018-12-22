@@ -205,6 +205,20 @@ public class WordTestManager implements Serializable {
     }
 
     /**
+     * 問題として有効な単語を抽出する
+     * @return 問題として有効な単語リスト
+     */
+    public List<Word> getValidWords(){
+        return words.stream()
+                .filter(w -> !w.getExampleSpanish().equals(""))
+                .collect(Collectors.toList());
+    }
+
+    public Grade getEvaluate(int questionIndex, int exampleIndex){
+        return evaluate(questionWords.get(questionIndex), exampleIndex, answers.get(questionIndex));
+    }
+
+    /**
      * かっこ内を隠したスペイン語の例文を取得する
      * @param word 単語
      * @return かっこ内を隠したスペイン語の例文
@@ -222,10 +236,6 @@ public class WordTestManager implements Serializable {
 
     public static String getJapaneseExample(Word word, int index){
         return word.getExampleJapanese().split(EXAMPLE_SPLIT)[index];
-    }
-
-    public Grade getEvaluate(int questionIndex, int exampleIndex){
-        return evaluate(questionWords.get(questionIndex), exampleIndex, answers.get(questionIndex));
     }
 
     /**
@@ -295,15 +305,5 @@ public class WordTestManager implements Serializable {
      */
     private int getValidWordCount(){
         return getValidWords().size();
-    }
-
-    /**
-     * 問題として有効な単語を抽出する
-     * @return 問題として有効な単語リスト
-     */
-    public List<Word> getValidWords(){
-        return words.stream()
-                .filter(w -> !w.getExampleSpanish().equals(""))
-                .collect(Collectors.toList());
     }
 }
