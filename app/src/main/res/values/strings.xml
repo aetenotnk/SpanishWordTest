@@ -2,7 +2,7 @@
     <string name="app_name">SpanishWordTest</string>
     <string name="select_mode">モードを選択してください</string>
     <string name="start_test">テストを開始する</string>
-    <string name="check_test">テストを確認する</string>
+    <string name="check_test">問題を確認する</string>
 
     <string name="test_question_prefix">Q</string>
     <string name="test_question">.かっこ内を埋めなさい。</string>
