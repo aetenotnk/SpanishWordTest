@@ -2,9 +2,12 @@ package jp.yutayamazaki.spanishwordtest;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
+import jp.yutayamazaki.spanishwordtest.widget.CheckQuestionAdapter;
 
 public class CheckQuestion extends AppCompatActivity {
     private WordTestManager testManager;
@@ -17,6 +20,10 @@ public class CheckQuestion extends AppCompatActivity {
         testManager = WordTestManager.class.cast(
                 getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
         setTitle(testManager.getTitle());
+
+        RecyclerView questionList = findViewById(R.id.question_list);
+        questionList.setAdapter(new CheckQuestionAdapter(testManager));
+        questionList.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override

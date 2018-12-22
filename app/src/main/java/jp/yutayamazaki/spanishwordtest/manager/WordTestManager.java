@@ -301,7 +301,7 @@ public class WordTestManager implements Serializable {
      * 問題として有効な単語を抽出する
      * @return 問題として有効な単語リスト
      */
-    private List<Word> getValidWords(){
+    public List<Word> getValidWords(){
         return words.stream()
                 .filter(w -> !w.getExampleSpanish().equals(""))
                 .collect(Collectors.toList());
