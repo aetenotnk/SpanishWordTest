@@ -191,6 +191,8 @@ public class WordTest extends AppCompatActivity {
 
         // 解答欄を設定
         answerText.setText(testManager.getCurrentAnswer());
+        // カーソルを一番後ろに設定
+        answerText.setSelection(answerText.getText().toString().length());
 
         // 前へボタンの制御
         if(testManager.isFirst()){
