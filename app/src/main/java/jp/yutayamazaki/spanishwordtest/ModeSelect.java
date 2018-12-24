@@ -1,8 +1,10 @@
 package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -38,6 +40,24 @@ public class ModeSelect extends AppCompatActivity {
             startActivity(checkQuestionIntent);
             overridePendingTransition(R.anim.in_right, R.anim.out_left);
         });
+
+        // アクションバーの戻るボタンを表示
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // アクションバーのバックボタンが押されたときの挙動
+        if(id == android.R.id.home){
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
