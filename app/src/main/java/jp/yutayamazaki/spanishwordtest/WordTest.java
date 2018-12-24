@@ -71,6 +71,13 @@ public class WordTest extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+
+        testManager.setCurrentAnswer(answerText.getText().toString());
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
@@ -184,6 +191,8 @@ public class WordTest extends AppCompatActivity {
 
         // 解答欄を設定
         answerText.setText(testManager.getCurrentAnswer());
+        // カーソルを一番後ろに設定
+        answerText.setSelection(answerText.getText().toString().length());
 
         // 前へボタンの制御
         if(testManager.isFirst()){
