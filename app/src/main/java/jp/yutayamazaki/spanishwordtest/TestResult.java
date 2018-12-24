@@ -99,6 +99,7 @@ public class TestResult extends AppCompatActivity {
             wordTestIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
 
             startActivity(wordTestIntent);
+            finish();
             overridePendingTransition(R.anim.in_left, R.anim.out_right);
         });
         checkQuestionButton.setOnClickListener(view ->{
@@ -107,12 +108,14 @@ public class TestResult extends AppCompatActivity {
             checkQuestionIntent.putExtra(TestList.EXTRA_WORD_TEST_MANAGER, testManager);
 
             startActivity(checkQuestionIntent);
+            finish();
             overridePendingTransition(R.anim.in_right, R.anim.out_left);
         });
         returnTestListButton.setOnClickListener(view -> {
             Intent testListIntent = new Intent(getApplication(), TestList.class);
 
             startActivity(testListIntent);
+            finish();
             overridePendingTransition(R.anim.in_left, R.anim.out_right);
         });
     }
