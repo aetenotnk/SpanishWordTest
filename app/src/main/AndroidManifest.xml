@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".TestList"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:theme="@style/TestListStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
