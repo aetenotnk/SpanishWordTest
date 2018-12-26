@@ -3,7 +3,9 @@ package jp.yutayamazaki.spanishwordtest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -39,6 +41,10 @@ public class TestList extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        AppCompatImageButton settingButton = toolbar.findViewById(R.id.setting_button);
+        settingButton.setOnClickListener(view ->
+                startActivity(new Intent(getApplication(), SettingActivity.class)));
 
         String token = getResources().getString(R.string.dropbox_token);
         String userAgent = getResources().getString(R.string.dropbox_useragant);

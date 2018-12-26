@@ -33,6 +33,9 @@
             android:name=".CheckQuestion"
             android:launchMode="singleTask"
             android:parentActivityName=".ModeSelect"/>
+        <activity
+            android:name=".SettingActivity"
+            android:launchMode="singleTask"/>
     </application>
 
 </manifest>
