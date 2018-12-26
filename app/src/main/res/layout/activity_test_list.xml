@@ -15,11 +15,13 @@
         android:minHeight="32dp"
         android:elevation="4dp"
         app:titleTextColor="#FFFFFF">
-        <android.support.v7.widget.AppCompatImageView
+        <android.support.v7.widget.AppCompatImageButton
+            android:id="@+id/setting_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="32dp"
+            android:background="@color/colorPrimary"
             android:src="@drawable/ic_settings_white_24dp"/>
     </android.support.v7.widget.Toolbar>
 
