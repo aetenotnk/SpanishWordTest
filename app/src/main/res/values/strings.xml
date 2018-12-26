@@ -25,5 +25,5 @@
 
     <string name="test_count_alert">試験数は1～99で設定してください。</string>
     <string name="about_app_title">このアプリについて</string>
-    <string name="about_app_message">Copyright 2018 Yuta Yamazaki\nVer1.0.0</string>
+    <string name="about_app_message">Copyright 2018 Yuta Yamazaki\nVer: %s</string>
 </resources>
