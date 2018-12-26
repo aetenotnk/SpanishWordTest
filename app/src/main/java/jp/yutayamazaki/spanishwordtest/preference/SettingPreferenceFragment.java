@@ -20,9 +20,12 @@ public class SettingPreferenceFragment extends PreferenceFragment
         findPreference("test_count").setOnPreferenceChangeListener(
                 new NumberValidator(TEST_COUNT_MIN, TEST_COUNT_MAX));
         findPreference("about_app").setOnPreferenceClickListener(preference -> {
+            String title = getResources().getString(R.string.about_app_title);
+            String message = getResources().getString(R.string.about_app_message);
+
             new AlertDialog.Builder(getActivity())
-                    .setTitle("このアプリについて")
-                    .setMessage("Copyright 2018 Yuta Yamazaki\nVer1.0.0")
+                    .setTitle(title)
+                    .setMessage(message)
                     .setPositiveButton("OK", null)
                     .show();
 
