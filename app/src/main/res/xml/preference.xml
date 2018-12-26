@@ -3,5 +3,6 @@
     <EditTextPreference
         android:key="test_count"
         android:title="試験数"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:defaultValue="20"/>
 </PreferenceScreen>
