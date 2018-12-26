@@ -2,6 +2,7 @@ package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,8 +17,7 @@ import jp.yutayamazaki.spanishwordtest.bean.Word;
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
 
 public class WordTest extends AppCompatActivity {
-    // TODO: 2018/12/16 問題数は設定から変更できるようにする
-    private static int TEST_COUNT = 20;
+    private static int DEFAULT_TEST_COUNT = 20;
     // スワイプ判定する最低のX軸の移動距離
     private static float SWIPE_MIN_DISTANCE = 50;
     // スワイプ判定する最低のX軸の速度
@@ -43,7 +43,10 @@ public class WordTest extends AppCompatActivity {
 
         testManager = WordTestManager.class.cast(
                 getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
-        testManager.init(TEST_COUNT);
+        String testCountStr = PreferenceManager
+                .getDefaultSharedPreferences(this)
+                .getString("test_count", String.valueOf(DEFAULT_TEST_COUNT));
+        testManager.init(Integer.valueOf(testCountStr));
         setTitle(testManager.getTitle());
 
         // アクションバーのバックボタンを有効にする
