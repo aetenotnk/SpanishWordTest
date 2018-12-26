@@ -9,10 +9,15 @@ import jp.yutayamazaki.spanishwordtest.R;
 
 public class SettingPreferenceFragment extends PreferenceFragment
         implements SharedPreferences.OnSharedPreferenceChangeListener {
+    private static int TEST_COUNT_MIN = 1;
+    private static int TEST_COUNT_MAX = 99;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preference);
+        findPreference("test_count").setOnPreferenceChangeListener(
+                new NumberValidator(TEST_COUNT_MIN, TEST_COUNT_MAX));
     }
 
     @Override
@@ -47,8 +52,8 @@ public class SettingPreferenceFragment extends PreferenceFragment
      */
     private void setSummary(){
         SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
-        String text = sharedPreferences.getString("testText", "");
+        String text = sharedPreferences.getString("test_count", "");
 
-        findPreference("testText").setSummary(text);
+        findPreference("test_count").setSummary(text);
     }
 }

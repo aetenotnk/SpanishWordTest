@@ -22,4 +22,6 @@
     <string name="result_word_japanese">しなければならない</string>
     <string name="result_example_spanish">(Hay que) lavarse las manos antes de comer.</string>
     <string name="result_example_japanese">食事の前には手を洗わなければならない。</string>
+
+    <string name="test_count_alert">試験数は1～99で設定してください。</string>
 </resources>
