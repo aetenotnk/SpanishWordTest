@@ -1,9 +1,10 @@
 package jp.yutayamazaki.spanishwordtest.preference;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceFragment;
-import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 
 import jp.yutayamazaki.spanishwordtest.R;
 
@@ -18,6 +19,15 @@ public class SettingPreferenceFragment extends PreferenceFragment
         addPreferencesFromResource(R.xml.preference);
         findPreference("test_count").setOnPreferenceChangeListener(
                 new NumberValidator(TEST_COUNT_MIN, TEST_COUNT_MAX));
+        findPreference("about_app").setOnPreferenceClickListener(preference -> {
+            new AlertDialog.Builder(getActivity())
+                    .setTitle("このアプリについて")
+                    .setMessage("Copyright 2018 Yuta Yamazaki\nVer1.0.0")
+                    .setPositiveButton("OK", null)
+                    .show();
+
+            return true;
+        });
     }
 
     @Override

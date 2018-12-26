@@ -5,4 +5,8 @@
         android:title="試験数"
         android:inputType="number"
         android:defaultValue="20"/>
+    <Preference
+        android:key="about_app"
+        android:title="このアプリについて"
+        />
 </PreferenceScreen>
