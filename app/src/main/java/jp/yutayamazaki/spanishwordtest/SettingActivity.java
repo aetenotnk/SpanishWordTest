@@ -25,7 +25,40 @@ public class SettingActivity extends PreferenceActivity {
         }
 
         @Override
+        public void onStart() {
+            super.onStart();
+            setSummary();
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceManager()
+                    .getSharedPreferences()
+                    .registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            getPreferenceManager()
+                    .getSharedPreferences()
+                    .unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String s) {
+            setSummary();
+        }
+
+        /**
+         * 各設定の概要を表示する
+         */
+        private void setSummary(){
+            SharedPreferences sharedPreferences = getPreferenceScreen().getSharedPreferences();
+            String text = sharedPreferences.getString("testText", "");
+
+            findPreference("testText").setSummary(text);
         }
     }
 }
