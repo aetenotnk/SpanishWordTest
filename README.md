@@ -15,7 +15,7 @@
 
 ## 使い方
 1. 試験画面で（）内に入る単語を解答します。
-![doc/src/screenshot01.jpg]
+![testscreen](doc/src/screenshot01.jpg)
 
 1. 問題が規定数終わると試験結果が表示されます。
-![doc/src/screenshot02.jpg]
+![resultscreen](doc/src/screenshot02.jpg)
