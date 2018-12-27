@@ -14,8 +14,8 @@
 - Galaxy S9(それ以外の端末ではレイアウトが崩れる可能性があります)
 
 ## 使い方
-1. 試験画面で（）内に入る単語を解答します。
-![testscreen](./doc/img/screenshot01.jpg)
+- 試験画面で（）内に入る単語を解答します。
+<img src="./doc/img/screenshot01.jpg" width="300">
 
-1. 問題が規定数終わると試験結果が表示されます。
-![resultscreen](./doc/img/screenshot02.jpg)
+- 問題が規定数終わると試験結果が表示されます。
+<img src="./doc/img/screenshot02.jpg" width="300">
