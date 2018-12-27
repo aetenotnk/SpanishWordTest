@@ -12,3 +12,10 @@
 - AndroidStudio 3.2.1
 - gradle 3.2.1
 - Galaxy S9(それ以外の端末ではレイアウトが崩れる可能性があります)
+
+## 使い方
+1. 試験画面で（）内に入る単語を解答します。
+![doc/src/screenshot01.jpg]
+
+1. 問題が規定数終わると試験結果が表示されます。
+![doc/src/screenshot02.jpg]
