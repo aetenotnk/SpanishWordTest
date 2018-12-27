@@ -155,4 +155,27 @@ public class TestTitleCollectionTest {
         Assert.assertEquals("caption1_1", all.get(0).getCaption());
         Assert.assertEquals("/dummy_1", all.get(0).getFilepath());
     }
+
+    /**
+     * データを削除のテスト
+     */
+    @Test
+    public void deleteAll(){
+        TestTitleCollection testTitleCollection =
+                new TestTitleCollection(RuntimeEnvironment.application);
+        TestTitle data1 = new TestTitle(1, "Test1", "caption1", "/dummy1");
+        TestTitle data2 = new TestTitle(2, "Test2", "caption2", "/dummy2");
+
+        testTitleCollection.insertOrUpdate(data1);
+        testTitleCollection.insertOrUpdate(data2);
+
+        List<TestTitle> all = testTitleCollection.selectAll();
+
+        Assert.assertEquals(2, all.size());
+
+        testTitleCollection.deleteAll();
+        all = testTitleCollection.selectAll();
+
+        Assert.assertEquals(0, all.size());
+    }
 }
