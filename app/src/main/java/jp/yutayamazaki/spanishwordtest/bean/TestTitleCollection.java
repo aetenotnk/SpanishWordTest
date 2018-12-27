@@ -35,6 +35,8 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
                     "VALUES(?, ?, ?, ?)";
     private static String SQL_SELECT_ALL =
             "SELECT * FROM " + DB_NAME;
+    private static String SQL_DELETE_ALL =
+            "DELETE FROM " + DB_NAME;
 
     public TestTitleCollection(Context context){
         super(context, DB_NAME, DB_VERSION);
@@ -85,5 +87,14 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
         db.close();
 
         return result;
+    }
+
+    /**
+     * DB内のデータをすべて削除する
+     */
+    public void deleteAll() {
+        SQLiteStatement statement = getWritableDatabase().compileStatement(SQL_DELETE_ALL);
+
+        statement.execute();
     }
 }

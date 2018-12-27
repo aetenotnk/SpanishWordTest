@@ -74,6 +74,7 @@ public class TestList extends AppCompatActivity {
     private void loadDataFromDropBox(){
         TestTitleCollection testTitleCollection = new TestTitleCollection(this);
         // テスト一覧のデータを取得
+        testTitleCollection.deleteAll();
         testTitleCollection.loadBeansByDropBox(dropBox,
                 TEST_TITLE_FILE,
                 getFilesDir().getAbsolutePath());
