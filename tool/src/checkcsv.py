@@ -44,7 +44,7 @@ def main():
 
         next(reader)
 
-        count = 1
+        count = 2
         for row in reader:
             word = Word(row)
 
