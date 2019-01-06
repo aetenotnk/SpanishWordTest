@@ -2,7 +2,7 @@ package jp.yutayamazaki.spanishwordtest.bean;
 
 import java.io.Serializable;
 
-public class TestTitle implements Bean, Serializable {
+public class TestTitle extends Bean implements Serializable {
     private int id;
     private String title;
     private String caption;
@@ -13,10 +13,6 @@ public class TestTitle implements Bean, Serializable {
         this.title = title;
         this.caption = caption;
         this.filepath = filepath;
-    }
-
-    public TestTitle(TestTitle other){
-        this(other.id, other.title, other.caption, other.filepath);
     }
 
     public int getId() {
