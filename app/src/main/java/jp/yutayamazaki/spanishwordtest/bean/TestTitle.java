@@ -1,8 +1,7 @@
 package jp.yutayamazaki.spanishwordtest.bean;
 
-import java.io.Serializable;
 
-public class TestTitle extends Bean implements Serializable {
+public class TestTitle extends Bean {
     private int id;
     private String title;
     private String caption;

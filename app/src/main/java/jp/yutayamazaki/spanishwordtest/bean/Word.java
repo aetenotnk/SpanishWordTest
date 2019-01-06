@@ -1,8 +1,7 @@
 package jp.yutayamazaki.spanishwordtest.bean;
 
-import java.io.Serializable;
 
-public class Word extends Bean implements Serializable {
+public class Word extends Bean {
     private String wordSpanish;
     private String wordJapanese;
     private String exampleSpanish;
