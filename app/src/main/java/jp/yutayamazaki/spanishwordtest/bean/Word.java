@@ -12,7 +12,9 @@ public class Word implements Bean, Serializable {
     public enum WordType{
         VERB,
         ADJECTIVE,
-        NOUN;
+        NOUN,
+        PREPOSITION,
+        ADVERB;
 
         public static WordType getEnum(String wordType){
             if(wordType.toLowerCase().equals("v")){
@@ -23,6 +25,12 @@ public class Word implements Bean, Serializable {
             }
             if(wordType.toLowerCase().equals("noun")){
                 return NOUN;
+            }
+            if(wordType.toLowerCase().equals("preposition")){
+                return PREPOSITION;
+            }
+            if(wordType.toLowerCase().equals("adverb")){
+                return ADVERB;
             }
 
             return null;
@@ -37,6 +45,12 @@ public class Word implements Bean, Serializable {
             }
             if(wordType == NOUN){
                 return "noun";
+            }
+            if(wordType == PREPOSITION){
+                return "preposition";
+            }
+            if(wordType == ADVERB){
+                return "adverb";
             }
 
             return null;
