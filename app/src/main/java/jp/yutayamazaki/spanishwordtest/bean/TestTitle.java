@@ -34,9 +34,4 @@ public class TestTitle implements Bean, Serializable {
     public String getFilepath() {
         return filepath;
     }
-
-    @Override
-    public Bean copy() {
-        return new TestTitle(this);
-    }
 }

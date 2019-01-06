@@ -67,13 +67,6 @@ public class Word implements Bean, Serializable {
         this.type = WordType.getEnum(wordType);
     }
 
-    @Override
-    public Bean copy() {
-        return new Word(this.wordSpanish, this.wordJapanese,
-                this.exampleSpanish, this.exampleJapanese,
-                WordType.getString(this.type));
-    }
-
     public String getWordSpanish() {
         return wordSpanish;
     }
