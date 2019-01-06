@@ -10,11 +10,11 @@ public class Word implements Bean, Serializable {
     private WordType type;
 
     public enum WordType{
-        VERB,
-        ADJECTIVE,
-        NOUN,
-        PREPOSITION,
-        ADVERB;
+        VERB, // 動詞
+        ADJECTIVE, // 形容詞
+        NOUN, // 名詞
+        PREPOSITION, // 前置詞
+        ADVERB; // 副詞
 
         public static WordType getEnum(String wordType){
             if(wordType.toLowerCase().equals("v")){
