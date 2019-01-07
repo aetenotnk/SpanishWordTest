@@ -12,8 +12,8 @@ public class WordTypeCollection extends BeanCollection<WordType> {
     private static String DB_NAME = "WordType";
     private static int DB_VERSION = 1;
 
-    private static String DB_COL_WORD_TYPE_STRING = "WordTypeString";
-    private static String DB_COL_WORD_TYPE_DISPLAY = "WordTypeDisplay";
+    private static String DB_COL_WORD_TYPE_STRING = "word_type_string";
+    private static String DB_COL_WORD_TYPE_DISPLAY = "word_type_display";
 
     private static String SQL_CREATE_TABLE =
             "CREATE TABLE " + DB_NAME + "(" +
