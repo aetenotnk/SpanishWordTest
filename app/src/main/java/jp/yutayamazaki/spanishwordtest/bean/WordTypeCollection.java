@@ -10,7 +10,7 @@ import java.util.List;
 
 public class WordTypeCollection extends BeanCollection<WordType> {
     private static String DB_NAME = "WordType";
-    private static int DB_VERSION = 1;
+    private static int DB_VERSION = 2;
 
     private static String DB_COL_WORD_TYPE_STRING = "word_type_string";
     private static String DB_COL_WORD_TYPE_DISPLAY = "word_type_display";
