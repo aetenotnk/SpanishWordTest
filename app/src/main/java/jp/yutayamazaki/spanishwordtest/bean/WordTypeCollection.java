@@ -28,6 +28,7 @@ public class WordTypeCollection extends BeanCollection<WordType> {
     private static String SQL_SELECT_BY_WORD_TYPE_STRING =
             "SELECT * FROM " + DB_NAME + " " +
                     "WHERE " + DB_COL_WORD_TYPE_STRING + "=?";
+    private static String SQL_DELETE_ALL = "DELETE FROM " + DB_NAME;
 
     public WordTypeCollection(Context context){
         super(context, DB_NAME, DB_VERSION);
@@ -92,5 +93,19 @@ public class WordTypeCollection extends BeanCollection<WordType> {
         db.close();
 
         return new WordType(resWordTypeString, resWordTypeDisplay);
+    }
+
+    public void deleteAll(){
+        SQLiteStatement statement = getWritableDatabase().compileStatement(SQL_DELETE_ALL);
+
+        statement.execute();
+    }
+
+    public static String getDbName(){
+        return DB_NAME;
+    }
+
+    public static String getDbColWordTypeString(){
+        return DB_COL_WORD_TYPE_STRING;
     }
 }
