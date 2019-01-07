@@ -14,6 +14,7 @@ import java.util.List;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.Word;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
+import jp.yutayamazaki.spanishwordtest.bean.WordType;
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
 
 @RunWith(RobolectricTestRunner.class)
@@ -23,6 +24,8 @@ public class WordTestManagerTest {
 
     @Before
     public void setUp(){
+        TestUtil.setWordType();
+
         wordCollection = new WordCollection(RuntimeEnvironment.application, 1);
 
         testTitle =
@@ -34,21 +37,21 @@ public class WordTestManagerTest {
                         "・・・しないといけない",
                         "(Hay que) lavarse las manos antes de comer.",
                         "食事の前に手を洗わないといけません。",
-                        "v"));
+                        new WordType("v", "動詞")));
         wordCollection.insertOrUpdate(
                 new Word(
                         "¿Puedo ...?",
                         "私は・・・してもいいですか？",
                         "¿(Puedo) pasar?",
                         "食事の前に手を洗わないといけません。",
-                        "v"));
+                        new WordType("v", "動詞")));
         wordCollection.insertOrUpdate(
                 new Word(
                         "caliente",
                         "熱い",
                         "",
                         "",
-                        "adjective"));
+                        new WordType("v", "動詞")));
     }
 
     @After
@@ -111,7 +114,7 @@ public class WordTestManagerTest {
                 "・・・しないといけない",
                 "(Hay que) lavarse las manos antes de comer.",
                 "食事の前に手を洗わないといけません。",
-                "v");
+                new WordType("v", "動詞"));
 
         Assert.assertEquals("(    ) lavarse las manos antes de comer.",
                 WordTestManager.getBlindSpanishExample(word1, 0));
@@ -121,7 +124,7 @@ public class WordTestManagerTest {
                 "赤い",
                 "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
                 "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
-                "adjective");
+                new WordType("adjective", "形容詞"));
 
         Assert.assertEquals("El samáforo está (    ).",
                 WordTestManager.getBlindSpanishExample(word2, 1));
@@ -134,7 +137,7 @@ public class WordTestManagerTest {
                 "赤い",
                 "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
                 "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
-                "adjective");
+                new WordType("adjective", "形容詞"));
 
         Assert.assertEquals("Con un poco de whisky se puso (rojo).",
                 WordTestManager.getSpanishExample(word, 0));
@@ -149,7 +152,7 @@ public class WordTestManagerTest {
                 "赤い",
                 "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
                 "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
-                "adjective");
+                new WordType("adjective", "形容詞"));
 
         Assert.assertEquals("彼は少しのウイスキーで赤くなった。",
                 WordTestManager.getJapaneseExample(word, 0));
@@ -167,7 +170,7 @@ public class WordTestManagerTest {
                 "赤い",
                 "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
                 "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
-                "adjective");
+                new WordType("adjective", "形容詞"));
 
         Assert.assertEquals(WordTestManager.Grade.OK,
                 WordTestManager.evaluate(word, 0, "rojo"));
@@ -185,7 +188,7 @@ public class WordTestManagerTest {
                 "・・・しないといけない",
                 "(Hay que) lavarse las manos antes de comer.",
                 "食事の前に手を洗わないといけません。",
-                "v");
+                new WordType("v", "動詞"));
 
         Assert.assertEquals(WordTestManager.Grade.OK,
                 WordTestManager.evaluate(word, 0, "Hay que"));
@@ -201,7 +204,7 @@ public class WordTestManagerTest {
                 "・・・しないといけない",
                 "(Hay que) lavarse las manos antes de comer.",
                 "食事の前に手を洗わないといけません。",
-                "v");
+                new WordType("v", "動詞"));
 
         Assert.assertEquals(WordTestManager.Grade.NOT_OK,
                 WordTestManager.evaluate(word, 0, ""));
@@ -217,7 +220,7 @@ public class WordTestManagerTest {
                 "・・・しないといけない",
                 "Hay que lavarse las manos antes de comer.",
                 "食事の前に手を洗わないといけません。",
-                "v");
+                new WordType("v", "動詞"));
 
         Assert.assertEquals(WordTestManager.Grade.NOT_OK,
                 WordTestManager.evaluate(word, 0, "Hay que"));
@@ -233,7 +236,7 @@ public class WordTestManagerTest {
                 "赤い",
                 "Con un poco de whisky se puso (rojo). / El samáforo está (rojo).",
                 "彼は少しのウイスキーで赤くなった。 / 信号は赤です。",
-                "adjective");
+                new WordType("adjective", "形容詞"));
 
         Assert.assertEquals(WordTestManager.Grade.NOT_OK,
                 WordTestManager.evaluate(word, 0, "roja"));

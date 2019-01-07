@@ -18,6 +18,7 @@ import java.util.List;
 
 import jp.yutayamazaki.spanishwordtest.bean.Word;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
+import jp.yutayamazaki.spanishwordtest.bean.WordType;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 
 @RunWith(RobolectricTestRunner.class)
@@ -41,6 +42,8 @@ public class WordCollectionTest {
 
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         new File(System.getProperty("user.dir") + tempPath).mkdir();
+
+        TestUtil.setWordType();
     }
 
     /**
@@ -92,7 +95,7 @@ public class WordCollectionTest {
                 word.getExampleSpanish());
         Assert.assertEquals("食事の前に手を洗わないといけません。",
                 word.getExampleJapanese());
-        Assert.assertEquals(Word.WordType.VERB, word.getType());
+        Assert.assertEquals("v", word.getType().getWordTypeString());
     }
 
     /**
@@ -106,7 +109,7 @@ public class WordCollectionTest {
                 "スポーツ",
                 "¿Haces algún (deporte)",
                 "君は何かスポーツしてる？",
-                "noun");
+                new WordType("noun", "名詞"));
 
         wordCollection.insertOrUpdate(word);
 
@@ -117,7 +120,7 @@ public class WordCollectionTest {
         Assert.assertEquals("スポーツ", all.get(0).getWordJapanese());
         Assert.assertEquals("¿Haces algún (deporte)", all.get(0).getExampleSpanish());
         Assert.assertEquals("君は何かスポーツしてる？", all.get(0).getExampleJapanese());
-        Assert.assertEquals(Word.WordType.NOUN, all.get(0).getType());
+        Assert.assertEquals("noun", all.get(0).getType().getWordTypeString());
     }
 
     /**
@@ -131,7 +134,7 @@ public class WordCollectionTest {
                 "スポーツ",
                 "¿Haces algún (deporte)",
                 "君は何かスポーツしてる？",
-                "noun");
+                new WordType("noun", "名詞"));
 
         wordCollection.insertOrUpdate(word);
         wordCollection.insertOrUpdate(word);
@@ -153,7 +156,7 @@ public class WordCollectionTest {
                 "スポーツ",
                 "¿Haces algún (deporte)",
                 "君は何かスポーツしてる？",
-                "noun");
+                new WordType("noun", "名詞"));
 
         for(int i = 0;i < 10;i++){
             wordCollection.insertOrUpdate(word);

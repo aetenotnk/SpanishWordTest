@@ -2,12 +2,16 @@ package jp.yutayamazaki.spanishwordtest;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
+import org.robolectric.RuntimeEnvironment;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+
+import jp.yutayamazaki.spanishwordtest.bean.WordType;
+import jp.yutayamazaki.spanishwordtest.bean.WordTypeCollection;
 
 public class TestUtil {
     /**
@@ -72,5 +76,19 @@ public class TestUtil {
 
         file.delete();
         System.out.println("delete: " + file.getAbsolutePath());
+    }
+
+    /**
+     * 単語タイプを設定する
+     */
+    public static void setWordType() {
+        WordTypeCollection wordTypeCollection =
+                new WordTypeCollection(RuntimeEnvironment.application);
+
+        wordTypeCollection.insertOrUpdate(new WordType("v", "動詞"));
+        wordTypeCollection.insertOrUpdate(new WordType("adjective", "形容詞"));
+        wordTypeCollection.insertOrUpdate(new WordType("noun", "名詞"));
+        wordTypeCollection.insertOrUpdate(new WordType("preposition", "前置詞"));
+        wordTypeCollection.insertOrUpdate(new WordType("adverb", "副詞"));
     }
 }
