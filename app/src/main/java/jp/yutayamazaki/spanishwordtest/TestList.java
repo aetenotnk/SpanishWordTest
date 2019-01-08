@@ -1,6 +1,7 @@
 package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
@@ -18,9 +19,11 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+import jp.yutayamazaki.spanishwordtest.bean.BeanDBHelper;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
+import jp.yutayamazaki.spanishwordtest.bean.WordType;
 import jp.yutayamazaki.spanishwordtest.bean.WordTypeCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
@@ -74,16 +77,17 @@ public class TestList extends AppCompatActivity {
      * DropBoxからデータを読み込む
      */
     private void loadDataFromDropBox(){
+        // 以前のデータを削除
+        deleteData();
+
         // 単語タイプ取得
         WordTypeCollection wordTypeCollection = new WordTypeCollection(this);
-        wordTypeCollection.deleteAll();
         wordTypeCollection.loadBeansByDropBox(dropBox,
                 WORD_TYPE_FILE,
                 getFilesDir().getAbsolutePath());
 
         TestTitleCollection testTitleCollection = new TestTitleCollection(this);
         // テスト一覧のデータを取得
-        testTitleCollection.deleteAll();
         testTitleCollection.loadBeansByDropBox(dropBox,
                 TEST_TITLE_FILE,
                 getFilesDir().getAbsolutePath());
@@ -94,11 +98,19 @@ public class TestList extends AppCompatActivity {
             WordCollection wordCollection = new WordCollection(this, title.getId());
 
             // 単語データを入れ替える
-            wordCollection.deleteAll();
             wordCollection.loadBeansByDropBox(dropBox,
                     filePath,
                     getFilesDir().getAbsolutePath());
         }
+    }
+
+    private void deleteData() {
+        SQLiteOpenHelper dbHelper = new BeanDBHelper(this);
+
+        // 依存関係がある単語データは単語タイプより先に削除する
+        WordCollection.dropTable(dbHelper);
+        WordTypeCollection.dropTable(dbHelper);
+        TestTitleCollection.dropTable(dbHelper);
     }
 
     private void setTestList(){
