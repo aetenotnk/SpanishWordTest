@@ -59,18 +59,6 @@ public class WordCollectionTest {
     }
 
     /**
-     * テーブルが作成できるかテスト
-     */
-    @Test
-    public void createTable(){
-        WordCollection WordCollection =
-                new WordCollection(RuntimeEnvironment.application, 1);
-        SQLiteDatabase db = WordCollection.getReadableDatabase();
-
-        Assert.assertNotEquals(null, db);
-    }
-
-    /**
      * DropBoxからデータを取得してデータを追加できるかテスト
      * @throws Exception 設定ファイルが読み込めなければ例外を投げる
      */

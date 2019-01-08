@@ -1,7 +1,5 @@
 package jp.yutayamazaki.spanishwordtest;
 
-import android.database.sqlite.SQLiteDatabase;
-
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
 import org.json.JSONObject;
@@ -14,7 +12,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.List;
 
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
@@ -54,43 +51,6 @@ public class TestTitleCollectionTest {
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
 
         TestUtil.deleteFiles(new File(System.getProperty("user.dir") + tempPath));
-    }
-
-    /**
-     * DBが作成できるかテスト
-     */
-    @Test
-    public void createTable(){
-        TestTitleCollection testTitleCollection =
-                new TestTitleCollection(RuntimeEnvironment.application);
-        SQLiteDatabase db = testTitleCollection.getReadableDatabase();
-
-        Assert.assertNotEquals(null, db);
-    }
-
-    /**
-     * DBを更新した時のテスト
-     * @throws Exception TestTitleCollection.DB_FIELDにアクセスできないと例外を投げる
-     */
-    @Test
-    public void upgradeTable() throws Exception {
-        TestTitleCollection testTitleCollection =
-                new TestTitleCollection(RuntimeEnvironment.application);
-        Class c = testTitleCollection.getClass();
-        // プライベートなstaticフィールドに無理やりアクセス
-        Field versionField = c.getDeclaredField("DB_VERSION");
-        versionField.setAccessible(true);
-        // バージョンを1に設定
-        versionField.setInt(testTitleCollection, 1);
-        // getWritableDatabaseを呼んで,
-        // バージョンを更新してnewをした時にonUpgradeが呼ばれるようにする
-        testTitleCollection.getWritableDatabase().close();
-        // バージョンを更新
-        versionField.setInt(testTitleCollection, 2);
-        SQLiteDatabase db =
-                new TestTitleCollection(RuntimeEnvironment.application).getWritableDatabase();
-
-        Assert.assertNotEquals(null, db);
     }
 
     @Test
