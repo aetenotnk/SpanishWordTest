@@ -3,6 +3,7 @@ package jp.yutayamazaki.spanishwordtest.bean;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
 import java.util.LinkedList;
@@ -22,7 +23,7 @@ public class WordCollection extends BeanCollection<Word> {
     /**
      * テーブル名より前のCREATE文の文字列
      */
-    private static String SQL_CREATE_TABLE_PREFIX = "CREATE TABLE ";
+    private static String SQL_CREATE_TABLE_PREFIX = "CREATE TABLE IF NOT EXISTS ";
     /**
      * テーブル名より後のCREATE文の文字列
      */
@@ -51,7 +52,7 @@ public class WordCollection extends BeanCollection<Word> {
     private WordTypeCollection wordTypeCollection;
 
     public WordCollection(Context context, int testId){
-        super(context,
+        super(new BeanDBHelper(context),
                 DB_NAME_PREFIX + testId + DB_NAME_SUFFIX,
                 DB_VERSION);
 
@@ -63,16 +64,8 @@ public class WordCollection extends BeanCollection<Word> {
      * DB上のレコードをすべて削除する
      */
     public void deleteAll(){
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         SQLiteStatement statement = db.compileStatement(SQL_DELETE_ALL + dbName);
-
-        statement.execute();
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        SQLiteStatement statement = sqLiteDatabase.compileStatement(
-                SQL_CREATE_TABLE_PREFIX + dbName + SQL_CREATE_TABLE_SUFFIX);
 
         statement.execute();
     }
@@ -88,8 +81,37 @@ public class WordCollection extends BeanCollection<Word> {
     }
 
     @Override
+    public void createTable(SQLiteOpenHelper dbHelper){
+        SQLiteStatement statement = dbHelper.getWritableDatabase().compileStatement(
+            SQL_CREATE_TABLE_PREFIX + dbName + SQL_CREATE_TABLE_SUFFIX);
+
+        statement.execute();
+    }
+
+    /**
+     * TestWordXX_WORD テーブルをすべて削除
+     * @param dbHelper SQLiteOpenHelper
+     */
+    public static void dropTable(SQLiteOpenHelper dbHelper){
+        SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
+        Cursor cursor = readableDatabase.rawQuery(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'WordTest%$_WORD' ESCAPE '$'", null);
+        SQLiteDatabase writableDatabase = dbHelper.getWritableDatabase();
+
+        while(cursor.moveToNext()){
+            String tableName = cursor.getString(cursor.getColumnIndex("name"));
+            SQLiteStatement statement = writableDatabase.compileStatement(
+                    "DROP TABLE IF EXISTS " + tableName);
+
+            statement.execute();
+        }
+
+        cursor.close();
+    }
+
+    @Override
     public void insertOrUpdate(Word word) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db =dbHelper.getWritableDatabase();
         SQLiteStatement statement = db.compileStatement(
                 SQL_INSERT_OR_UPDATE_PREFIX + dbName + SQL_INSERT_OR_UPDATE_SUFFIX);
 
@@ -105,7 +127,7 @@ public class WordCollection extends BeanCollection<Word> {
 
     @Override
     public List<Word> selectAll() {
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(SQL_SELECT_ALL + dbName, null);
         List<Word> result = new LinkedList<>();
 

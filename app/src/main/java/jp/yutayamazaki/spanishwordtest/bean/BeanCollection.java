@@ -1,9 +1,6 @@
 package jp.yutayamazaki.spanishwordtest.bean;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 
 import java.io.File;
 import java.util.List;
@@ -15,25 +12,17 @@ import jp.yutayamazaki.spanishwordtest.file.CSVLoader;
  * Beanのコレクションクラス
  * @param <T> Beanを継承したクラス
  */
-abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
-    private static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ";
-
+abstract class BeanCollection<T extends Bean> {
+    protected SQLiteOpenHelper dbHelper;
     protected String dbName;
     protected int version;
 
-    public BeanCollection(Context context, String dbName, int version){
-        super(context, dbName, null, version);
+    public BeanCollection(SQLiteOpenHelper dbHelper, String dbName, int version){
+        this.dbHelper = dbHelper;
         this.dbName = dbName;
         this.version = version;
-    }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        SQLiteStatement statement = sqLiteDatabase.compileStatement(SQL_DROP_TABLE + dbName);
-
-        statement.execute();
-
-        onCreate(sqLiteDatabase);
+        createTable(dbHelper);
     }
 
     /**
@@ -64,6 +53,8 @@ abstract class BeanCollection<T extends Bean> extends SQLiteOpenHelper {
      * @return 作成したデータ
      */
     public abstract T createBean(String[] row);
+
+    public abstract void createTable(SQLiteOpenHelper dbHelper);
 
     /**
      * データを挿入する

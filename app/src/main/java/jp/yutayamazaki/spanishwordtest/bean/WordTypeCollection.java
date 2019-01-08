@@ -3,6 +3,7 @@ package jp.yutayamazaki.spanishwordtest.bean;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
 import java.util.LinkedList;
@@ -16,9 +17,10 @@ public class WordTypeCollection extends BeanCollection<WordType> {
     private static String DB_COL_WORD_TYPE_DISPLAY = "word_type_display";
 
     private static String SQL_CREATE_TABLE =
-            "CREATE TABLE " + DB_NAME + "(" +
+            "CREATE TABLE IF NOT EXISTS " + DB_NAME + "(" +
                     DB_COL_WORD_TYPE_STRING + " text primary key," +
                     DB_COL_WORD_TYPE_DISPLAY + " text)";
+    private static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + DB_NAME;
     private static String SQL_INSERT_OR_UPDATE =
             "REPLACE INTO " + DB_NAME + "(" +
                     DB_COL_WORD_TYPE_STRING + "," +
@@ -31,14 +33,7 @@ public class WordTypeCollection extends BeanCollection<WordType> {
     private static String SQL_DELETE_ALL = "DELETE FROM " + DB_NAME;
 
     public WordTypeCollection(Context context){
-        super(context, DB_NAME, DB_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        SQLiteStatement statement = sqLiteDatabase.compileStatement(SQL_CREATE_TABLE);
-
-        statement.execute();
+        super(new BeanDBHelper(context), DB_NAME, DB_VERSION);
     }
 
     @Override
@@ -47,8 +42,20 @@ public class WordTypeCollection extends BeanCollection<WordType> {
     }
 
     @Override
+    public void createTable(SQLiteOpenHelper dbHelper) {
+        SQLiteStatement statement =
+                dbHelper.getWritableDatabase().compileStatement(SQL_CREATE_TABLE);
+
+        statement.execute();
+    }
+
+    public static void dropTable(SQLiteOpenHelper dbHelper) {
+        dbHelper.getWritableDatabase().compileStatement(SQL_DROP_TABLE).execute();
+    }
+
+    @Override
     public void insertOrUpdate(WordType wordType) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         SQLiteStatement statement = db.compileStatement(SQL_INSERT_OR_UPDATE);
 
         statement.bindString(1, wordType.getWordTypeString());
@@ -60,7 +67,7 @@ public class WordTypeCollection extends BeanCollection<WordType> {
 
     @Override
     public List<WordType> selectAll() {
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(SQL_SELECT_ALL, null);
         List<WordType> result = new LinkedList<>();
 
@@ -81,7 +88,7 @@ public class WordTypeCollection extends BeanCollection<WordType> {
     }
 
     public WordType selectByWordTypeString(String wordTypeString){
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(SQL_SELECT_BY_WORD_TYPE_STRING, new String[]{ wordTypeString });
 
         cursor.moveToNext();
@@ -96,7 +103,7 @@ public class WordTypeCollection extends BeanCollection<WordType> {
     }
 
     public void deleteAll(){
-        SQLiteStatement statement = getWritableDatabase().compileStatement(SQL_DELETE_ALL);
+        SQLiteStatement statement = dbHelper.getWritableDatabase().compileStatement(SQL_DELETE_ALL);
 
         statement.execute();
     }

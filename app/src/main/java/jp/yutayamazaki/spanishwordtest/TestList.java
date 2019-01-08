@@ -21,6 +21,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
+import jp.yutayamazaki.spanishwordtest.bean.WordTypeCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
 
@@ -28,6 +29,7 @@ public class TestList extends AppCompatActivity {
     public static String EXTRA_WORD_TEST_MANAGER = "WordTestManager";
 
     private static String TEST_TITLE_FILE = "testlist.csv";
+    private static String WORD_TYPE_FILE = "wordtype.csv";
 
     private DropBox dropBox;
     private ProgressBar progressBar;
@@ -72,6 +74,13 @@ public class TestList extends AppCompatActivity {
      * DropBoxからデータを読み込む
      */
     private void loadDataFromDropBox(){
+        // 単語タイプ取得
+        WordTypeCollection wordTypeCollection = new WordTypeCollection(this);
+        wordTypeCollection.deleteAll();
+        wordTypeCollection.loadBeansByDropBox(dropBox,
+                WORD_TYPE_FILE,
+                getFilesDir().getAbsolutePath());
+
         TestTitleCollection testTitleCollection = new TestTitleCollection(this);
         // テスト一覧のデータを取得
         testTitleCollection.deleteAll();

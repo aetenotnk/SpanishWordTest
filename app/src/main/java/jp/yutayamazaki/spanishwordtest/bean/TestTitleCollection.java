@@ -3,6 +3,7 @@ package jp.yutayamazaki.spanishwordtest.bean;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
 import java.util.LinkedList;
@@ -21,11 +22,12 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
     private static String DB_COL_FILEPATH = "filepath";
 
     private static String SQL_CREATE_TABLE =
-            "CREATE TABLE " + DB_NAME + "(" +
+            "CREATE TABLE IF NOT EXISTS " + DB_NAME + "(" +
                     DB_COL_ID + " integer primary key," +
                     DB_COL_TITLE + " text," +
                     DB_COL_CAPTION + " text," +
                     DB_COL_FILEPATH + " text)";
+    private static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS " + DB_NAME;
     private static String SQL_INSERT_OR_UPDATE =
             "REPLACE INTO " + DB_NAME + "(" +
                     DB_COL_ID + "," +
@@ -39,14 +41,7 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
             "DELETE FROM " + DB_NAME;
 
     public TestTitleCollection(Context context){
-        super(context, DB_NAME, DB_VERSION);
-    }
-
-    @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        SQLiteStatement statement = sqLiteDatabase.compileStatement(SQL_CREATE_TABLE);
-
-        statement.execute();
+        super(new BeanDBHelper(context), DB_NAME, DB_VERSION);
     }
 
     @Override
@@ -55,8 +50,20 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
     }
 
     @Override
+    public void createTable(SQLiteOpenHelper dbHelper) {
+        SQLiteStatement statement =
+                dbHelper.getWritableDatabase().compileStatement(SQL_CREATE_TABLE);
+
+        statement.execute();
+    }
+
+    public static void dropTable(SQLiteOpenHelper dbHelper) {
+        dbHelper.getWritableDatabase().compileStatement(SQL_DROP_TABLE).execute();
+    }
+
+    @Override
     public void insertOrUpdate(TestTitle testTitle) {
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
         SQLiteStatement statement = db.compileStatement(SQL_INSERT_OR_UPDATE);
 
         statement.bindLong(1, testTitle.getId());
@@ -70,7 +77,7 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
 
     @Override
     public List<TestTitle> selectAll() {
-        SQLiteDatabase db = getReadableDatabase();
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery(SQL_SELECT_ALL, null);
         List<TestTitle> result = new LinkedList<>();
 
@@ -93,7 +100,7 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
      * DB内のデータをすべて削除する
      */
     public void deleteAll() {
-        SQLiteStatement statement = getWritableDatabase().compileStatement(SQL_DELETE_ALL);
+        SQLiteStatement statement = dbHelper.getWritableDatabase().compileStatement(SQL_DELETE_ALL);
 
         statement.execute();
     }
