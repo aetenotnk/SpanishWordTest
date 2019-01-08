@@ -19,9 +19,9 @@ public class BeanDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        TestTitleCollection.dropTable(this);
-        WordCollection.dropTable(this);
-        WordTypeCollection.dropTable(this);
+        TestTitleCollection.dropTable(sqLiteDatabase);
+        WordCollection.dropTable(sqLiteDatabase);
+        WordTypeCollection.dropTable(sqLiteDatabase);
 
         onCreate(sqLiteDatabase);
     }

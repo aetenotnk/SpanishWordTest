@@ -58,7 +58,11 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
     }
 
     public static void dropTable(SQLiteOpenHelper dbHelper) {
-        dbHelper.getWritableDatabase().compileStatement(SQL_DROP_TABLE).execute();
+        dropTable(dbHelper.getWritableDatabase());
+    }
+
+    public static void dropTable(SQLiteDatabase db) {
+        db.compileStatement(SQL_DROP_TABLE).execute();
     }
 
     @Override

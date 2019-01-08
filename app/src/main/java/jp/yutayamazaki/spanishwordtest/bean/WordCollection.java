@@ -93,14 +93,16 @@ public class WordCollection extends BeanCollection<Word> {
      * @param dbHelper SQLiteOpenHelper
      */
     public static void dropTable(SQLiteOpenHelper dbHelper){
-        SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
-        Cursor cursor = readableDatabase.rawQuery(
+        dropTable(dbHelper.getWritableDatabase());
+    }
+
+    public static void dropTable(SQLiteDatabase db){
+        Cursor cursor = db.rawQuery(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name LIKE 'WordTest%$_WORD' ESCAPE '$'", null);
-        SQLiteDatabase writableDatabase = dbHelper.getWritableDatabase();
 
         while(cursor.moveToNext()){
             String tableName = cursor.getString(cursor.getColumnIndex("name"));
-            SQLiteStatement statement = writableDatabase.compileStatement(
+            SQLiteStatement statement = db.compileStatement(
                     "DROP TABLE IF EXISTS " + tableName);
 
             statement.execute();

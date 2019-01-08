@@ -50,7 +50,11 @@ public class WordTypeCollection extends BeanCollection<WordType> {
     }
 
     public static void dropTable(SQLiteOpenHelper dbHelper) {
-        dbHelper.getWritableDatabase().compileStatement(SQL_DROP_TABLE).execute();
+        dropTable(dbHelper.getWritableDatabase());
+    }
+
+    public static void dropTable(SQLiteDatabase db) {
+        db.compileStatement(SQL_DROP_TABLE).execute();
     }
 
     @Override
