@@ -1,6 +1,6 @@
 package jp.yutayamazaki.spanishwordtest;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteConstraintException;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
@@ -158,5 +158,22 @@ public class WordCollectionTest {
         all = wordCollection.selectAll();
 
         Assert.assertEquals(0, all.size());
+    }
+
+    /**
+     * 存在しない単語タイプを挿入したときのテスト
+     */
+    @Test(expected = SQLiteConstraintException.class)
+    public void relationWordTypeFail(){
+        WordCollection wordCollection =
+                new WordCollection(RuntimeEnvironment.application, 1);
+        Word word = new Word("deporte",
+                "スポーツ",
+                "¿Haces algún (deporte)",
+                "君は何かスポーツしてる？",
+                new WordType("not_found", "存在しないタイプ"));
+
+        // 外部キー制約があるので例外を投げる
+        wordCollection.insertOrUpdate(word);
     }
 }
