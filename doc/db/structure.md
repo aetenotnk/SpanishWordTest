@@ -31,4 +31,4 @@
 | 項番 | カラム論理名 | カラム物理名 | 型 | Nullable | 主キー制約 | 外部キー制約 | コメント|
 ---|---|---|---|---|---|---|---|
 |1|品詞を識別する文字列|word_type_string|text|true|true| | |
-|2|表示名|word_type_display|text|true|true| | |
+|2|表示名|word_type_display|text|true|false| | |
