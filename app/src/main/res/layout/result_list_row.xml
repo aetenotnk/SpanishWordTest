@@ -13,6 +13,10 @@
             android:layout_height="wrap_content"
             android:text="@string/result_word_spanish"
             android:textColor="@android:color/black"/>
+        
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/word_japanese"
