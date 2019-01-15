@@ -12,6 +12,7 @@ import java.util.List;
 
 import jp.yutayamazaki.spanishwordtest.R;
 import jp.yutayamazaki.spanishwordtest.bean.Word;
+import jp.yutayamazaki.spanishwordtest.manager.Question;
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
 
 public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
@@ -20,7 +21,7 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
 
     private WordTestManager testManager;
 
-    private List<Pair<Word, Integer>> filteredWords;
+    private List<Question> filteredQuestions;
 
     public enum Filter{
         ALL,
@@ -30,7 +31,7 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
 
     public ResultListAdapter(WordTestManager testManager){
         this.testManager = testManager;
-        this.filteredWords = testManager.getQuestionWordPairs();
+        this.filteredQuestions = testManager.getQuestions();
     }
 
     @NonNull
@@ -45,12 +46,12 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ResultListHolder holder, int position) {
-        Word word = filteredWords.get(position).first;
-        Integer questionIndex = filteredWords.get(position).second;
+        Word word = filteredQuestions.get(position).getWord();
+        int questionId = filteredQuestions.get(position).getId();
+        int questionIndex = questionId - 1;
         // スペイン語の単語の前に問題番号と評価の記号を付ける
         WordTestManager.Grade grade = testManager.getEvaluate(questionIndex, 0);
-        int questionNumber = questionIndex + 1;
-        String numberText = NUMBER_PREFIX + questionNumber + NUMBER_SUFFIX;
+        String numberText = NUMBER_PREFIX + questionId + NUMBER_SUFFIX;
         String spanishWordText = grade + numberText + word.getWordSpanish();
 
         holder.spanishWordText.setText(spanishWordText);
@@ -61,7 +62,7 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
 
     @Override
     public int getItemCount() {
-        return filteredWords.size();
+        return filteredQuestions.size();
     }
 
     /**
@@ -71,16 +72,16 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
     public void filterWords(Filter filterCondition){
         switch (filterCondition){
             case ALL:
-                filteredWords = testManager.getQuestionWordPairs();
+                filteredQuestions = testManager.getQuestions();
                 break;
             case CORRECT:
-                filteredWords = testManager.getCorrectWordPairs();
+                filteredQuestions = testManager.getCorrectQuestions();
                 break;
             case MISTAKE:
-                filteredWords = testManager.getMistakeWordPairs();
+                filteredQuestions = testManager.getMistakeQuestions();
                 break;
             default:
-                filteredWords = Collections.emptyList();
+                filteredQuestions = Collections.emptyList();
         }
         notifyDataSetChanged();
     }

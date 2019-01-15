@@ -1,7 +1,5 @@
 package jp.yutayamazaki.spanishwordtest.manager;
 
-import android.util.Pair;
-
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -20,7 +18,7 @@ public class WordTestManager implements Serializable {
 
     private TestTitle testTitle;
     private List<Word> words;
-    private List<Word> questionWords;
+    private List<Question> questions;
     private int testCount;
     private int currentTestCount;
     private List<String> answers;
@@ -58,7 +56,7 @@ public class WordTestManager implements Serializable {
     public WordTestManager(TestTitle testTitle, WordCollection wordCollection){
         this.testTitle = testTitle;
         this.words = wordCollection.selectAll();
-        this.questionWords = new LinkedList<>();
+        this.questions = new LinkedList<>();
         this.answers = new LinkedList<>();
     }
 
@@ -101,60 +99,8 @@ public class WordTestManager implements Serializable {
         return testTitle.getTitle();
     }
 
-    public Word getCurrentWord(){
-        return questionWords.get(currentTestCount);
-    }
-
-    /**
-     * 問題に出した単語をすべて取得する
-     * @return 問題のすべての単語とその問題のインデックスのペアリスト
-     */
-    public List<Pair<Word, Integer>> getQuestionWordPairs(){
-        List<Pair<Word, Integer>> res = new LinkedList<>();
-
-        for(int i = 0;i < questionWords.size();i++){
-            res.add(new Pair<>(questionWords.get(i), i));
-        }
-
-        return res;
-    }
-
-    /**
-     * 正解した単語をすべて取得する
-     * @return 正解した単語とその問題のインデックスのペアリスト
-     */
-    public List<Pair<Word, Integer>> getCorrectWordPairs(){
-        List<Pair<Word, Integer>> res = new LinkedList<>();
-
-        for(int i = 0;i < questionWords.size();i++){
-            Word word = questionWords.get(i);
-            String answer = answers.get(i);
-
-            if(evaluate(word, 0, answer) == Grade.OK){
-                res.add(new Pair<>(word, i));
-            }
-        }
-
-        return res;
-    }
-
-    /**
-     * 間違えた単語をすべて取得する
-     * @return 間違えた単語とその問題のインデックスのペアリスト
-     */
-    public List<Pair<Word, Integer>> getMistakeWordPairs(){
-        List<Pair<Word, Integer>> res = new LinkedList<>();
-
-        for(int i = 0;i < questionWords.size();i++){
-            Word word = questionWords.get(i);
-            String answer = answers.get(i);
-
-            if(evaluate(word, 0, answer) == Grade.NOT_OK){
-                res.add(new Pair<>(word, i));
-            }
-        }
-
-        return res;
+    public Question getCurrentWord(){
+        return questions.get(currentTestCount);
     }
 
     public void next(){
@@ -170,7 +116,7 @@ public class WordTestManager implements Serializable {
     }
 
     public boolean isLast(){
-        return currentTestCount == (questionWords.size() - 1);
+        return currentTestCount == (questions.size() - 1);
     }
 
     public int getCurrentTestCount(){
@@ -182,14 +128,38 @@ public class WordTestManager implements Serializable {
     }
 
     /**
+     * 問題をすべて得る
+     * @return 問題のリストをコピーしたもの
+     */
+    public List<Question> getQuestions() {
+        return new LinkedList<>(questions);
+    }
+
+    /**
+     * 正解した問題をすべて得る
+     * @return 正解した問題のリスト
+     */
+    public List<Question> getCorrectQuestions() {
+        return getFilteredQuestionsByGrade(Grade.OK);
+    }
+
+    /**
+     * 間違えた問題をすべて得る
+     * @return 間違えた問題のリスト
+     */
+    public List<Question> getMistakeQuestions() {
+        return getFilteredQuestionsByGrade(Grade.NOT_OK);
+    }
+
+    /**
      * テストのスコアを取得する
      * @return テストのスコア
      */
     public float getScore(){
         float score = 0;
 
-        for(int i = 0;i < questionWords.size();i++){
-            score += evaluate(questionWords.get(i), 0, answers.get(i)).getScore();
+        for(int i = 0; i < questions.size(); i++){
+            score += questions.get(i).evaluateAnswer(answers.get(i)).score;
         }
 
         return score;
@@ -201,7 +171,7 @@ public class WordTestManager implements Serializable {
      */
     public float getMaxScore(){
         // すべてOKの時のスコアを返す
-        return questionWords.size() * Grade.OK.getScore();
+        return questions.size() * Grade.OK.getScore();
     }
 
     /**
@@ -215,7 +185,7 @@ public class WordTestManager implements Serializable {
     }
 
     public Grade getEvaluate(int questionIndex, int exampleIndex){
-        return evaluate(questionWords.get(questionIndex), exampleIndex, answers.get(questionIndex));
+        return questions.get(questionIndex).evaluateAnswer(answers.get(questionIndex));
     }
 
     /**
@@ -278,12 +248,15 @@ public class WordTestManager implements Serializable {
         // 例文を含む単語だけ抽出
         List<Word> filteredWords = getValidWords();
 
-        questionWords.clear();
+        questions.clear();
 
         // 抽出した単語からランダムに出題する問題を設定
         Collections.shuffle(filteredWords);
         for(int i = 0;i < testCount;i++){
-            questionWords.add(filteredWords.get(i));
+            Word word = filteredWords.get(i);
+            int id = i + 1;
+
+            questions.add(new Question(word, id));
         }
     }
 
@@ -305,5 +278,20 @@ public class WordTestManager implements Serializable {
      */
     private int getValidWordCount(){
         return getValidWords().size();
+    }
+
+    private List<Question> getFilteredQuestionsByGrade(Grade grade) {
+        List<Question> res = new LinkedList<>();
+
+        for(int i = 0;i < questions.size();i++) {
+            Question question = questions.get(i);
+            String answer = answers.get(i);
+
+            if(question.evaluateAnswer(answer) == grade) {
+                res.add(question);
+            }
+        }
+
+        return res;
     }
 }

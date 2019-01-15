@@ -13,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import jp.yutayamazaki.spanishwordtest.bean.Word;
+import jp.yutayamazaki.spanishwordtest.manager.Question;
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
 
 public class WordTest extends AppCompatActivity {
@@ -41,6 +41,7 @@ public class WordTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_test);
 
+        // TODO: 2019/01/15 警告の修正
         testManager = WordTestManager.class.cast(
                 getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
         String testCountStr = PreferenceManager
@@ -181,7 +182,7 @@ public class WordTest extends AppCompatActivity {
     }
 
     private void setContents(){
-        Word currentWord = testManager.getCurrentWord();
+        Question currentQuestion = testManager.getCurrentWord();
         String questionText =
                 this.getResources().getString(R.string.test_question_prefix) +
                         (testManager.getCurrentTestCount() + 1) +
@@ -189,8 +190,8 @@ public class WordTest extends AppCompatActivity {
 
         // テストの問題文を設定
         questionTextView.setText(questionText);
-        spanishTextView.setText(WordTestManager.getBlindSpanishExample(currentWord, 0));
-        japaneseTextView.setText(WordTestManager.getJapaneseExample(currentWord, 0));
+        spanishTextView.setText(currentQuestion.getBlindSpanishExample());
+        japaneseTextView.setText(currentQuestion.getJapaneseExample());
 
         // 解答欄を設定
         answerText.setText(testManager.getCurrentAnswer());
