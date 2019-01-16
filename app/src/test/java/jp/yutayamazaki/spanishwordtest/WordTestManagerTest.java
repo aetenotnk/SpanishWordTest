@@ -15,6 +15,7 @@ import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.Word;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
 import jp.yutayamazaki.spanishwordtest.bean.WordType;
+import jp.yutayamazaki.spanishwordtest.manager.Question;
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
 
 @RunWith(RobolectricTestRunner.class)
@@ -70,16 +71,16 @@ public class WordTestManagerTest {
 
         manager.init(2);
 
-        Field wordsField = manager.getClass().getDeclaredField("questionWords");
+        Field wordsField = manager.getClass().getDeclaredField("questions");
         wordsField.setAccessible(true);
-        List<Word> words = (List<Word>)wordsField.get(manager);
+        List<Question> questions = (List<Question>)wordsField.get(manager);
 
         // 単語が2つ設定できているかチェック
-        Assert.assertEquals(2, words.size());
+        Assert.assertEquals(2, questions.size());
 
         // 設定した単語に例文を含むものだけかチェック
-        for(Word word : words){
-            Assert.assertNotEquals("", word.getExampleSpanish());
+        for(Question question : questions){
+            Assert.assertNotEquals("", question.getSpanishExample());
         }
     }
 
@@ -95,12 +96,12 @@ public class WordTestManagerTest {
         // テスト数が有効な単語数より多い
         manager.init(Integer.MAX_VALUE);
 
-        Field wordsField = manager.getClass().getDeclaredField("questionWords");
-        wordsField.setAccessible(true);
-        List<Word> words = (List<Word>) wordsField.get(manager);
+        Field questionsField = manager.getClass().getDeclaredField("questions");
+        questionsField.setAccessible(true);
+        List<Question> questions = (List<Question>) questionsField.get(manager);
 
         // 有効な単語すべてが問題になっていること
-        Assert.assertEquals(2, words.size());
+        Assert.assertEquals(2, questions.size());
     }
 
     /**
