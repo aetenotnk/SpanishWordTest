@@ -50,7 +50,7 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListHolder> {
         int questionId = filteredQuestions.get(position).getId();
         int questionIndex = questionId - 1;
         // スペイン語の単語の前に問題番号と評価の記号を付ける
-        WordTestManager.Grade grade = testManager.getEvaluate(questionIndex, 0);
+        WordTestManager.Grade grade = testManager.getEvaluate(questionIndex);
         String numberText = NUMBER_PREFIX + questionId + NUMBER_SUFFIX;
         String spanishWordText = grade + numberText + word.getWordSpanish();
 

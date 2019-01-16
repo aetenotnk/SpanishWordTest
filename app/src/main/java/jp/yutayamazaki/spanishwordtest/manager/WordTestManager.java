@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
@@ -13,9 +11,6 @@ import jp.yutayamazaki.spanishwordtest.bean.Word;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
 
 public class WordTestManager implements Serializable {
-    private static String BLANK = "(    )";
-    private static String EXAMPLE_SPLIT = " / ";
-
     private TestTitle testTitle;
     private List<Word> words;
     private List<Question> questions;
@@ -86,15 +81,6 @@ public class WordTestManager implements Serializable {
         return answers.get(currentTestCount);
     }
 
-    /**
-     * ユーザーの解答を取得する
-     * @param index 何番目の解答か
-     * @return index番目の解答
-     */
-    public String getAnswer(int index){
-        return answers.get(index);
-    }
-
     public String getTitle(){
         return testTitle.getTitle();
     }
@@ -121,10 +107,6 @@ public class WordTestManager implements Serializable {
 
     public int getCurrentTestCount(){
         return currentTestCount;
-    }
-
-    public int getTestCount(){
-        return testCount;
     }
 
     /**
@@ -184,51 +166,9 @@ public class WordTestManager implements Serializable {
                 .collect(Collectors.toList());
     }
 
-    public Grade getEvaluate(int questionIndex, int exampleIndex){
+    public Grade getEvaluate(int questionIndex){
         return questions.get(questionIndex).evaluateAnswer(answers.get(questionIndex));
     }
-
-    /**
-     * かっこ内を隠したスペイン語の例文を取得する
-     * @param word 単語
-     * @return かっこ内を隠したスペイン語の例文
-     */
-    public static String getBlindSpanishExample(Word word, int index){
-        Pattern pattern = Pattern.compile("\\(.*\\)");
-        Matcher matcher = pattern.matcher(getSpanishExample(word, index));
-
-        return matcher.replaceAll(BLANK);
-    }
-
-    public static String getSpanishExample(Word word, int index){
-        return word.getExampleSpanish().split(EXAMPLE_SPLIT)[index];
-    }
-
-    public static String getJapaneseExample(Word word, int index){
-        return word.getExampleJapanese().split(EXAMPLE_SPLIT)[index];
-    }
-
-    /**
-     * 解答を評価する
-     * @param word 単語
-     * @param index 例文のインデックス
-     * @param answer ユーザーの解答
-     * @return ユーザーの解答の評価
-     */
-    public static Grade evaluate(Word word, int index, String answer){
-        String spanishExample = word.getExampleSpanish().split(EXAMPLE_SPLIT)[index];
-        Pattern pattern = Pattern.compile("\\((.*)\\)");
-        Matcher matcher = pattern.matcher(spanishExample);
-
-        // データが不正で()がないかもしれないので
-        // Matcher#findでパターンが見つかったかチェックする
-        if(matcher.find() && answer.toLowerCase().equals(matcher.group(1).toLowerCase())){
-            return Grade.OK;
-        }
-
-        return Grade.NOT_OK;
-    }
-
     /**
      * テスト数の初期化
      * @param testCount 要求されたテスト数
