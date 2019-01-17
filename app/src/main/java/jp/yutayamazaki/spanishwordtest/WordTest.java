@@ -186,12 +186,14 @@ public class WordTest extends AppCompatActivity {
         String questionText =
                 this.getResources().getString(R.string.test_question_prefix) +
                         (testManager.getCurrentTestCount() + 1) +
-                        this.getResources().getString(R.string.test_question);
+                        currentQuestion.getQuestionText();
+        String spanishText = currentQuestion.getQuestionSpanishText();
+        String japaneseText = currentQuestion.getQuestionJapaneseText();
 
         // テストの問題文を設定
         questionTextView.setText(questionText);
-        spanishTextView.setText(currentQuestion.getBlindSpanishExample());
-        japaneseTextView.setText(currentQuestion.getJapaneseExample());
+        spanishTextView.setText(spanishText);
+        japaneseTextView.setText(japaneseText);
 
         // 解答欄を設定
         answerText.setText(testManager.getCurrentAnswer());
