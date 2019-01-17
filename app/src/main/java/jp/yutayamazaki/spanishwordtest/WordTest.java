@@ -209,10 +209,10 @@ public class WordTest extends AppCompatActivity {
 
         // 次へボタンの画像の設定
         if(testManager.isLast()){
-            nextButton.setImageResource(R.drawable.ic_check_black_24dp);
+            nextButton.setImageResource(R.drawable.ic_check_24dp);
         }
         else{
-            nextButton.setImageResource(R.drawable.ic_navigate_next_black_24dp);
+            nextButton.setImageResource(R.drawable.ic_navigate_next_24dp);
         }
     }
 
