@@ -44,14 +44,7 @@ public class Question implements Serializable {
     }
 
     public String getQuestionJapaneseText() {
-        return hasExamples() ? japaneseExample : word.getWordJapanese();
-    }
-
-    private String getBlindSpanishExample() {
-        Pattern pattern = Pattern.compile("\\(.*\\)");
-        Matcher matcher = pattern.matcher(spanishExample);
-
-        return matcher.replaceAll(BLANK);
+        return hasExamples() ? japaneseExample : japaneseWord;
     }
 
     public Word getWord() {
@@ -62,20 +55,8 @@ public class Question implements Serializable {
         return id;
     }
 
-    public List<String> getSpanishWords() {
-        return spanishWords;
-    }
-
-    public String getWordJapanese() {
-        return japaneseWord;
-    }
-
     public String getSpanishExample() {
         return spanishExample;
-    }
-
-    public String getJapaneseExample() {
-        return japaneseExample;
     }
 
     public boolean hasExamples() {
@@ -94,6 +75,13 @@ public class Question implements Serializable {
 
         spanishExample = examplesSpanish[index];
         japaneseExample = examplesJapanese[index];
+    }
+
+    private String getBlindSpanishExample() {
+        Pattern pattern = Pattern.compile("\\(.*\\)");
+        Matcher matcher = pattern.matcher(spanishExample);
+
+        return matcher.replaceAll(BLANK);
     }
 
     /**
