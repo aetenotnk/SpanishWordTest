@@ -45,10 +45,10 @@ public class QuestionTest {
     }
 
     /**
-     * 正しい答えを判定できるかテスト
+     * 例文を持つ単語で正しい答えを判定できるかテスト
      */
     @Test
-    public void evaluateOK() {
+    public void evaluateOKHasExamples() {
         Word word = new Word(
                 "Hay que ...",
                 "・・・しないといけない",
@@ -62,10 +62,10 @@ public class QuestionTest {
     }
 
     /**
-     * 間違った答えを判定できるかテスト
+     * 例文を持つ単語で間違った答えを判定できるかテスト
      */
     @Test
-    public void evaluateNotOK() {
+    public void evaluateNotOKHasExamples() {
         Word word = new Word(
                 "Hay que ...",
                 "・・・しないといけない",
