@@ -103,8 +103,8 @@ public class Question implements Serializable {
     }
 
     private WordTestManager.Grade evaluateAnswerNoExample(String answer) {
-        Pattern pattern1 = Pattern.compile("^a-zA-ZáéíñóúüÁÉÍÑÓÚÜ\\s");
-        Pattern pattern2 = Pattern.compile("^a-zA-ZáéíñóúüÁÉÍÑÓÚÜ\\(\\)\\s");
+        Pattern pattern1 = Pattern.compile("[^a-zA-ZáéíñóúüÁÉÍÑÓÚÜ\\s]");
+        Pattern pattern2 = Pattern.compile("[^a-zA-ZáéíñóúüÁÉÍÑÓÚÜ()\\s]");
         Pattern kakkoPattern = Pattern.compile("\\((.*)\\)");
 
         for(String word : spanishWords) {
