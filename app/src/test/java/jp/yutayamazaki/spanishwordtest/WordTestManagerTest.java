@@ -77,11 +77,6 @@ public class WordTestManagerTest {
 
         // 単語が2つ設定できているかチェック
         Assert.assertEquals(2, questions.size());
-
-        // 設定した単語に例文を含むものだけかチェック
-        for(Question question : questions){
-            Assert.assertNotEquals("", question.getSpanishExample());
-        }
     }
 
     /**
@@ -100,7 +95,7 @@ public class WordTestManagerTest {
         questionsField.setAccessible(true);
         List<Question> questions = (List<Question>) questionsField.get(manager);
 
-        // 有効な単語すべてが問題になっていること
-        Assert.assertEquals(2, questions.size());
+        // 単語すべてが問題になっていること
+        Assert.assertEquals(3, questions.size());
     }
 }

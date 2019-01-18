@@ -27,7 +27,7 @@ public class QuestionTest {
         Question question = new Question(word, 1);
 
         Assert.assertEquals("(    ) lavarse las manos antes de comer.",
-                question.getBlindSpanishExample());
+                question.getQuestionSpanishText());
     }
 
     /**
