@@ -27,14 +27,28 @@ public class QuestionTest {
         Question question = new Question(word, 1);
 
         Assert.assertEquals("(    ) lavarse las manos antes de comer.",
-                question.getBlindSpanishExample());
+                question.getQuestionSpanishText());
+    }
+
+    @Test
+    public void noExamplesQuestion() {
+        Word word = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "",
+                "",
+                new WordType("v", "動詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals("", question.getQuestionSpanishText());
+        Assert.assertEquals("・・・しないといけない", question.getQuestionJapaneseText());
     }
 
     /**
-     * 正しい答えを判定できるかテスト
+     * 例文を持つ単語で正しい答えを判定できるかテスト
      */
     @Test
-    public void evaluateOK() {
+    public void evaluateOKHasExamples() {
         Word word = new Word(
                 "Hay que ...",
                 "・・・しないといけない",
@@ -48,10 +62,10 @@ public class QuestionTest {
     }
 
     /**
-     * 間違った答えを判定できるかテスト
+     * 例文を持つ単語で間違った答えを判定できるかテスト
      */
     @Test
-    public void evaluateNotOK() {
+    public void evaluateNotOKHasExamples() {
         Word word = new Word(
                 "Hay que ...",
                 "・・・しないといけない",
@@ -62,6 +76,106 @@ public class QuestionTest {
 
         Assert.assertEquals(WordTestManager.Grade.NOT_OK,
                 question.evaluateAnswer("abc"));
+    }
+
+    /**
+     * 例文を持たない単語がOKの評価できるかどうか
+     */
+    @Test
+    public void evaluateOKNoExamples1() {
+        Word word = new Word(
+                "amar",
+                "愛する",
+                "",
+                "",
+                new WordType("v", "動詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(WordTestManager.Grade.OK, question.evaluateAnswer("amar"));
+    }
+
+    /**
+     * 例文を持たない単語で記号がある単語でOKの評価できるかどうか
+     */
+    @Test
+    public void evaluateOKNotExamples2() {
+        Word word = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "",
+                "",
+                new WordType("v", "動詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(WordTestManager.Grade.OK,
+                question.evaluateAnswer("Hay que"));
+    }
+
+    /**
+     * 例文を持たない単語でかっこのある単語でOKの評価できるかどうか
+     */
+    @Test
+    public void evaluateOKNotExamples3() {
+        Word word = new Word(
+                "(p)sicología",
+                "心理学",
+                "",
+                "",
+                new WordType("noun", "名詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(WordTestManager.Grade.OK, question.evaluateAnswer("sicología"));
+        Assert.assertEquals(WordTestManager.Grade.OK, question.evaluateAnswer("psicología"));
+    }
+
+    /**
+     * 例文を持たない単語がNGの評価できるかどうか
+     */
+    @Test
+    public void evaluateNotOKNoExamples1() {
+        Word word = new Word(
+                "amar",
+                "愛する",
+                "",
+                "",
+                new WordType("v", "動詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK, question.evaluateAnswer("abc"));
+    }
+
+    /**
+     * 例文を持たない単語で記号がある単語でNGの評価できるかどうか
+     */
+    @Test
+    public void evaluateNotOKNotExamples2() {
+        Word word = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "",
+                "",
+                new WordType("v", "動詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                question.evaluateAnswer("abc"));
+    }
+
+    /**
+     * 例文を持たない単語でかっこのある単語でNGの評価できるかどうか
+     */
+    @Test
+    public void evaluateNotOKNotExamples3() {
+        Word word = new Word(
+                "(p)sicología",
+                "心理学",
+                "",
+                "",
+                new WordType("noun", "名詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK, question.evaluateAnswer("abc"));
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK, question.evaluateAnswer("(p)sicología"));
     }
 
     /**

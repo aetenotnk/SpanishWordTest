@@ -161,9 +161,7 @@ public class WordTestManager implements Serializable {
      * @return 問題として有効な単語リスト
      */
     public List<Word> getValidWords(){
-        return words.stream()
-                .filter(w -> !w.getExampleSpanish().equals(""))
-                .collect(Collectors.toList());
+        return new LinkedList<>(words);
     }
 
     public Grade getEvaluate(int questionIndex){
