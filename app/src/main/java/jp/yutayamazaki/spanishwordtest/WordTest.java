@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageButton;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -30,8 +31,8 @@ public class WordTest extends AppCompatActivity {
     private TextView questionTextView;
     private TextView spanishTextView;
     private TextView japaneseTextView;
-    private Button previousButton;
-    private Button nextButton;
+    private AppCompatImageButton previousButton;
+    private AppCompatImageButton nextButton;
     private EditText answerText;
 
     private GestureDetector gestureDetector;
@@ -206,12 +207,12 @@ public class WordTest extends AppCompatActivity {
             previousButton.setVisibility(Button.VISIBLE);
         }
 
-        // 次へボタンのテキストの設定
+        // 次へボタンの画像の設定
         if(testManager.isLast()){
-            nextButton.setText(R.string.test_finish_button);
+            nextButton.setImageResource(R.drawable.ic_check_24dp);
         }
         else{
-            nextButton.setText(R.string.test_next_button);
+            nextButton.setImageResource(R.drawable.ic_navigate_next_24dp);
         }
     }
 
