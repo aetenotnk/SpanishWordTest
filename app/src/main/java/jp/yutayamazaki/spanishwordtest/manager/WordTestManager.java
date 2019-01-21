@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.Word;
@@ -16,7 +15,7 @@ public class WordTestManager implements Serializable {
     private List<Question> questions;
     private int testCount;
     private int currentTestCount;
-    private List<String> answers;
+    private List<List<String>> answers;
 
     /**
      * 各問題のの評価
@@ -69,16 +68,16 @@ public class WordTestManager implements Serializable {
      * 現在の問題の解答を設定する
      * @param input ユーザーの解答
      */
-    public void setCurrentAnswer(String input){
-        answers.set(currentTestCount, input);
+    public void setCurrentAnswer(int index, String input){
+        answers.get(currentTestCount).set(index, input);
     }
 
     /**
      * 現在の問題のユーザーの解答を取得する
      * @return 現在の問題のユーザーの解答
      */
-    public String getCurrentAnswer(){
-        return answers.get(currentTestCount);
+    public String getCurrentAnswer(int index){
+        return answers.get(currentTestCount).get(index);
     }
 
     public String getTitle(){
@@ -206,7 +205,10 @@ public class WordTestManager implements Serializable {
 
         // 解答リストを問題数分確保し空の文字列で埋める
         for(int i = 0;i < testCount;i++){
-            answers.add("");
+            answers.add(new LinkedList<>());
+            for(int j = 0;j < questions.get(i).getAnswerCount();j++) {
+                answers.get(i).add("");
+            }
         }
     }
 
@@ -223,9 +225,9 @@ public class WordTestManager implements Serializable {
 
         for(int i = 0;i < questions.size();i++) {
             Question question = questions.get(i);
-            String answer = answers.get(i);
+            List<String> answerList = answers.get(i);
 
-            if(question.evaluateAnswer(answer) == grade) {
+            if(question.evaluateAnswer(answerList) == grade) {
                 res.add(question);
             }
         }

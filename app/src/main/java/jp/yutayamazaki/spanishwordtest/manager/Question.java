@@ -31,8 +31,8 @@ public class Question implements Serializable {
         setExamples();
     }
 
-    public WordTestManager.Grade evaluateAnswer(String answer) {
-        return hasExamples() ? evaluateAnswerHasExamples(answer) : evaluateAnswerNoExample(answer);
+    public WordTestManager.Grade evaluateAnswer(List<String> answers) {
+        return hasExamples() ? evaluateAnswerHasExamples(answers) : evaluateAnswerNoExample(answers);
     }
 
     public String getQuestionText() {
@@ -63,6 +63,13 @@ public class Question implements Serializable {
         return !spanishExample.equals("");
     }
 
+    public int getAnswerCount() {
+        Pattern pattern = Pattern.compile("\\(.*?\\)");
+        Matcher matcher = pattern.matcher(spanishExample);
+
+        return matcher.groupCount();
+    }
+
     private void setWords() {
         this.spanishWords = Arrays.asList(word.getWordSpanish().split(SEPARATOR));
         this.japaneseWord = word.getWordJapanese();
@@ -78,7 +85,7 @@ public class Question implements Serializable {
     }
 
     private String getBlindSpanishExample() {
-        Pattern pattern = Pattern.compile("\\(.*\\)");
+        Pattern pattern = Pattern.compile("\\(.*?\\)");
         Matcher matcher = pattern.matcher(spanishExample);
 
         return matcher.replaceAll(BLANK);
@@ -86,26 +93,29 @@ public class Question implements Serializable {
 
     /**
      * 例文があるときの答えを評価する
-     * @param answer ユーザの答え
+     * @param answers ユーザの答え
      * @return 評価
      */
-    private WordTestManager.Grade evaluateAnswerHasExamples(String answer) {
-        Pattern pattern = Pattern.compile("\\((.*)\\)");
+    private WordTestManager.Grade evaluateAnswerHasExamples(List<String> answers) {
+        Pattern pattern = Pattern.compile("\\((.*?)\\)");
         Matcher matcher = pattern.matcher(spanishExample);
 
-        // データが不正で()がないかもしれないので
-        // Matcher#findでパターンが見つかったかチェックする
-        if(matcher.find() && answer.toLowerCase().equals(matcher.group(1).toLowerCase())){
-            return WordTestManager.Grade.OK;
+        int i = 0;
+        while(matcher.find()) {
+            if(!answers.get(i).toLowerCase().equals(matcher.group(1).toLowerCase())) {
+                return WordTestManager.Grade.NOT_OK;
+            }
+            i++;
         }
 
-        return WordTestManager.Grade.NOT_OK;
+        return WordTestManager.Grade.OK;
     }
 
-    private WordTestManager.Grade evaluateAnswerNoExample(String answer) {
+    private WordTestManager.Grade evaluateAnswerNoExample(List<String> answers) {
         Pattern pattern1 = Pattern.compile("[^a-zA-ZáéíñóúüÁÉÍÑÓÚÜ\\s]");
         Pattern pattern2 = Pattern.compile("[^a-zA-ZáéíñóúüÁÉÍÑÓÚÜ()\\s]");
         Pattern kakkoPattern = Pattern.compile("\\((.*)\\)");
+        String answer = answers.get(0);
 
         for(String word : spanishWords) {
             // 単語から記号と前後のスペースを削除

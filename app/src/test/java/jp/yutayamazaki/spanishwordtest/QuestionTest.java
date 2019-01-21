@@ -6,6 +6,8 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import jp.yutayamazaki.spanishwordtest.bean.Word;
 import jp.yutayamazaki.spanishwordtest.bean.WordType;
@@ -58,7 +60,8 @@ public class QuestionTest {
         Question question = new Question(word, 1);
 
         Assert.assertEquals(WordTestManager.Grade.OK,
-                question.evaluateAnswer("Hay que"));
+                question.evaluateAnswer(Stream.of("Hay que").collect(Collectors.toList())));
+//                question.evaluateAnswer("Hay que"));
     }
 
     /**
@@ -75,7 +78,7 @@ public class QuestionTest {
         Question question = new Question(word, 1);
 
         Assert.assertEquals(WordTestManager.Grade.NOT_OK,
-                question.evaluateAnswer("abc"));
+                question.evaluateAnswer(Stream.of("abc").collect(Collectors.toList())));
     }
 
     /**
@@ -91,7 +94,8 @@ public class QuestionTest {
                 new WordType("v", "動詞"));
         Question question = new Question(word, 1);
 
-        Assert.assertEquals(WordTestManager.Grade.OK, question.evaluateAnswer("amar"));
+        Assert.assertEquals(WordTestManager.Grade.OK,
+                question.evaluateAnswer(Stream.of("amar").collect(Collectors.toList())));
     }
 
     /**
@@ -108,7 +112,7 @@ public class QuestionTest {
         Question question = new Question(word, 1);
 
         Assert.assertEquals(WordTestManager.Grade.OK,
-                question.evaluateAnswer("Hay que"));
+                question.evaluateAnswer(Stream.of("Hay que").collect(Collectors.toList())));
     }
 
     /**
@@ -124,8 +128,10 @@ public class QuestionTest {
                 new WordType("noun", "名詞"));
         Question question = new Question(word, 1);
 
-        Assert.assertEquals(WordTestManager.Grade.OK, question.evaluateAnswer("sicología"));
-        Assert.assertEquals(WordTestManager.Grade.OK, question.evaluateAnswer("psicología"));
+        Assert.assertEquals(WordTestManager.Grade.OK,
+                question.evaluateAnswer(Stream.of("sicología").collect(Collectors.toList())));
+        Assert.assertEquals(WordTestManager.Grade.OK,
+                question.evaluateAnswer(Stream.of("psicología").collect(Collectors.toList())));
     }
 
     /**
@@ -141,7 +147,8 @@ public class QuestionTest {
                 new WordType("v", "動詞"));
         Question question = new Question(word, 1);
 
-        Assert.assertEquals(WordTestManager.Grade.NOT_OK, question.evaluateAnswer("abc"));
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                question.evaluateAnswer(Stream.of("abc").collect(Collectors.toList())));
     }
 
     /**
@@ -158,7 +165,7 @@ public class QuestionTest {
         Question question = new Question(word, 1);
 
         Assert.assertEquals(WordTestManager.Grade.NOT_OK,
-                question.evaluateAnswer("abc"));
+                question.evaluateAnswer(Stream.of("abc").collect(Collectors.toList())));
     }
 
     /**
@@ -174,8 +181,46 @@ public class QuestionTest {
                 new WordType("noun", "名詞"));
         Question question = new Question(word, 1);
 
-        Assert.assertEquals(WordTestManager.Grade.NOT_OK, question.evaluateAnswer("abc"));
-        Assert.assertEquals(WordTestManager.Grade.NOT_OK, question.evaluateAnswer("(p)sicología"));
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                question.evaluateAnswer(Stream.of("abc").collect(Collectors.toList())));
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                question.evaluateAnswer(Stream.of("(p)sicología").collect(Collectors.toList())));
+    }
+
+    /**
+     * 1つの例文に複数のかっこがあるときにOKの評価ができるかテスト
+     */
+    @Test
+    public void evaluateOKHasTwoBlanks() {
+        Word word  = new Word("no sólo ... sino tabién",
+                "・・・だけでなく・・・もまた",
+                "(No sólo) cantamos (sino también) bailamos.",
+                "私たちは歌っただけでなく、踊りもした。",
+                new WordType("other", "その他"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(WordTestManager.Grade.OK,
+                question.evaluateAnswer(Stream.of("No sólo", "sino también").collect(Collectors.toList())));
+    }
+
+    /**
+     * 1つの例文に複数のかっこがあるときにNotOKの評価ができるかテスト
+     */
+    @Test
+    public void evaluateNotOKHasTwoBlanks() {
+        Word word  = new Word("no sólo ... sino tabién",
+                "・・・だけでなく・・・もまた",
+                "(No sólo) cantamos (sino también) bailamos.",
+                "私たちは歌っただけでなく、踊りもした。",
+                new WordType("other", "その他"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                question.evaluateAnswer(Stream.of("No sólo", "abc").collect(Collectors.toList())));
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                question.evaluateAnswer(Stream.of("abc", "sino también").collect(Collectors.toList())));
+        Assert.assertEquals(WordTestManager.Grade.NOT_OK,
+                question.evaluateAnswer(Stream.of("abc", "def").collect(Collectors.toList())));
     }
 
     /**
