@@ -17,8 +17,7 @@ public class CheckQuestion extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_question);
 
-        testManager = WordTestManager.class.cast(
-                getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
+        testManager = (WordTestManager) getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER);
         setTitle(testManager.getTitle());
 
         RecyclerView questionList = findViewById(R.id.question_list);

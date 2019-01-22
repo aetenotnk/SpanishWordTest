@@ -135,7 +135,7 @@ public class TestList extends AppCompatActivity {
 
 
         runOnUiThread(() -> {
-            ListView listView = ListView.class.cast(findViewById(R.id.test_list));
+            ListView listView = findViewById(R.id.test_list);
             listView.setAdapter(adapter);
 
             // リスト内の項目をタップした時の処理
@@ -160,8 +160,8 @@ public class TestList extends AppCompatActivity {
      * リストのサイズを調整する。
      */
     private void resizeTestList(){
-        RelativeLayout contents = RelativeLayout.class.cast(findViewById(R.id.test_list_contents));
-        ListView listView = ListView.class.cast(findViewById(R.id.test_list));
+        RelativeLayout contents = findViewById(R.id.test_list_contents);
+        ListView listView = findViewById(R.id.test_list);
 
         ViewGroup.LayoutParams params = listView.getLayoutParams();
         params.height = contents.getHeight() - 16;

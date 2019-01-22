@@ -18,8 +18,7 @@ public class ModeSelect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mode_select);
 
-        testManager = WordTestManager.class.cast(
-                getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
+        testManager = (WordTestManager) getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER);
         setTitle(testManager.getTitle());
 
         Button startButton = findViewById(R.id.start_button);

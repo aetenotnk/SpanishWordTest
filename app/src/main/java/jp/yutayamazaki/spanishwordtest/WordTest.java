@@ -49,9 +49,7 @@ public class WordTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_test);
 
-        // TODO: 2019/01/15 警告の修正
-        testManager = WordTestManager.class.cast(
-                getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
+        testManager = (WordTestManager) getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER);
         String testCountStr = PreferenceManager
                 .getDefaultSharedPreferences(this)
                 .getString("test_count", String.valueOf(DEFAULT_TEST_COUNT));

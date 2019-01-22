@@ -32,8 +32,7 @@ public class TestResult extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_result);
 
-        this.testManager = WordTestManager.class.cast(
-                getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER));
+        testManager = (WordTestManager) getIntent().getSerializableExtra(TestList.EXTRA_WORD_TEST_MANAGER);
         setTitle(testManager.getTitle());
 
         this.scoreText = findViewById(R.id.score_actual);
