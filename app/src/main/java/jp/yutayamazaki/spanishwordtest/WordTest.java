@@ -10,9 +10,14 @@ import android.support.v7.widget.AppCompatImageButton;
 import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import jp.yutayamazaki.spanishwordtest.manager.Question;
 import jp.yutayamazaki.spanishwordtest.manager.WordTestManager;
@@ -33,7 +38,9 @@ public class WordTest extends AppCompatActivity {
     private TextView japaneseTextView;
     private AppCompatImageButton previousButton;
     private AppCompatImageButton nextButton;
-    private EditText answerText;
+//    private EditText answerText;
+    private LinearLayout answerLinearLayout;
+    private List<EditText> answers;
 
     private GestureDetector gestureDetector;
 
@@ -62,7 +69,8 @@ public class WordTest extends AppCompatActivity {
         japaneseTextView = findViewById(R.id.japanese_text);
         previousButton = findViewById(R.id.previous_button);
         nextButton = findViewById(R.id.next_button);
-        answerText = findViewById(R.id.answer);
+        answerLinearLayout = findViewById(R.id.answers);
+        answers = new LinkedList<>();
 
         setButtonEvent();
         setSwipeEvent();
@@ -79,7 +87,9 @@ public class WordTest extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        testManager.setCurrentAnswer(answerText.getText().toString());
+        for(int i = 0;i < answers.size();i++) {
+            testManager.setCurrentAnswer(i, answers.get(i).getText().toString());
+        }
     }
 
     @Override
@@ -113,14 +123,13 @@ public class WordTest extends AppCompatActivity {
     private void setButtonEvent(){
         previousButton.setOnClickListener(view ->{
             // 解答を取得
-            testManager.setCurrentAnswer(answerText.getText().toString());
+            setTestManagerAnswers();
             testManager.previous();
             setContents();
         });
         nextButton.setOnClickListener(view ->{
             // 解答を取得
-            testManager.setCurrentAnswer(answerText.getText().toString());
-            testManager.setCurrentAnswer(answerText.getText().toString());
+            setTestManagerAnswers();
             if(testManager.isLast()){
                 Intent resultIntent = new Intent(getApplication(), TestResult.class);
 
@@ -182,6 +191,44 @@ public class WordTest extends AppCompatActivity {
         gestureDetector = new GestureDetector(this, listener);
     }
 
+    /**
+     * 解答欄を設定する
+     */
+    private void setAnswerEditText() {
+        answerLinearLayout.removeAllViews();
+        answers.clear();
+
+        Question question = testManager.getCurrentWord();
+
+        for(int i = 0;i < question.getAnswerCount();i++) {
+            EditText editText = new EditText(this);
+            String answer = testManager.getCurrentAnswer(i);
+
+            editText.setHint(R.string.input_answer);
+            editText.setText(answer);
+
+            answerLinearLayout.addView(editText,
+                    new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+            answers.add(editText);
+        }
+
+        EditText firstAnswer = answers.get(0);
+
+        // カーソルを一番後ろに設定
+        firstAnswer.setSelection(firstAnswer.getText().toString().length());
+    }
+
+    /**
+     * testManagerに答えを設定する
+     */
+    private void setTestManagerAnswers() {
+        for(int i = 0;i < answers.size();i++) {
+            testManager.setCurrentAnswer(i, answers.get(i).getText().toString());
+        }
+    }
+
     private void setContents(){
         Question currentQuestion = testManager.getCurrentWord();
         String questionText =
@@ -197,9 +244,7 @@ public class WordTest extends AppCompatActivity {
         japaneseTextView.setText(japaneseText);
 
         // 解答欄を設定
-        answerText.setText(testManager.getCurrentAnswer());
-        // カーソルを一番後ろに設定
-        answerText.setSelection(answerText.getText().toString().length());
+        setAnswerEditText();
 
         // 前へボタンの制御
         if(testManager.isFirst()){

@@ -275,4 +275,52 @@ public class QuestionTest {
         Assert.assertTrue(examples.contains("Example2"));
         Assert.assertTrue(examples.contains("Example3"));
     }
+
+    /**
+     * 例文の中に1つかっこがある単語の解答数が正しく取得できるかテスト
+     */
+    @Test
+    public void answerCountHasExample1() {
+        Word word = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "(Hay que) lavarse las manos antes de comer.",
+                "食事の前に手を洗わないといけません。",
+                new WordType("v", "動詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(1, question.getAnswerCount());
+    }
+
+    /**
+     * 例文の中に複数かっこがある単語の解答数が正しく取得できるかテスト
+     */
+    @Test
+    public void answerCountHasExample2() {
+        Word word  = new Word("no sólo ... sino tabién",
+                "・・・だけでなく・・・もまた",
+                "(No sólo) cantamos (sino también) bailamos.",
+                "私たちは歌っただけでなく、踊りもした。",
+                new WordType("other", "その他"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(2, question.getAnswerCount());
+    }
+
+
+    /**
+     * 例文のない単語で解答の数が正しく取得できるかテスト
+     */
+    @Test
+    public void answerCountNoExample() {
+        Word word = new Word(
+                "Hay que ...",
+                "・・・しないといけない",
+                "",
+                "",
+                new WordType("v", "動詞"));
+        Question question = new Question(word, 1);
+
+        Assert.assertEquals(1, question.getAnswerCount());
+    }
 }

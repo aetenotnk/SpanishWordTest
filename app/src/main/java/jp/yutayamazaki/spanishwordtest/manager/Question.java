@@ -63,11 +63,12 @@ public class Question implements Serializable {
         return !spanishExample.equals("");
     }
 
+    /**
+     * 解答数を取得する
+     * @return 解答数
+     */
     public int getAnswerCount() {
-        Pattern pattern = Pattern.compile("\\(.*?\\)");
-        Matcher matcher = pattern.matcher(spanishExample);
-
-        return matcher.groupCount();
+        return hasExamples() ? getAnswerCountHasExample() : getAnswerCountNoExample();
     }
 
     private void setWords() {
@@ -134,5 +135,31 @@ public class Question implements Serializable {
         }
 
         return WordTestManager.Grade.NOT_OK;
+    }
+
+    /**
+     * 例文があるときの解答数を取得する
+     * @return 解答数
+     */
+    private int getAnswerCountHasExample() {
+        // 例文中の(...)の数を返す
+        Pattern pattern = Pattern.compile("\\(.*?\\)");
+        Matcher matcher = pattern.matcher(spanishExample);
+        int count = 0;
+
+        while(matcher.find()) {
+            count++;
+        }
+
+        return count;
+    }
+
+    /**
+     * 例文がない時の解答数を取得する
+     * @return 解答数
+     */
+    private int getAnswerCountNoExample() {
+        // 解答数は必ず1つ
+        return 1;
     }
 }
