@@ -195,7 +195,7 @@ public class WordTest extends AppCompatActivity {
         answerLinearLayout.removeAllViews();
         answers.clear();
 
-        Question question = testManager.getCurrentWord();
+        Question question = testManager.getCurrentQuestion();
 
         for(int i = 0;i < question.getAnswerCount();i++) {
             EditText editText = new EditText(this);
@@ -227,7 +227,7 @@ public class WordTest extends AppCompatActivity {
     }
 
     private void setContents(){
-        Question currentQuestion = testManager.getCurrentWord();
+        Question currentQuestion = testManager.getCurrentQuestion();
         String questionText =
                 this.getResources().getString(R.string.test_question_prefix) +
                         (testManager.getCurrentTestCount() + 1) +

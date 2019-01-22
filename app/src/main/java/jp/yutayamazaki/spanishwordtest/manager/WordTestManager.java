@@ -84,7 +84,7 @@ public class WordTestManager implements Serializable {
         return testTitle.getTitle();
     }
 
-    public Question getCurrentWord(){
+    public Question getCurrentQuestion(){
         return questions.get(currentTestCount);
     }
 
