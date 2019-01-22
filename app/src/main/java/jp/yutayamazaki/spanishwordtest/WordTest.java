@@ -38,7 +38,6 @@ public class WordTest extends AppCompatActivity {
     private TextView japaneseTextView;
     private AppCompatImageButton previousButton;
     private AppCompatImageButton nextButton;
-//    private EditText answerText;
     private LinearLayout answerLinearLayout;
     private List<EditText> answers;
 
