@@ -1,5 +1,6 @@
 package jp.yutayamazaki.spanishwordtest;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -11,6 +12,7 @@ import android.view.GestureDetector;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -215,6 +217,13 @@ public class WordTest extends AppCompatActivity {
 
         // カーソルを一番後ろに設定
         firstAnswer.setSelection(firstAnswer.getText().toString().length());
+        // 最初の解答欄にフォーカス
+        firstAnswer.requestFocus();
+        // キーボードを表示
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(imm != null) {
+            imm.showSoftInput(firstAnswer, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     /**
