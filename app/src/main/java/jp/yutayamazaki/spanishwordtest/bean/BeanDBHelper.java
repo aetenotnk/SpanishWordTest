@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class BeanDBHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "db";
-    private static int DB_VERSION = 1;
+    private static int DB_VERSION = 2;
 
     public BeanDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);

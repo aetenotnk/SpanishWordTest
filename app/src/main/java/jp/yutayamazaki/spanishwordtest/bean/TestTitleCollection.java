@@ -47,6 +47,8 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
             "SELECT * FROM " + DB_NAME;
     private static String SQL_DELETE_ALL =
             "DELETE FROM " + DB_NAME;
+    private static String SQL_DELETE_BY_ID =
+            "DELETE FROM " + DB_NAME + " WHERE id=?";
 
     public TestTitleCollection(Context context){
         super(new BeanDBHelper(context), DB_NAME, DB_VERSION);
@@ -115,6 +117,19 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
      */
     public void deleteAll() {
         SQLiteStatement statement = dbHelper.getWritableDatabase().compileStatement(SQL_DELETE_ALL);
+
+        statement.execute();
+    }
+
+    /**
+     * idを指定してデータを削除する
+     * @param id 削除するデータのid
+     */
+    public void deleteById(int id) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(SQL_DELETE_BY_ID);
+
+        statement.bindLong(1, id);
 
         statement.execute();
     }

@@ -47,6 +47,7 @@ public class WordCollection extends BeanCollection<Word> {
             "VALUES (?, ?, ?, ?, ?)";
     private static String SQL_SELECT_ALL = "SELECT * FROM ";
     private static String SQL_DELETE_ALL = "DELETE FROM ";
+    private static String SQL_DROP_TABLE = "DROP TABLE IF EXISTS ";
 
     private int testId;
     private WordTypeCollection wordTypeCollection;
@@ -84,6 +85,13 @@ public class WordCollection extends BeanCollection<Word> {
     public void createTable(SQLiteOpenHelper dbHelper){
         SQLiteStatement statement = dbHelper.getWritableDatabase().compileStatement(
             SQL_CREATE_TABLE_PREFIX + dbName + SQL_CREATE_TABLE_SUFFIX);
+
+        statement.execute();
+    }
+
+    public void dropTable() {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        SQLiteStatement statement = db.compileStatement(SQL_DROP_TABLE + dbName);
 
         statement.execute();
     }

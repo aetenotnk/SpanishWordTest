@@ -1,7 +1,6 @@
 package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
@@ -17,8 +16,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Collectors;
 
-import jp.yutayamazaki.spanishwordtest.bean.BeanDBHelper;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
@@ -75,40 +74,50 @@ public class TestList extends AppCompatActivity {
      * DropBoxからデータを読み込む
      */
     private void loadDataFromDropBox(){
-        // 以前のデータを削除
-        deleteData();
+        String tempDir = getFilesDir().getAbsolutePath();
 
         // 単語タイプ取得
         WordTypeCollection wordTypeCollection = new WordTypeCollection(this);
         wordTypeCollection.loadBeansByDropBox(dropBox,
                 WORD_TYPE_FILE,
-                getFilesDir().getAbsolutePath());
+                tempDir);
 
         TestTitleCollection testTitleCollection = new TestTitleCollection(this);
-        // テスト一覧のデータを取得
-        testTitleCollection.loadBeansByDropBox(dropBox,
-                TEST_TITLE_FILE,
-                getFilesDir().getAbsolutePath());
-        testTitles = testTitleCollection.selectAll();
-        // 単語データを取得
-        for(TestTitle title : testTitles){
+        // 単語データを読み込みなおす試験データを取得
+        List<TestTitle> reloadTestTitles = testTitleCollection.getUpdatedOrNewTestTitleByDropBox(
+                dropBox, TEST_TITLE_FILE, tempDir);
+
+        // 単語データを読み込みなおす
+        for(TestTitle title : reloadTestTitles) {
             String filePath = title.getFilepath();
             WordCollection wordCollection = new WordCollection(this, title.getId());
 
             // 単語データを入れ替える
+            wordCollection.deleteAll();
             wordCollection.loadBeansByDropBox(dropBox,
                     filePath,
-                    getFilesDir().getAbsolutePath());
+                    tempDir);
         }
-    }
 
-    private void deleteData() {
-        SQLiteOpenHelper dbHelper = new BeanDBHelper(this);
+        List<TestTitle> oldTestTitles = testTitleCollection.selectAll();
+        testTitleCollection.deleteAll();
+        testTitleCollection.loadBeansByDropBox(dropBox, TEST_TITLE_FILE, tempDir);
+        List<TestTitle> newTestTitles = testTitleCollection.selectAll();
+        List<TestTitle> deletedTestTitles = oldTestTitles.stream()
+                .filter(testTitle ->
+                        newTestTitles.stream().noneMatch(newTestTitle ->
+                                newTestTitle.getId() == testTitle.getId()))
+                .collect(Collectors.toList());
 
-        // 依存関係がある単語データは単語タイプより先に削除する
-        WordCollection.dropTable(dbHelper);
-        WordTypeCollection.dropTable(dbHelper);
-        TestTitleCollection.dropTable(dbHelper);
+        // 削除されたデータをDB上から削除
+        for(TestTitle title : deletedTestTitles) {
+            WordCollection wordCollection = new WordCollection(this, title.getId());
+
+            testTitleCollection.deleteById(title.getId());
+            wordCollection.dropTable();
+        }
+
+        testTitles = newTestTitles;
     }
 
     private void setTestList(){
