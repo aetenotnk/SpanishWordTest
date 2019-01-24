@@ -6,12 +6,14 @@ public class TestTitle extends Bean {
     private String title;
     private String caption;
     private String filepath;
+    private int version;
 
-    public TestTitle(int id, String title, String caption, String filepath) {
+    public TestTitle(int id, String title, String caption, String filepath, int version) {
         this.id = id;
         this.title = title;
         this.caption = caption;
         this.filepath = filepath;
+        this.version = version;
     }
 
     public int getId() {
@@ -28,5 +30,9 @@ public class TestTitle extends Bean {
 
     public String getFilepath() {
         return filepath;
+    }
+
+    public int getVersion() {
+        return version;
     }
 }

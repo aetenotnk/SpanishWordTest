@@ -13,6 +13,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
@@ -81,7 +82,7 @@ public class TestTitleCollectionTest {
     public void insert(){
         TestTitleCollection testTitleCollection =
                 new TestTitleCollection(RuntimeEnvironment.application);
-        TestTitle data = new TestTitle(1, "Test1", "caption1", "/dummy");
+        TestTitle data = new TestTitle(1, "Test1", "caption1", "/dummy", 1);
 
         testTitleCollection.insertOrUpdate(data);
 
@@ -101,8 +102,8 @@ public class TestTitleCollectionTest {
     public void update(){
         TestTitleCollection testTitleCollection =
                 new TestTitleCollection(RuntimeEnvironment.application);
-        TestTitle data1 = new TestTitle(1, "Test1", "caption1", "/dummy");
-        TestTitle data2 = new TestTitle(1, "Test1_1", "caption1_1", "/dummy_1");
+        TestTitle data1 = new TestTitle(1, "Test1", "caption1", "/dummy", 1);
+        TestTitle data2 = new TestTitle(1, "Test1_1", "caption1_1", "/dummy_1", 1);
 
         testTitleCollection.insertOrUpdate(data1);
         testTitleCollection.insertOrUpdate(data2);
@@ -123,8 +124,8 @@ public class TestTitleCollectionTest {
     public void deleteAll(){
         TestTitleCollection testTitleCollection =
                 new TestTitleCollection(RuntimeEnvironment.application);
-        TestTitle data1 = new TestTitle(1, "Test1", "caption1", "/dummy1");
-        TestTitle data2 = new TestTitle(2, "Test2", "caption2", "/dummy2");
+        TestTitle data1 = new TestTitle(1, "Test1", "caption1", "/dummy1", 1);
+        TestTitle data2 = new TestTitle(2, "Test2", "caption2", "/dummy2", 1);
 
         testTitleCollection.insertOrUpdate(data1);
         testTitleCollection.insertOrUpdate(data2);
@@ -137,5 +138,41 @@ public class TestTitleCollectionTest {
         all = testTitleCollection.selectAll();
 
         Assert.assertEquals(0, all.size());
+    }
+
+    /**
+     * 更新されたか、新しく追加された行が正しく取得できるかテスト
+     * @throws Exception 設定ファイルが読み込めなければ例外を投げる
+     */
+    @Test
+    public void getUpdatedOrNewTestTitle() throws Exception {
+        TestTitleCollection testTitleCollection =
+                new TestTitleCollection(RuntimeEnvironment.application);
+        String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
+        tempPath = System.getProperty("user.dir") + tempPath;
+
+        testTitleCollection.loadBeansByDropBox(dropBox, "test/testlist_old.csv", tempPath);
+
+        List<TestTitle> updatedOrNew =
+                testTitleCollection.getUpdatedOrNewTestTitleByDropBox(
+                        dropBox,
+                        "test/testlist_new.csv",
+                        tempPath);
+
+        List<TestTitle> updatedTestTitles =
+                updatedOrNew.stream()
+                        .filter(testTitle -> testTitle.getId() == 2)
+                        .collect(Collectors.toList());
+        List<TestTitle> newTestTitles =
+                updatedOrNew.stream()
+                        .filter(testTitle -> testTitle.getId() == 3)
+                        .collect(Collectors.toList());
+
+        Assert.assertEquals(1, updatedTestTitles.size());
+        Assert.assertEquals(1, newTestTitles.size());
+
+        TestTitle updatedTestTitle = updatedTestTitles.get(0);
+
+        Assert.assertEquals(2, updatedTestTitle.getVersion());
     }
 }

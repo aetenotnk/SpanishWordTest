@@ -30,7 +30,7 @@ public class WordTestManagerTest {
         wordCollection = new WordCollection(RuntimeEnvironment.application, 1);
 
         testTitle =
-                new TestTitle(1, "Test1", "Caption1", "/dummy.csv");
+                new TestTitle(1, "Test1", "Caption1", "/dummy.csv", 1);
 
         wordCollection.insertOrUpdate(
                 new Word(
