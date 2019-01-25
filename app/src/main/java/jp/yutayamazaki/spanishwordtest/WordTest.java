@@ -8,7 +8,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
+import android.text.InputType;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.ViewGroup;
@@ -200,11 +202,9 @@ public class WordTest extends AppCompatActivity {
         Question question = testManager.getCurrentQuestion();
 
         for(int i = 0;i < question.getAnswerCount();i++) {
-            EditText editText = new EditText(this);
             String answer = testManager.getCurrentAnswer(i);
-
-            editText.setHint(R.string.input_answer);
-            editText.setText(answer);
+            boolean isLast = i == question.getAnswerCount() - 1;
+            EditText editText = createAnswerEditTest(answer, i, isLast);
 
             answerLinearLayout.addView(editText,
                     new LinearLayout.LayoutParams(
@@ -224,6 +224,44 @@ public class WordTest extends AppCompatActivity {
         if(imm != null) {
             imm.showSoftInput(firstAnswer, InputMethodManager.SHOW_IMPLICIT);
         }
+    }
+
+    /**
+     * 解答欄を作成
+     * @param answer 解答欄に入力されている内容
+     * @param index 何番目の解答欄か
+     * @param isLast 最後の解答欄か
+     * @return 作成した解答欄
+     */
+    private EditText createAnswerEditTest(String answer, int index, boolean isLast) {
+        EditText editText = new EditText(this);
+
+        editText.setHint(R.string.input_answer);
+        editText.setText(answer);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        // エンターキーを押した時の挙動を設定
+        if(isLast) {
+            editText.setOnKeyListener((v, code, event) -> {
+                if(code == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    nextButton.callOnClick();
+                }
+
+                return false;
+            });
+        }
+        else {
+            editText.setOnKeyListener((v, code, event) -> {
+                if(code == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_UP) {
+                    EditText next = answers.get(index + 1);
+
+                    next.requestFocus();
+                }
+
+                return false;
+            });
+        }
+
+        return editText;
     }
 
     /**
