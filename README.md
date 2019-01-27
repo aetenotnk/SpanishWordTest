@@ -9,8 +9,8 @@
 ※ DropBoxのアクセストークンは入っておりません。<br>
 
 ## 開発環境
-- AndroidStudio 3.2.1
-- gradle 3.2.1
+- AndroidStudio 3.3
+- gradle 3.3.0
 - Galaxy S9(それ以外の端末ではレイアウトが崩れる可能性があります)
 
 ## 使い方
