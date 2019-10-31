@@ -66,7 +66,6 @@ public class WordTypeCollection extends BeanCollection<WordType> {
         statement.bindString(2, wordType.getWordTypeDisplay());
 
         statement.execute();
-        db.close();
     }
 
     @Override
@@ -86,7 +85,6 @@ public class WordTypeCollection extends BeanCollection<WordType> {
         }
 
         cursor.close();
-        db.close();
 
         return result;
     }
@@ -101,7 +99,6 @@ public class WordTypeCollection extends BeanCollection<WordType> {
         String resWordTypeDisplay = cursor.getString(cursor.getColumnIndex(DB_COL_WORD_TYPE_DISPLAY));
 
         cursor.close();
-        db.close();
 
         return new WordType(resWordTypeString, resWordTypeDisplay);
     }

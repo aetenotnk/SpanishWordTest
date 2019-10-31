@@ -27,32 +27,26 @@ public class DropBox {
      * @param filename ドロップボックス上のアプリケーションフォルダより後のファイル名またはパス
      * @return String ファイルをダウンロードしたパス
      */
-    public String downloadFile(String filename, String saveDir){
+    public String downloadFile(String filename, String saveDir) throws DbxException, IOException{
         String fromPath = "/" + filename;
         String toPath = saveDir + "/" + filename;
 
         // ファイルまでのディレクトリを作成する
         new File(toPath).getParentFile().mkdirs();
 
-        try{
-            DbxDownloader downloader  = client.files().download(fromPath);
-            File outFile = new File(toPath);
+        DbxDownloader downloader  = client.files().download(fromPath);
+        File outFile = new File(toPath);
 
-            InputStreamReader isr = new InputStreamReader(downloader.getInputStream());
-            OutputStreamWriter osr = new OutputStreamWriter(new FileOutputStream(outFile));
+        InputStreamReader isr = new InputStreamReader(downloader.getInputStream());
+        OutputStreamWriter osr = new OutputStreamWriter(new FileOutputStream(outFile));
 
-            int c;
-            while((c = isr.read()) != -1){
-                osr.write(c);
-            }
-            osr.flush();
-            osr.close();
-            isr.close();
+        int c;
+        while((c = isr.read()) != -1){
+            osr.write(c);
         }
-        catch(DbxException | IOException e){
-            Log.e("DropBoxError", "Cannot downloadTextFile");
-            e.printStackTrace();
-        }
+        osr.flush();
+        osr.close();
+        isr.close();
 
         return toPath;
     }

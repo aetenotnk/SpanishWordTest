@@ -1,6 +1,7 @@
 package jp.yutayamazaki.spanishwordtest;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatImageButton;
@@ -11,6 +12,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 
+import com.dropbox.core.DbxException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,50 +81,61 @@ public class TestList extends AppCompatActivity {
     private void loadDataFromDropBox(){
         String tempDir = getFilesDir().getAbsolutePath();
         BeanDBHelper dbHelper = new BeanDBHelper(this);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // 単語タイプ取得
-        WordTypeCollection wordTypeCollection = new WordTypeCollection(dbHelper);
-        wordTypeCollection.loadBeansByDropBox(dropBox,
-                WORD_TYPE_FILE,
-                tempDir);
-
-        TestTitleCollection testTitleCollection = new TestTitleCollection(dbHelper);
-        // 単語データを読み込みなおす試験データを取得
-        List<TestTitle> reloadTestTitles = testTitleCollection.getUpdatedOrNewTestTitleByDropBox(
-                dropBox, TEST_TITLE_FILE, tempDir);
-
-        // 単語データを読み込みなおす
-        for(TestTitle title : reloadTestTitles) {
-            String filePath = title.getFilepath();
-            WordCollection wordCollection = new WordCollection(dbHelper, title.getId());
-
-            // 単語データを入れ替える
-            wordCollection.deleteAll();
-            wordCollection.loadBeansByDropBox(dropBox,
-                    filePath,
+        db.beginTransaction();
+        try{
+            // 単語タイプ取得
+            WordTypeCollection wordTypeCollection = new WordTypeCollection(dbHelper);
+            wordTypeCollection.loadBeansByDropBox(dropBox,
+                    WORD_TYPE_FILE,
                     tempDir);
+
+            TestTitleCollection testTitleCollection = new TestTitleCollection(dbHelper);
+            // 単語データを読み込みなおす試験データを取得
+            List<TestTitle> reloadTestTitles = testTitleCollection.getUpdatedOrNewTestTitleByDropBox(
+                    dropBox, TEST_TITLE_FILE, tempDir);
+
+            // 単語データを読み込みなおす
+            for(TestTitle title : reloadTestTitles) {
+                String filePath = title.getFilepath();
+                WordCollection wordCollection = new WordCollection(dbHelper, title.getId());
+
+                // 単語データを入れ替える
+                wordCollection.deleteAll();
+                wordCollection.loadBeansByDropBox(dropBox,
+                        filePath,
+                        tempDir);
+            }
+
+            List<TestTitle> oldTestTitles = testTitleCollection.selectAll();
+            testTitleCollection.deleteAll();
+            testTitleCollection.loadBeansByDropBox(dropBox, TEST_TITLE_FILE, tempDir);
+            List<TestTitle> newTestTitles = testTitleCollection.selectAll();
+            List<TestTitle> deletedTestTitles = oldTestTitles.stream()
+                    .filter(testTitle ->
+                            newTestTitles.stream().noneMatch(newTestTitle ->
+                                    newTestTitle.getId() == testTitle.getId()))
+                    .collect(Collectors.toList());
+
+            // 削除されたデータをDB上から削除
+            for(TestTitle title : deletedTestTitles) {
+                WordCollection wordCollection = new WordCollection(dbHelper, title.getId());
+
+                testTitleCollection.deleteById(title.getId());
+                wordCollection.dropTable();
+            }
+
+            db.setTransactionSuccessful();
+        }
+        catch (IOException | DbxException e){
+            e.printStackTrace();
         }
 
-        List<TestTitle> oldTestTitles = testTitleCollection.selectAll();
-        testTitleCollection.deleteAll();
-        testTitleCollection.loadBeansByDropBox(dropBox, TEST_TITLE_FILE, tempDir);
-        List<TestTitle> newTestTitles = testTitleCollection.selectAll();
-        List<TestTitle> deletedTestTitles = oldTestTitles.stream()
-                .filter(testTitle ->
-                        newTestTitles.stream().noneMatch(newTestTitle ->
-                                newTestTitle.getId() == testTitle.getId()))
-                .collect(Collectors.toList());
-
-        // 削除されたデータをDB上から削除
-        for(TestTitle title : deletedTestTitles) {
-            WordCollection wordCollection = new WordCollection(dbHelper, title.getId());
-
-            testTitleCollection.deleteById(title.getId());
-            wordCollection.dropTable();
-        }
-
+        db.endTransaction();
+        testTitles = new TestTitleCollection(dbHelper).selectAll();
+        dbHelper.clearDatabase();
         dbHelper.close();
-        testTitles = newTestTitles;
     }
 
     private void setTestList(){

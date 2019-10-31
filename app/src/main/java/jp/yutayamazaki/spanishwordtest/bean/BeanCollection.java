@@ -2,7 +2,10 @@ package jp.yutayamazaki.spanishwordtest.bean;
 
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.dropbox.core.DbxException;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
@@ -31,7 +34,7 @@ abstract class BeanCollection<T extends Bean> {
      * @param filename DropBox上のファイル名
      * @param tempDir 一時的に保存するディレクトリ
      */
-    public void loadBeansByDropBox(DropBox dropBox, String filename, String tempDir){
+    public void loadBeansByDropBox(DropBox dropBox, String filename, String tempDir) throws DbxException, IOException {
         String path = dropBox.downloadFile(filename, tempDir);
         List<String[]> rows = CSVLoader.load(new File(tempDir + "/" + filename));
 

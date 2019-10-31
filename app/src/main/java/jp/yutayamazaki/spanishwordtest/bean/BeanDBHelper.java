@@ -8,6 +8,8 @@ public class BeanDBHelper extends SQLiteOpenHelper {
     private static String DB_NAME = "db";
     private static int DB_VERSION = 2;
 
+    private SQLiteDatabase db;
+
     public BeanDBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
@@ -31,5 +33,21 @@ public class BeanDBHelper extends SQLiteOpenHelper {
         super.onConfigure(db);
 
         db.setForeignKeyConstraintsEnabled(true);
+    }
+
+    @Override
+    public SQLiteDatabase getWritableDatabase(){
+        if(db == null){
+            db = super.getWritableDatabase();
+        }
+
+        return db;
+    }
+
+    public void clearDatabase(){
+        if(db != null){
+            db.close();
+            db = null;
+        }
     }
 }

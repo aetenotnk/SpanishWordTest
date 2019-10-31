@@ -6,7 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
 
+import com.dropbox.core.DbxException;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -87,7 +90,6 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
         statement.bindLong(5, testTitle.getVersion());
 
         statement.execute();
-        db.close();
     }
 
     @Override
@@ -107,7 +109,6 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
         }
 
         cursor.close();
-        db.close();
 
         return result;
     }
@@ -141,7 +142,7 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
      * @param tempDir 一時的に保存するディレクトリ
      * @return 更新、追加されたTestTitleのリスト
      */
-    public List<TestTitle> getUpdatedOrNewTestTitleByDropBox(DropBox dropBox, String filename, String tempDir) {
+    public List<TestTitle> getUpdatedOrNewTestTitleByDropBox(DropBox dropBox, String filename, String tempDir)  throws DbxException, IOException {
         String path = dropBox.downloadFile(filename, tempDir);
         List<String[]> rows = CSVLoader.load(new File(tempDir + "/" + filename));
         List<TestTitle> oldTestTitles = selectAll();

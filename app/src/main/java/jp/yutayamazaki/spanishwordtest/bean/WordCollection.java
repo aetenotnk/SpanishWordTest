@@ -132,7 +132,6 @@ public class WordCollection extends BeanCollection<Word> {
         statement.bindString(5, word.getType().getWordTypeString());
 
         statement.execute();
-        db.close();
     }
 
     @Override
@@ -153,7 +152,6 @@ public class WordCollection extends BeanCollection<Word> {
         }
 
         cursor.close();
-        db.close();
 
         return result;
     }
