@@ -18,6 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.stream.Collectors;
 
+import jp.yutayamazaki.spanishwordtest.bean.BeanDBHelper;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
@@ -75,14 +76,15 @@ public class TestList extends AppCompatActivity {
      */
     private void loadDataFromDropBox(){
         String tempDir = getFilesDir().getAbsolutePath();
+        BeanDBHelper dbHelper = new BeanDBHelper(this);
 
         // 単語タイプ取得
-        WordTypeCollection wordTypeCollection = new WordTypeCollection(this);
+        WordTypeCollection wordTypeCollection = new WordTypeCollection(dbHelper);
         wordTypeCollection.loadBeansByDropBox(dropBox,
                 WORD_TYPE_FILE,
                 tempDir);
 
-        TestTitleCollection testTitleCollection = new TestTitleCollection(this);
+        TestTitleCollection testTitleCollection = new TestTitleCollection(dbHelper);
         // 単語データを読み込みなおす試験データを取得
         List<TestTitle> reloadTestTitles = testTitleCollection.getUpdatedOrNewTestTitleByDropBox(
                 dropBox, TEST_TITLE_FILE, tempDir);
@@ -90,7 +92,7 @@ public class TestList extends AppCompatActivity {
         // 単語データを読み込みなおす
         for(TestTitle title : reloadTestTitles) {
             String filePath = title.getFilepath();
-            WordCollection wordCollection = new WordCollection(this, title.getId());
+            WordCollection wordCollection = new WordCollection(dbHelper, title.getId());
 
             // 単語データを入れ替える
             wordCollection.deleteAll();
@@ -111,12 +113,13 @@ public class TestList extends AppCompatActivity {
 
         // 削除されたデータをDB上から削除
         for(TestTitle title : deletedTestTitles) {
-            WordCollection wordCollection = new WordCollection(this, title.getId());
+            WordCollection wordCollection = new WordCollection(dbHelper, title.getId());
 
             testTitleCollection.deleteById(title.getId());
             wordCollection.dropTable();
         }
 
+        dbHelper.close();
         testTitles = newTestTitles;
     }
 
@@ -150,7 +153,7 @@ public class TestList extends AppCompatActivity {
                 Intent modeSelectIntent = new Intent(getApplication(), ModeSelect.class);
                 TestTitle testTitle = testTitles.get(i);
                 WordCollection wordCollection =
-                        new WordCollection(TestList.this, testTitle.getId());
+                        new WordCollection(new BeanDBHelper(TestList.this), testTitle.getId());
 
                 // モード選択画面に渡すWordTestManagerを渡す
                 modeSelectIntent.putExtra(EXTRA_WORD_TEST_MANAGER,

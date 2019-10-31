@@ -50,8 +50,8 @@ public class TestTitleCollection extends BeanCollection<TestTitle> {
     private static String SQL_DELETE_BY_ID =
             "DELETE FROM " + DB_NAME + " WHERE id=?";
 
-    public TestTitleCollection(Context context){
-        super(new BeanDBHelper(context), DB_NAME, DB_VERSION);
+    public TestTitleCollection(BeanDBHelper dbHelper){
+        super(dbHelper, DB_NAME, DB_VERSION);
     }
 
     @Override

@@ -11,6 +11,7 @@ import org.robolectric.RuntimeEnvironment;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import jp.yutayamazaki.spanishwordtest.bean.BeanDBHelper;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.Word;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
@@ -27,7 +28,7 @@ public class WordTestManagerTest {
     public void setUp(){
         TestUtil.setWordType();
 
-        wordCollection = new WordCollection(RuntimeEnvironment.application, 1);
+        wordCollection = new WordCollection(new BeanDBHelper(RuntimeEnvironment.application), 1);
 
         testTitle =
                 new TestTitle(1, "Test1", "Caption1", "/dummy.csv", 1);

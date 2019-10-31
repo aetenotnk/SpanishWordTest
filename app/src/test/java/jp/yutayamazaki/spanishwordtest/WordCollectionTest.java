@@ -16,6 +16,7 @@ import org.robolectric.RuntimeEnvironment;
 import java.io.File;
 import java.util.List;
 
+import jp.yutayamazaki.spanishwordtest.bean.BeanDBHelper;
 import jp.yutayamazaki.spanishwordtest.bean.Word;
 import jp.yutayamazaki.spanishwordtest.bean.WordCollection;
 import jp.yutayamazaki.spanishwordtest.bean.WordType;
@@ -65,7 +66,7 @@ public class WordCollectionTest {
     @Test
     public void loadDataFromDropBox() throws Exception{
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, 1);
+                new WordCollection(new BeanDBHelper(RuntimeEnvironment.application), 1);
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         tempPath = System.getProperty("user.dir") + tempPath;
 
@@ -92,7 +93,7 @@ public class WordCollectionTest {
     @Test
     public void insert(){
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, 1);
+                new WordCollection(new BeanDBHelper(RuntimeEnvironment.application), 1);
         Word word = new Word("deporte",
                 "スポーツ",
                 "¿Haces algún (deporte)",
@@ -117,7 +118,7 @@ public class WordCollectionTest {
     @Test
     public void insertTwiceSameData(){
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, 1);
+                new WordCollection(new BeanDBHelper(RuntimeEnvironment.application), 1);
         Word word = new Word("deporte",
                 "スポーツ",
                 "¿Haces algún (deporte)",
@@ -139,7 +140,7 @@ public class WordCollectionTest {
     @Test
     public void deleteAll(){
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, 1);
+                new WordCollection(new BeanDBHelper(RuntimeEnvironment.application), 1);
         Word word = new Word("deporte",
                 "スポーツ",
                 "¿Haces algún (deporte)",
@@ -166,7 +167,7 @@ public class WordCollectionTest {
     @Test(expected = SQLiteConstraintException.class)
     public void relationWordTypeFail(){
         WordCollection wordCollection =
-                new WordCollection(RuntimeEnvironment.application, 1);
+                new WordCollection(new BeanDBHelper(RuntimeEnvironment.application), 1);
         Word word = new Word("deporte",
                 "スポーツ",
                 "¿Haces algún (deporte)",

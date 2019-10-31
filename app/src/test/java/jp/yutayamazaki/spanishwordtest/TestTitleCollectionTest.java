@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import jp.yutayamazaki.spanishwordtest.bean.BeanDBHelper;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitle;
 import jp.yutayamazaki.spanishwordtest.bean.TestTitleCollection;
 import jp.yutayamazaki.spanishwordtest.dropbox.DropBox;
@@ -57,7 +58,7 @@ public class TestTitleCollectionTest {
     @Test
     public void loadDataFromDropBox() throws Exception{
         TestTitleCollection testTitleCollection =
-                new TestTitleCollection(RuntimeEnvironment.application);
+                new TestTitleCollection(new BeanDBHelper(RuntimeEnvironment.application));
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         tempPath = System.getProperty("user.dir") + tempPath;
 
@@ -81,7 +82,7 @@ public class TestTitleCollectionTest {
     @Test
     public void insert(){
         TestTitleCollection testTitleCollection =
-                new TestTitleCollection(RuntimeEnvironment.application);
+                new TestTitleCollection(new BeanDBHelper(RuntimeEnvironment.application));
         TestTitle data = new TestTitle(1, "Test1", "caption1", "/dummy", 1);
 
         testTitleCollection.insertOrUpdate(data);
@@ -101,7 +102,7 @@ public class TestTitleCollectionTest {
     @Test
     public void update(){
         TestTitleCollection testTitleCollection =
-                new TestTitleCollection(RuntimeEnvironment.application);
+                new TestTitleCollection(new BeanDBHelper(RuntimeEnvironment.application));
         TestTitle data1 = new TestTitle(1, "Test1", "caption1", "/dummy", 1);
         TestTitle data2 = new TestTitle(1, "Test1_1", "caption1_1", "/dummy_1", 1);
 
@@ -123,7 +124,7 @@ public class TestTitleCollectionTest {
     @Test
     public void deleteAll(){
         TestTitleCollection testTitleCollection =
-                new TestTitleCollection(RuntimeEnvironment.application);
+                new TestTitleCollection(new BeanDBHelper(RuntimeEnvironment.application));
         TestTitle data1 = new TestTitle(1, "Test1", "caption1", "/dummy1", 1);
         TestTitle data2 = new TestTitle(2, "Test2", "caption2", "/dummy2", 1);
 
@@ -147,7 +148,7 @@ public class TestTitleCollectionTest {
     @Test
     public void getUpdatedOrNewTestTitle() throws Exception {
         TestTitleCollection testTitleCollection =
-                new TestTitleCollection(RuntimeEnvironment.application);
+                new TestTitleCollection(new BeanDBHelper(RuntimeEnvironment.application));
         String tempPath = jsonConfig.getJSONObject("test").getString("tempdirectory");
         tempPath = System.getProperty("user.dir") + tempPath;
 

@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import jp.yutayamazaki.spanishwordtest.bean.BeanDBHelper;
 import jp.yutayamazaki.spanishwordtest.bean.WordType;
 import jp.yutayamazaki.spanishwordtest.bean.WordTypeCollection;
 
@@ -83,7 +84,7 @@ public class TestUtil {
      */
     public static void setWordType() {
         WordTypeCollection wordTypeCollection =
-                new WordTypeCollection(RuntimeEnvironment.application);
+                new WordTypeCollection(new BeanDBHelper(RuntimeEnvironment.application));
 
         wordTypeCollection.insertOrUpdate(new WordType("v", "動詞"));
         wordTypeCollection.insertOrUpdate(new WordType("adjective", "形容詞"));

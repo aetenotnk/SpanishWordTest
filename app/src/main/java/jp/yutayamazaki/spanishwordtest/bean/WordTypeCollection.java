@@ -32,8 +32,8 @@ public class WordTypeCollection extends BeanCollection<WordType> {
                     "WHERE " + DB_COL_WORD_TYPE_STRING + "=?";
     private static String SQL_DELETE_ALL = "DELETE FROM " + DB_NAME;
 
-    public WordTypeCollection(Context context){
-        super(new BeanDBHelper(context), DB_NAME, DB_VERSION);
+    public WordTypeCollection(BeanDBHelper dbHelper){
+        super(dbHelper, DB_NAME, DB_VERSION);
     }
 
     @Override

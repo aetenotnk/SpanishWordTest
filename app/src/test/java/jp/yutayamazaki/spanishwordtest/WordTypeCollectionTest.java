@@ -8,6 +8,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import java.util.List;
 
+import jp.yutayamazaki.spanishwordtest.bean.BeanDBHelper;
 import jp.yutayamazaki.spanishwordtest.bean.WordType;
 import jp.yutayamazaki.spanishwordtest.bean.WordTypeCollection;
 
@@ -18,7 +19,7 @@ public class WordTypeCollectionTest {
         WordType wordType1 = new WordType("v", "動詞");
         WordType wordType2 = new WordType("adjective", "形容詞");
         WordTypeCollection wordTypeCollection =
-                new WordTypeCollection(RuntimeEnvironment.application);
+                new WordTypeCollection(new BeanDBHelper(RuntimeEnvironment.application));
 
         wordTypeCollection.insertOrUpdate(wordType1);
         wordTypeCollection.insertOrUpdate(wordType2);
@@ -33,7 +34,7 @@ public class WordTypeCollectionTest {
         WordType wordType1 = new WordType("v", "どうし");
         WordType wordType2 = new WordType("v", "動詞");
         WordTypeCollection wordTypeCollection =
-                new WordTypeCollection(RuntimeEnvironment.application);
+                new WordTypeCollection(new BeanDBHelper(RuntimeEnvironment.application));
 
         wordTypeCollection.insertOrUpdate(wordType1);
         wordTypeCollection.insertOrUpdate(wordType2);
@@ -50,7 +51,7 @@ public class WordTypeCollectionTest {
         WordType wordType1 = new WordType("v", "動詞");
         WordType wordType2 = new WordType("adjective", "形容詞");
         WordTypeCollection wordTypeCollection =
-                new WordTypeCollection(RuntimeEnvironment.application);
+                new WordTypeCollection(new BeanDBHelper(RuntimeEnvironment.application));
 
         wordTypeCollection.insertOrUpdate(wordType1);
         wordTypeCollection.insertOrUpdate(wordType2);

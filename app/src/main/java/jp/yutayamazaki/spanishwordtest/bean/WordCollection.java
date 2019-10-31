@@ -52,13 +52,13 @@ public class WordCollection extends BeanCollection<Word> {
     private int testId;
     private WordTypeCollection wordTypeCollection;
 
-    public WordCollection(Context context, int testId){
-        super(new BeanDBHelper(context),
+    public WordCollection(BeanDBHelper dbHelper, int testId){
+        super(dbHelper,
                 DB_NAME_PREFIX + testId + DB_NAME_SUFFIX,
                 DB_VERSION);
 
         this.testId = testId;
-        this.wordTypeCollection = new WordTypeCollection(context);
+        this.wordTypeCollection = new WordTypeCollection(dbHelper);
     }
 
     /**

@@ -13,11 +13,11 @@ import jp.yutayamazaki.spanishwordtest.file.CSVLoader;
  * @param <T> Beanを継承したクラス
  */
 abstract class BeanCollection<T extends Bean> {
-    protected SQLiteOpenHelper dbHelper;
+    protected BeanDBHelper dbHelper;
     protected String dbName;
     protected int version;
 
-    public BeanCollection(SQLiteOpenHelper dbHelper, String dbName, int version){
+    public BeanCollection(BeanDBHelper dbHelper, String dbName, int version){
         this.dbHelper = dbHelper;
         this.dbName = dbName;
         this.version = version;
